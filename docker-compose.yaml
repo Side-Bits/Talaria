@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
+    # optionally mount volume for live reload in dev
+    # volumes:
+    #   - ./backend:/app
+    # command: air
+
+volumes:
+  pgdata:
+
