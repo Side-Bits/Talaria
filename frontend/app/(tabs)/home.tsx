@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { ThemedText } from '@/components/ThemedText';
-import { StyleSheet} from 'react-native';
 
 export default function TabHome() {
   return (
@@ -10,7 +9,3 @@ export default function TabHome() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-
-});

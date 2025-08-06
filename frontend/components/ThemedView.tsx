@@ -46,12 +46,14 @@ const styles = StyleSheet.create({
   column: {
     flex: 1,
     flexDirection: 'column',
+    alignItems: 'center',
   },
   container: {
-    padding: 16,
+    flex: 1,
+    paddingHorizontal: 16,
   },
   box: {
-    padding: 8,
+    paddingVertical: 8,
   }
 });
 
