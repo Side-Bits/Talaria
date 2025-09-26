@@ -2,18 +2,22 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetUserById(c *gin.Context) {
-	userID := c.Param("id")
+func GetUserByToken(c *gin.Context) {
 
-	id, err := strconv.Atoi(userID)
-	if err != nil || id < 0 || id >= len(models.Users) {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+	userId, exists := c.Get("userID")
+
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 		return
 	}
-	c.JSON(http.StatusOK, models.Users[id])
+
+	c.JSON(http.StatusOK, gin.H{
+		"userID":  userId,
+		"profile": "mock profile data",
+	})
+
 }
