@@ -3,11 +3,12 @@ package controllers
 import (
 	"net/http"
 
+	"deus.est/hermes/database"
+	"deus.est/hermes/models"
 	"github.com/gin-gonic/gin"
 )
 
 func GetUserByToken(c *gin.Context) {
-
 	userId, exists := c.Get("userID")
 
 	if !exists {
@@ -15,9 +16,27 @@ func GetUserByToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"userID":  userId,
-		"profile": "mock profile data",
-	})
+	user, err := getUserById(c, userId.(int))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch user"})
+		return
+	}
 
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
+}
+
+func getUserById(c *gin.Context, id int) (models.User, error) {
+	var user models.User
+
+	row := database.DB.QueryRowContext(
+		c.Request.Context(),
+		"SELECT id, name, email FROM users WHERE id=$1",
+		id,
+	)
+
+	err := row.Scan(&user.ID, &user.Name, &user.Email)
+
+	return user, err
 }
