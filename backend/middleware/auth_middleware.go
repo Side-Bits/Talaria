@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strings"
 
+	"deus.est/hermes/controllers"
+	"deus.est/hermes/database"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,14 +18,18 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		token := strings.TrimPrefix(authHeader, "Bearer ")
-		// TODO: validate token (verify or lookup in DB)
 		if token == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing or invalid token"})
 			return
 		}
+
+		userId, err := controllers.GetUserIdByToken(database.DB, token)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": err})
+		}
+
 		// set user id in the context
-		userID := "1234"
-		c.Set("userID", userID)
+		c.Set("userID", userId)
 		c.Next()
 	}
 }
