@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"deus.est/hermes/controllers"
-	"deus.est/hermes/middleware"
 	"github.com/gin-gonic/gin"
+	"talaria/internal/api/handlers"
+	"talaria/internal/api/middleware"
 )
 
 func PrivateRoutes(r *gin.Engine) {
@@ -12,6 +12,6 @@ func PrivateRoutes(r *gin.Engine) {
 	api.Use(middleware.AuthMiddleware())
 	{
 		// TODO authenticated routes. All must receive a valid token
-		api.GET("/user", controllers.GetUserByToken)
+		api.GET("/user", handlers.GetUserByToken)
 	}
 }

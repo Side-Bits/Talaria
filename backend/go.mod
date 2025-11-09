@@ -1,4 +1,4 @@
-module deus.est/hermes
+module talaria
 
 go 1.24.5
 

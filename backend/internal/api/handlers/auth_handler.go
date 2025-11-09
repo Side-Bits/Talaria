@@ -1,11 +1,12 @@
-package controllers
+package handlers
 
 import (
 	"net/http"
 
-	"deus.est/hermes/database"
-	"deus.est/hermes/models"
-	"deus.est/hermes/repositories"
+	"talaria/internal/models"
+	"talaria/internal/pkgs/database"
+	"talaria/internal/repositories"
+
 	"github.com/gin-gonic/gin"
 )
 

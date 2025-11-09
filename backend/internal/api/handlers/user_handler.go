@@ -1,11 +1,11 @@
-package controllers
+package handlers
 
 import (
 	"net/http"
 
-	"deus.est/hermes/database"
-	"deus.est/hermes/models"
 	"github.com/gin-gonic/gin"
+	"talaria/internal/models"
+	"talaria/internal/pkgs/database"
 )
 
 func GetUserByToken(c *gin.Context) {

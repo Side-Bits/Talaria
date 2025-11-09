@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"deus.est/hermes/models"
+	"talaria/internal/models"
 )
 
 func RegisterUser(db *sql.DB, user *models.User) error {

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"deus.est/hermes/database"
-	"deus.est/hermes/repositories"
 	"github.com/gin-gonic/gin"
+	"talaria/internal/pkgs/database"
+	"talaria/internal/repositories"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
