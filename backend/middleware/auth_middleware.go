@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"deus.est/hermes/controllers"
 	"deus.est/hermes/database"
+	"deus.est/hermes/repositories"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +23,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		userId, err := controllers.GetUserIdByToken(database.DB, token)
+		userId, err := repositories.GetUserIdByToken(database.DB, token)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": err})
 		}

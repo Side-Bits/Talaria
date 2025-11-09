@@ -1,19 +1,30 @@
 package controllers
 
 import (
-	"database/sql"
-	"fmt"
+	"net/http"
+
+	"deus.est/hermes/database"
+	"deus.est/hermes/models"
+	"deus.est/hermes/repositories"
+	"github.com/gin-gonic/gin"
 )
 
-func GetUserIdByToken(db *sql.DB, token string) (string, error) {
-	var userId string
-	err := db.QueryRow("SELECT userId FROM Tokens WHERE token = ?", token).Scan(&userId)
+func HandleRegisterUser(c *gin.Context) {
+	var user models.User
+
+	err := c.BindJSON(&user)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return "", fmt.Errorf("getUserIdByToken %s: unknown album", token)
-		}
-		return "", fmt.Errorf("getUserIdByToken %s: %e", token, err)
+		c.JSON(http.StatusBadRequest, nil)
+		return
 	}
 
-	return userId, nil
+	err = repositories.RegisterUser(database.DB, &user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	// generate token
+
+	c.JSON(http.StatusOK, user)
 }
