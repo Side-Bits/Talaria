@@ -2,29 +2,29 @@ package database
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var DB *sql.DB
-
-func ConnectDatabase() {
-	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+func InitDB() *pgxpool.Pool {
+	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("Unable to create connection pool: %v\n", err)
 	}
-	defer conn.Close(context.Background())
+	return dbpool
+}
 
-	var greeting string
-	err = conn.QueryRow(context.Background(), "select 'Hello, world!'").Scan(&greeting)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
-	}
+type DBExecutor interface {
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+	Exec(ctx context.Context, sql string, args ...any) (pgconn.CommandTag, error)
+}
 
-	fmt.Println(greeting)
+type TxBeginner interface {
+	DBExecutor
+	Begin(ctx context.Context) (pgx.Tx, error)
 }

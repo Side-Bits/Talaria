@@ -1,28 +1,27 @@
 package main
 
 import (
-	"net/http"
+	"talaria/internal/api/handlers"
+	"talaria/internal/api/routes"
+	"talaria/internal/pkgs/database"
+	"talaria/internal/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default() // Includes logger and recovery middleware
+	dbpool := database.InitDB()
+	defer dbpool.Close()
 
-	// Basic route
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello from Gin!",
-		})
-	})
+	authService := services.NewAuthService(dbpool)
+	authHandler := handlers.NewAuthHandler(*authService)
 
-	// Example: GET /hello/Alice
-	r.GET("/hello/:name", func(c *gin.Context) {
-		name := c.Param("name")
-		c.JSON(http.StatusOK, gin.H{
-			"greeting": "Hello " + name,
-		})
-	})
+	userService := services.NewUserService(dbpool)
+	userHandler := handlers.NewUserHandler(*userService)
+
+	router := routes.NewRouter(authHandler, userHandler, authService)
+	router.SetupRoutes(r)
 
 	// Start server on port 8080
 	r.Run(":8080")
