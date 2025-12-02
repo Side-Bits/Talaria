@@ -37,6 +37,10 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 	}
 	defer tx.Rollback(ctx) // Rollback if not committed
 
+	if err := utils.HashPassword(&user.Password); err != nil {
+		return "", err
+	}
+
 	if err := s.userRepo.Create(ctx, user); err != nil {
 		return "", err
 	}
@@ -76,10 +80,4 @@ func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (st
 // RevokeToken explicitly revokes a token
 func (s *AuthService) RevokeToken(ctx context.Context, tokenString string) error {
 	return s.tokenRepo.Deactivate(ctx, tokenString)
-}
-
-func hashPassword(password string) string {
-	// TODO
-	// Use bcrypt or similar
-	return password // placeholder
 }
