@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function NotFoundScreen() {
   return (
-    <ThemedView type='right'>
+    <ThemedView type='center'>
       <ThemedText type="title">Not Found!</ThemedText>
     </ThemedView>
   );

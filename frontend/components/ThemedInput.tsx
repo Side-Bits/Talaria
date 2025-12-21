@@ -21,8 +21,6 @@ export function ThemedInput({ label, type, ...rest }: Props) {
 const styles = StyleSheet.create({
     view: {
         width: '100%',
-        maxWidth: 400,
-        paddingHorizontal: 16,
         marginBottom: 8,
     },
     label: {

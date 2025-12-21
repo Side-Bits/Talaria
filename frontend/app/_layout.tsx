@@ -18,7 +18,7 @@ function RootNavigator() {
   console.log('Session:', session);
 
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={!!session} >
         <Stack.Screen name="(app)" options={{ headerTitle: 'Talaria' }} />
       </Stack.Protected>

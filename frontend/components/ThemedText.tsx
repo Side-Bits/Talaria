@@ -23,15 +23,15 @@ export function ThemedText({ type = 'default', style, ...rest }: Props) {
 
 const styles = StyleSheet.create({
   default: {
-    fontSize: 10,
+    fontSize: 14,
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: Colors.light.tint,
   },
   subtitle: {
     fontSize: 16,
-    fontWeight: 'bold',
   },
   defaultSemiBold: {
     fontSize: 10,
@@ -39,5 +39,7 @@ const styles = StyleSheet.create({
   },
   link: {
     color: Colors.light.tint,
+    fontSize: 14,
+    cursor: 'pointer'
   },
 });

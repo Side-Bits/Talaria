@@ -2,10 +2,10 @@ import React from 'react';
 
 import { ThemedText } from '@/components/ThemedText';
 
-export default function TabRegister() {
+export default function SignUp() {
   return (
     <>
-      <ThemedText type="title">Register!</ThemedText>
+      <ThemedText type="title">Sign up!</ThemedText>
     </>
   );
 }
