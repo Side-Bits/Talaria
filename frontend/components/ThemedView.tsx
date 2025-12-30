@@ -1,7 +1,7 @@
 import { View, StyleSheet, ViewProps } from 'react-native';
 
 type Props = ViewProps & {
-  type: 'center' | 'left' | 'right' | 'align' | 'column' | 'container' | 'box';
+  type: 'center' | 'left' | 'right' | 'align' | 'column' | 'list' | 'container' | 'box' | 'between' | 'middle';
 };
 
 export function ThemedView({ type, style, ...rest }: Props) {
@@ -13,8 +13,11 @@ export function ThemedView({ type, style, ...rest }: Props) {
         type === 'right' ? styles.right : undefined,
         type === 'align' ? styles.align : undefined,
         type === 'column' ? styles.column : undefined,
+        type === 'list' ? styles.list : undefined,
         type === 'container' ? styles.container : undefined,
         type === 'box' ? styles.box : undefined,
+        type === 'between' ? styles.between : undefined,
+        type === 'middle' ? styles.middle : undefined,
         style
       ]}
       {...rest}
@@ -29,13 +32,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   left: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'flex-start',
   },
   right: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'flex-end',
   },
   align: {
@@ -48,12 +47,26 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  list: {
+    flex: 1,
+    flexDirection: 'column',
+  },
   container: {
     flex: 1,
     paddingHorizontal: 16,
   },
   box: {
     paddingVertical: 8,
+  },
+  between: {
+    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: 'center',
+  },
+  middle: {
+    flex: 1,
+    alignItems: 'center',
   }
 });
 

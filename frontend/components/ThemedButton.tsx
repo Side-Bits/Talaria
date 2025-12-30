@@ -2,7 +2,6 @@ import { Colors } from '@/constants/Colors';
 import { PressableProps, Pressable, Text, StyleSheet, TextStyle } from 'react-native';
 import { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
-
 type ThemedButtonProps = PressableProps & {
     title: string;
     buttonStyle?: ViewStyle;
@@ -20,7 +19,8 @@ export function ThemedButton({ title, buttonStyle, textStyle, ...others }: Theme
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: 'black',
+        width: '100%',
+        backgroundColor: Colors.light.tint,
         borderRadius: 12,
         paddingVertical: 8,
         paddingHorizontal: 16,
