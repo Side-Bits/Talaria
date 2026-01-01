@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Colors } from '@/constants/Colors';
 import { View, StyleSheet } from 'react-native';
 import { ThemedText } from './ThemedText';
+import { Checkbox } from 'expo-checkbox';
 
 type Props = & {
     label: string;
 };
 
 export function ThemedCheckbox({ label, ...rest }: Props) {
-    return <View>
+    const [isChecked, setChecked] = useState(false);
+
+    return <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <Checkbox style={{ marginRight: 4 }} value={isChecked} onValueChange={setChecked} />
         <ThemedText>Remember me</ThemedText>
     </View>
 }

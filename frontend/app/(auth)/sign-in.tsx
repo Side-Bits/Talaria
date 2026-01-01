@@ -11,18 +11,18 @@ export default function SignIn() {
   const { signIn } = useSession();
   return (
     <ThemedView type='center'>
-      <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 500, width:'100%', paddingHorizontal: 16 }}>
+      <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width:'100%', paddingHorizontal: 16 }}>
         <ThemedText type="title" style={{ marginBottom: 16 }}>Welcome back!</ThemedText>
         <ThemedInput type='email' label='Email' />
         <ThemedInput type='password' label='Password' />
         <ThemedView type='between' style={{ marginBottom: 16 }}>
           <ThemedCheckbox label='Remember me'></ThemedCheckbox>
-          <ThemedText type='link'>Forgot password?</ThemedText>
+          <ThemedText type='link' onPress={() => console.log('Forgot password')}>Forgot password?</ThemedText>
         </ThemedView>
         <ThemedButton title='Sing in' onPress={() => {
           signIn();
           // TODO: when sign in successful (async), redirect to the app
-          router.replace('/(app)/travel');
+          router.replace('/(app)/travels');
         }} />
       </ThemedView>
     </ThemedView>
