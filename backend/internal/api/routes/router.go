@@ -32,7 +32,7 @@ func (rt *Router) SetupRoutes(r *gin.Engine) {
 
 func (rt *Router) setupPublicRoutes(r *gin.Engine) {
 	r.POST("/register", rt.authHandler.Register)
-	// r.POST("/login", rt.authHandler.Login)
+	r.POST("/login", rt.authHandler.Login)
 }
 
 func (rt *Router) setupPrivateRoutes(r *gin.Engine) {
