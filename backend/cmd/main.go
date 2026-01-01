@@ -5,7 +5,6 @@ import (
 	"talaria/internal/api/routes"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/services"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,8 +18,9 @@ func main() {
 
 	userService := services.NewUserService(dbpool)
 	userHandler := handlers.NewUserHandler(*userService)
+	travelHandler := handlers.NewTravelHandler(*userService)
 
-	router := routes.NewRouter(authHandler, userHandler, authService)
+	router := routes.NewRouter(authHandler, userHandler, travelHandler, authService)
 	router.SetupRoutes(r)
 
 	// Start server on port 8080
