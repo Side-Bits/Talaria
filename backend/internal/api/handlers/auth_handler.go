@@ -29,7 +29,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 
 	err := c.BindJSON(&user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, nil)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -43,4 +43,23 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		User:  user,
 		Token: token,
 	})
+}
+
+func (h *AuthHandler) Login(c *gin.Context) {
+	var user models.User
+
+	err := c.BindJSON(&user)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	token, err := h.authService.Login(c, &user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusAccepted, token)
 }

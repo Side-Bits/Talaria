@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"talaria/internal/domain/models"
@@ -56,4 +57,21 @@ func (r *UserRepository) GetUserIdByToken(ctx context.Context, token string) (st
 	}
 
 	return userId, nil
+}
+
+func (r *UserRepository) ValidateUser(ctx context.Context, user *models.User) (bool, error) {
+	query := `SELECT is_active FROM Users WHERE name = $1 AND password = $2`
+
+	var active bool
+	err := r.db.QueryRow(ctx, query, user.Name, user.Password).Scan(&active)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return false, nil
+	}
+
+	if err != nil {
+		return false, err
+	}
+
+	return active, nil
 }

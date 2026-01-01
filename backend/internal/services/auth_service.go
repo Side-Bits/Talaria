@@ -45,13 +45,8 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 		return "", err
 	}
 
-	// Generate and save token
-	tokenString, err := utils.GenerateRandomToken(tokenLength)
+	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
 	if err != nil {
-		return "", err
-	}
-
-	if err := s.tokenRepo.CreateDefault(ctx, tokenString, user.ID); err != nil {
 		return "", err
 	}
 
@@ -60,6 +55,48 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 		return "", err
 	}
 
+	return tokenString, nil
+}
+
+func (s *AuthService) Login(ctx context.Context, user *models.User) (string, error) {
+	// 1. Check user exists and password hash is correct
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return "", err
+	}
+	defer tx.Rollback(ctx) // Rollback if not committed
+
+	if err := utils.HashPassword(&user.Password); err != nil {
+		return "", err
+	}
+
+	valid, err := s.userRepo.ValidateUser(ctx, user)
+
+	if !valid {
+		return "", err
+	}
+
+	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
+	if err != nil {
+		return "", err
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
+}
+
+func generateAndSaveNewToken(ctx context.Context, repo *repositories.TokenRepository, user models.User) (string, error) {
+	tokenString, err := utils.GenerateRandomToken(tokenLength)
+	if err != nil {
+		return "", err
+	}
+
+	if err := repo.CreateDefault(ctx, tokenString, user.ID); err != nil {
+		return "", err
+	}
 	return tokenString, nil
 }
 
