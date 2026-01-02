@@ -32,9 +32,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   left: {
+    width: '100%',
     alignItems: 'flex-start',
   },
   right: {
+    width: '100%',
     alignItems: 'flex-end',
   },
   align: {
