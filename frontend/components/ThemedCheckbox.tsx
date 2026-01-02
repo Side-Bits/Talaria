@@ -11,9 +11,9 @@ type Props = & {
 export function ThemedCheckbox({ label, ...rest }: Props) {
     const [isChecked, setChecked] = useState(false);
 
-    return <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+    return <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Checkbox style={{ marginRight: 4 }} value={isChecked} onValueChange={setChecked} />
-        <ThemedText>Remember me</ThemedText>
+        <ThemedText>{label}</ThemedText>
     </View>
 }
 
