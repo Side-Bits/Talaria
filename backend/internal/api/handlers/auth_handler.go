@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/services"
 
@@ -46,20 +45,24 @@ func (h *AuthHandler) Register(c *gin.Context) {
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {
-	var user models.User
+	var data map[string]string
 
-	err := c.BindJSON(&user)
+	if err := c.BindJSON(&data); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
+	identifier := data["identifier"]
+	password := data["password"]
+
+	user, token, err := h.authService.Login(c, identifier, password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	token, err := h.authService.Login(c, &user)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusAccepted, token)
+	c.JSON(http.StatusAccepted, RegisterResponse{
+		User:  *user,
+		Token: token,
+	})
 }

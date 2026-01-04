@@ -4,10 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"time"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
+	"time"
 )
 
 type TokenRepository struct {
@@ -36,15 +35,14 @@ func (r *TokenRepository) Create(ctx context.Context, token *models.UserToken) e
 
 func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userId string) error {
 	query := `
-        INSERT INTO user_tokens (user_id, token, created_at, expires_at, is_active)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO user_tokens (user_id, token, created_at, expires_at)
+        VALUES ($1, $2, $3, $4)
     `
 	_, err := r.db.Exec(ctx, query,
 		userId,
 		token,
 		time.Now(),
 		time.Now().Add(r.tokenTTL),
-		true,
 	)
 	return err
 }
