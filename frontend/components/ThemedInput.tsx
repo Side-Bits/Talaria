@@ -11,7 +11,7 @@ export function ThemedInput({ label, type, ...rest }: Props) {
     return (
         <View style={styles.view}>
             <Text style={styles.label}>{label}</Text>
-            <TextInput style={styles.input}
+            <TextInput style={styles.input} secureTextEntry={type === 'password'}
                 {...rest}
             />
         </View>

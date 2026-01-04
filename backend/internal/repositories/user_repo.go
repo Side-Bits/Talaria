@@ -3,9 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 )
@@ -20,7 +18,7 @@ func NewUserRepository(db database.DBExecutor) *UserRepository {
 
 func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 	query := `
-        INSERT INTO users (name, email, password)
+        INSERT INTO users (username, email, password)
         VALUES ($1, $2, $3)
         RETURNING id;
     `
@@ -29,7 +27,7 @@ func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 
 func (r *UserRepository) GetByID(ctx context.Context, userID string) (*models.User, error) {
 	query := `
-				SELECT id, name, email, password FROM Users WHERE id = $1
+				SELECT id, username, email, password FROM Users WHERE id = $1
 		`
 	var user models.User
 	err := r.db.QueryRow(ctx, query, userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
@@ -38,6 +36,24 @@ func (r *UserRepository) GetByID(ctx context.Context, userID string) (*models.Us
 			return nil, fmt.Errorf("GetByID %s: user not found", userID)
 		}
 		return nil, fmt.Errorf("GetByID %s: %e", userID, err)
+	}
+
+	return &user, nil
+}
+
+func (r *UserRepository) GetByUsernameOrEmail(ctx context.Context, identifier string) (*models.User, error) {
+	query := `
+		SELECT id, username, email, password
+		FROM users
+		WHERE username = $1 OR email = $1
+		LIMIT 1
+	`
+
+	var user models.User
+	err := r.db.QueryRow(ctx, query, identifier).
+		Scan(&user.ID, &user.Name, &user.Email, &user.Password)
+	if err != nil {
+		return nil, err
 	}
 
 	return &user, nil
@@ -57,21 +73,4 @@ func (r *UserRepository) GetUserIdByToken(ctx context.Context, token string) (st
 	}
 
 	return userId, nil
-}
-
-func (r *UserRepository) ValidateUser(ctx context.Context, user *models.User) (bool, error) {
-	query := `SELECT is_active FROM Users WHERE name = $1 AND password = $2`
-
-	var active bool
-	err := r.db.QueryRow(ctx, query, user.Name, user.Password).Scan(&active)
-
-	if errors.Is(err, sql.ErrNoRows) {
-		return false, nil
-	}
-
-	if err != nil {
-		return false, err
-	}
-
-	return active, nil
 }
