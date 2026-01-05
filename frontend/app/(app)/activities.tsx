@@ -11,32 +11,28 @@ export default function TabActivities() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
 
   return (
-    <ThemedView type='middle' style={{ backgroundColor: '#fff' }}>
-      <View style={{ maxWidth: 500, width:'100%', paddingHorizontal: 16 }}>
-        <ThemedView type='left'>
-          <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-            <ThemedView type='list' style={{ marginBottom: 32, marginTop: 32 }}>
-              <ThemedView type='between'>
-                <ThemedText type="title">Viaje a Venecia</ThemedText>
-              </ThemedView>
-              <ThemedText type="default" style={{ color: Colors.light.gray }}>Italy</ThemedText>
-            </ThemedView>
-            <ThemedView type='left' style={{ width:'100%' }}>
-              <ThemedView type='between' style={{ marginBottom: 8 }}>
-                <ThemedText type="subtitle">Monday</ThemedText>
-                <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} />
-              </ThemedView>
-              {Array.from({ length: 2 }).map((_, i) => (
-                <Pressable style={ styles.container } onPress={() => router.replace('/(app)/travels')}>
-                  <ThemedView key={i} type='list'>
-                    <ThemedText type="default">Lugar</ThemedText>
-                  </ThemedView>
-                </Pressable>
-              ))}
-            </ThemedView>
-          </ScrollView>
+    <ThemedView type='left'>
+      <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
+        <ThemedView type='list' style={{ marginBottom: 32, marginTop: 32 }}>
+          <ThemedView type='between'>
+            <ThemedText type="title">Viaje a Venecia</ThemedText>
+          </ThemedView>
+          <ThemedText type="default" style={{ color: Colors.light.gray }}>Italy</ThemedText>
         </ThemedView>
-      </View>
+        <ThemedView type='left' style={{ width:'100%' }}>
+          <ThemedView type='between' style={{ marginBottom: 8 }}>
+            <ThemedText type="subtitle">Monday</ThemedText>
+            <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} />
+          </ThemedView>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Pressable style={ styles.container } onPress={() => router.replace('/(app)/activity')}>
+              <ThemedView key={i} type='list'>
+                <ThemedText type="default">Lugar</ThemedText>
+              </ThemedView>
+            </Pressable>
+          ))}
+        </ThemedView>
+      </ScrollView>
     </ThemedView>
   );
 }
