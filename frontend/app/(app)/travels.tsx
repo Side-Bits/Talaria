@@ -31,31 +31,27 @@ export default function TabTravels() {
   }, []);
 
   return (
-    <ThemedView type='middle' style={{ backgroundColor: '#fff' }}>
-      <View style={{ maxWidth: 500, width:'100%', paddingHorizontal: 16 }}>
-        <ThemedView type='left'>
-          <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-            <ThemedView type='between' style={{ marginBottom: 32, marginTop: 32 }}>
-              <ThemedText type="title">Travels</ThemedText>
-              <Ionicons name="options-outline" size={20} color={Colors.light.gray} />
-            </ThemedView>
-            <ThemedView type='left' style={{ width:'100%' }}>
-                <ThemedView type='between' style={{ marginBottom: 8 }}>
-                  <ThemedText type="subtitle">On going</ThemedText>
-                  <ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
-                </ThemedView>
-                {travels.map((travel) => (
-                  <Pressable key={travel.id} style={ styles.container } onPress={() => router.replace('/(app)/activities')}>
-                    <ThemedView type='list'>
-                      <ThemedText type="default">{travel.name}</ThemedText>
-                      <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(travel.start_date).toLocaleDateString()} a {new Date(travel.end_date).toLocaleDateString()}</ThemedText>
-                    </ThemedView>
-                  </Pressable>
-                ))}
-            </ThemedView>
-          </ScrollView>
+    <ThemedView type='left'>
+      <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
+        <ThemedView type='between' style={{ marginBottom: 32, marginTop: 32 }}>
+          <ThemedText type="title">Travels</ThemedText>
+          <Ionicons name="options-outline" size={20} color={Colors.light.gray} />
         </ThemedView>
-      </View>
+        <ThemedView type='left' style={{ width:'100%' }}>
+            <ThemedView type='between' style={{ marginBottom: 8 }}>
+              <ThemedText type="subtitle">On going</ThemedText>
+              <ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
+            </ThemedView>
+            {travels.map((travel) => (
+              <Pressable key={travel.id} style={ styles.container } onPress={() => router.replace('/(app)/activities')}>
+                <ThemedView type='list'>
+                  <ThemedText type="default">{travel.name}</ThemedText>
+                  <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(travel.start_date).toLocaleDateString()} a {new Date(travel.end_date).toLocaleDateString()}</ThemedText>
+                </ThemedView>
+              </Pressable>
+            ))}
+        </ThemedView>
+      </ScrollView>
     </ThemedView>
   );
 }
