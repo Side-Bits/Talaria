@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
 import { StyleSheet, ScrollView, useWindowDimensions, View, Pressable } from 'react-native';
@@ -10,6 +10,27 @@ import { router } from 'expo-router';
 export default function TabActivities() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
 
+    type Activity = {
+      id: string;
+      name: string;
+      start_date: string;
+      end_date: string;
+      duration: string;
+      finished?: boolean;
+    };
+  
+    const [activity, setActivities] = useState<Activity[]>([]);
+  
+    useEffect(() => {
+      fetch('http://localhost:8080/activities?id_travel=c9bf9e57-1685-4c89-bafb-ff5af830be8a', { method: 'GET' })
+        .then(res => {
+          if (!res.ok) throw new Error(res.statusText);
+          return res.json();
+        })
+        .then(data => Array.isArray(data) ? setActivities(data) : setActivities([]))
+        .catch(e => console.error('Failed to fetch activities', e));
+    }, []);
+
   return (
     <ThemedView type='left'>
       <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
@@ -18,16 +39,27 @@ export default function TabActivities() {
             <ThemedText type="title">Viaje a Venecia</ThemedText>
           </ThemedView>
           <ThemedText type="default" style={{ color: Colors.light.gray }}>Italy</ThemedText>
+          <ThemedView type='row' style={{ marginTop: 8 }}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <View style={[styles.perfile, { width: 20, height: 20 }]} />
+            ))}
+          </ThemedView>
         </ThemedView>
         <ThemedView type='left' style={{ width:'100%' }}>
           <ThemedView type='between' style={{ marginBottom: 8 }}>
             <ThemedText type="subtitle">Monday</ThemedText>
             <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} />
           </ThemedView>
-          {Array.from({ length: 3 }).map((_, i) => (
+          {activity.map((activity) => (
             <Pressable style={ styles.container } onPress={() => router.replace('/(app)/activity')}>
-              <ThemedView key={i} type='list'>
-                <ThemedText type="default">Lugar</ThemedText>
+              <ThemedView key={activity.id} type='list'>
+                <ThemedText type="default">{activity.name}</ThemedText>
+                <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(activity.start_date).toLocaleDateString()} a {new Date(activity.end_date).toLocaleDateString()}</ThemedText>
+                <ThemedView type='row' style={{ marginTop: 4 }}>
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <View style={[styles.perfile, { width: 15, height: 15 }]} />
+                  ))}
+                </ThemedView>
               </ThemedView>
             </Pressable>
           ))}
@@ -47,5 +79,10 @@ const styles = StyleSheet.create({
     borderBlockColor: Colors.light.border,
     backgroundColor: Colors.light.template,
     marginBottom: 8,
+  },
+  perfile: {
+    backgroundColor: '#ccc',
+    borderRadius: 50,
+    marginRight: 2
   }
 });

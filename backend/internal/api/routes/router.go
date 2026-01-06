@@ -4,7 +4,6 @@ package routes
 import (
 	"talaria/internal/api/handlers"
 	"talaria/internal/api/middleware"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,14 +11,16 @@ type Router struct {
 	authHandler   *handlers.AuthHandler
 	userHandler   *handlers.UserHandler
 	travelHandler *handlers.TravelHandler
+	activityHandler *handlers.ActivityHandler
 	tokenService  middleware.TokenValidator
 }
 
-func NewRouter(authHandler *handlers.AuthHandler, userHandler *handlers.UserHandler, travelHandler *handlers.TravelHandler, tokenService middleware.TokenValidator) *Router {
+func NewRouter(authHandler *handlers.AuthHandler, userHandler *handlers.UserHandler, travelHandler *handlers.TravelHandler, activityHandler *handlers.ActivityHandler, tokenService middleware.TokenValidator) *Router {
 	return &Router{
 		authHandler:   authHandler,
 		userHandler:   userHandler,
 		travelHandler: travelHandler,
+		activityHandler: activityHandler,
 		tokenService:  tokenService,
 	}
 }
@@ -36,6 +37,7 @@ func (rt *Router) setupPublicRoutes(r *gin.Engine) {
 	r.POST("/register", rt.authHandler.Register)
 	r.POST("/login", rt.authHandler.Login)
 	r.GET("/travels", rt.travelHandler.Travel)
+	r.GET("/activities", rt.activityHandler.Activity)
 }
 
 func (rt *Router) setupPrivateRoutes(r *gin.Engine) {

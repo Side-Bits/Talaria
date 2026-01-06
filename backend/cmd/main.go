@@ -30,14 +30,16 @@ func main() {
 	dbpool := database.InitDB()
 	defer dbpool.Close()
 
+	// Initialize
 	authService := services.NewAuthService(dbpool)
 	authHandler := handlers.NewAuthHandler(*authService)
 
 	userService := services.NewUserService(dbpool)
 	userHandler := handlers.NewUserHandler(*userService)
 	travelHandler := handlers.NewTravelHandler(*userService)
+	activityHandler := handlers.NewActivityHandler(*userService)
 
-	router := routes.NewRouter(authHandler, userHandler, travelHandler, authService)
+	router := routes.NewRouter(authHandler, userHandler, travelHandler, activityHandler, authService)
 	router.SetupRoutes(r)
 
 	// Start server on port 8080
