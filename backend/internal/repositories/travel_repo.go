@@ -14,6 +14,8 @@ func (r *UserRepository) GetTravels(ctx context.Context, id_user string) ([]mode
 		INNER JOIN clients_travels ON clients_travels.id_travel = travels.id_travel
 		INNER JOIN clients ON clients.id_user = clients_travels.id_user
 		WHERE clients.id_user = $1
+		ORDER BY travels.start_date ASC
+		LIMIT 5
 	`, id_user)
 	
 	if err != nil { return nil, err }

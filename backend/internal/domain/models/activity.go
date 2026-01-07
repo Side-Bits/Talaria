@@ -12,7 +12,6 @@ type Activity struct {
 	Location 	string `json:"location"`
 	StartDate  	time.Time `json:"start_date"`
 	EndDate    	time.Time `json:"end_date"`
-	Duration    time.Time `json:"duration"`
 	Price 		float64 `json:"price"`
 	Finished 	bool `json:"finished"`
 }

@@ -9,7 +9,7 @@ func (r *UserRepository) GetActivities(ctx context.Context, id_travel string) ([
 	var activities []models.Activity
 
 	rows, err := r.db.Query(ctx, `
-		SELECT activities.name, activities.start_date, activities.end_date, activities.duration
+		SELECT activities.name, activities.start_date, activities.end_date
 		FROM activities
 		WHERE activities.id_travel = $1
 		ORDER BY activities.start_date ASC
@@ -21,7 +21,7 @@ func (r *UserRepository) GetActivities(ctx context.Context, id_travel string) ([
 
 	for rows.Next() {
 		var activity models.Activity
-		if err := rows.Scan(&activity.Name, &activity.StartDate, &activity.EndDate, &activity.Duration); err != nil {
+		if err := rows.Scan(&activity.Name, &activity.StartDate, &activity.EndDate); err != nil {
 			return nil, err
 		}
 		activities = append(activities, activity)
