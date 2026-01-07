@@ -15,7 +15,6 @@ export default function TabActivities() {
       name: string;
       start_date: string;
       end_date: string;
-      duration: string;
       finished?: boolean;
     };
   
@@ -37,6 +36,7 @@ export default function TabActivities() {
         <ThemedView type='list' style={{ marginBottom: 32, marginTop: 32 }}>
           <ThemedView type='between'>
             <ThemedText type="title">Viaje a Venecia</ThemedText>
+            <Ionicons name="options-outline" size={20} color={Colors.light.gray} />
           </ThemedView>
           <ThemedText type="default" style={{ color: Colors.light.gray }}>Italy</ThemedText>
           <ThemedView type='row' style={{ marginTop: 8 }}>
@@ -51,10 +51,10 @@ export default function TabActivities() {
             <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} />
           </ThemedView>
           {activity.map((activity) => (
-            <Pressable style={ styles.container } onPress={() => router.replace('/(app)/activity')}>
+            <Pressable style={ styles.container } onPress={() => router.replace('/(app)/id-activity')}>
               <ThemedView key={activity.id} type='list'>
                 <ThemedText type="default">{activity.name}</ThemedText>
-                <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(activity.start_date).toLocaleDateString()} a {new Date(activity.end_date).toLocaleDateString()}</ThemedText>
+                <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(activity.start_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} a {new Date(activity.end_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} </ThemedText>
                 <ThemedView type='row' style={{ marginTop: 4 }}>
                   {Array.from({ length: 3 }).map((_, i) => (
                     <View style={[styles.perfile, { width: 15, height: 15 }]} />

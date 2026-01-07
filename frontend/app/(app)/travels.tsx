@@ -38,18 +38,18 @@ export default function TabTravels() {
           <Ionicons name="options-outline" size={20} color={Colors.light.gray} />
         </ThemedView>
         <ThemedView type='left' style={{ width:'100%' }}>
-            <ThemedView type='between' style={{ marginBottom: 8 }}>
-              <ThemedText type="subtitle">On going</ThemedText>
-              <ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
-            </ThemedView>
-            {travels.map((travel) => (
-              <Pressable key={travel.id} style={ styles.container } onPress={() => router.replace('/(app)/activities')}>
-                <ThemedView type='list'>
-                  <ThemedText type="default">{travel.name}</ThemedText>
-                  <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(travel.start_date).toLocaleDateString()} a {new Date(travel.end_date).toLocaleDateString()}</ThemedText>
-                </ThemedView>
-              </Pressable>
-            ))}
+          <ThemedView type='between' style={{ marginBottom: 8 }}>
+            <ThemedText type="subtitle">On going</ThemedText>
+            <ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
+          </ThemedView>
+          {travels.map((travel) => (
+            <Pressable key={travel.id} style={ styles.container } onPress={() => router.replace('/(app)/activities')}>
+              <ThemedView type='list'>
+                <ThemedText type="default">{travel.name}</ThemedText>
+                <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(travel.start_date).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', hour12: false })} a {new Date(travel.end_date).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', hour12: false })}</ThemedText>
+              </ThemedView>
+            </Pressable>
+          ))}
         </ThemedView>
       </ScrollView>
     </ThemedView>

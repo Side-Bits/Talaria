@@ -19,12 +19,12 @@ export default function Root() {
                 <Ionicons name="home-outline" size={20} color={Colors.light.gray} />
               </View>
             </Pressable>
-            <Pressable onPress={() => router.replace('/(app)/activity')}>
+            <Pressable onPress={() => router.replace('/(app)/id-travel')}>
               <View style={ styles.box }>
-                <Ionicons name="add-outline" size={30} color={Colors.light.text} />
+                <Ionicons name="add-outline" size={25} color={Colors.light.tint} />
               </View>
             </Pressable>
-            <Pressable onPress={() => console.log('person-outline')}>
+            <Pressable onPress={() => router.replace('/(app)/id-perfile')}>
               <View style={ styles.box }>
                 <Ionicons name="person-outline" size={20} color={Colors.light.gray} />
               </View>
