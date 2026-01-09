@@ -15,7 +15,7 @@ export default function SignIn() {
   const { signIn } = useSession();
 
   const [credentials, setCredentials] = useState<LoginCredentials>({
-    email: '',
+    identifier: '',
     password: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,7 +36,7 @@ export default function SignIn() {
     <ThemedView type='center'>
       <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width: '100%', paddingHorizontal: 16 }}>
         <ThemedText type="title" style={{ marginBottom: 16 }}>Welcome back!</ThemedText>
-        <ThemedInput type='email' label='Email' value={credentials.email} onChangeText={text => setCredentials({ ...credentials, email: text })} />
+        <ThemedInput type='email' label='Email' value={credentials.identifier} onChangeText={text => setCredentials({ ...credentials, identifier: text })} />
         <ThemedInput type='password' label='Password' value={credentials.password} onChangeText={text => setCredentials({ ...credentials, password: text })} />
         <ThemedView type='between' style={{ marginBottom: 16 }}>
           <ThemedCheckbox label='Remember me'></ThemedCheckbox>

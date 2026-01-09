@@ -28,13 +28,13 @@ func (h *AuthHandler) Register(c *gin.Context) {
 
 	err := c.BindJSON(&user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 		return
 	}
 
 	token, err := h.authService.Register(c, &user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, nil)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
