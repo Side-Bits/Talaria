@@ -2,24 +2,31 @@ package utils
 
 import (
 	"crypto/rand"
-	"crypto/sha256"
 	"encoding/base64"
-	"encoding/hex"
-	"fmt"
+	"errors"
+
+	"github.com/alexedwards/argon2id"
 )
 
-func HashPassword(password *string) error {
-	if password == nil || *password == "" {
-		return fmt.Errorf("password cannot be nil or empty")
+func HashPassword(password string) (string, error) {
+	if len(password) < 6 {
+		return "", errors.New("password must be at least 6 characters long")
 	}
 
-	if len(*password) < 6 {
-		return fmt.Errorf("password must be at least 6 characters long")
+	return argon2id.CreateHash(
+		password,
+		argon2id.DefaultParams,
+	)
+}
+
+func VerifyPassword(storedHash, password string) error {
+	match, err := argon2id.ComparePasswordAndHash(password, storedHash)
+	if err != nil {
+		return err
 	}
-
-	hashed := sha256.Sum256([]byte(*password))
-	*password = hex.EncodeToString(hashed[:])
-
+	if !match {
+		return errors.New("invalid credentials")
+	}
 	return nil
 }
 

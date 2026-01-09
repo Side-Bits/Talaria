@@ -2,12 +2,12 @@ package services
 
 import (
 	"context"
-	"time"
-
+	"errors"
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/pkgs/utils"
 	"talaria/internal/repositories"
+	"time"
 )
 
 const (
@@ -37,17 +37,20 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 	}
 	defer tx.Rollback(ctx) // Rollback if not committed
 
-	if err := utils.HashPassword(&user.Password); err != nil {
-		return "", err
+	hash, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return "", errors.New("Failed to hash password " + user.Password + " -> " + err.Error())
 	}
 
+	user.Password = hash
+
 	if err := s.userRepo.Create(ctx, user); err != nil {
-		return "", err
+		return "", errors.New("Failed to create user: " + err.Error())
 	}
 
 	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
 	if err != nil {
-		return "", err
+		return "", errors.New("Failed to generate auth token: " + err.Error())
 	}
 
 	// Commit transaction
@@ -58,34 +61,33 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 	return tokenString, nil
 }
 
-func (s *AuthService) Login(ctx context.Context, user *models.User) (string, error) {
+func (s *AuthService) Login(ctx context.Context, identifier string, password string) (*models.User, string, error) {
 	// 1. Check user exists and password hash is correct
 	tx, err := s.db.Begin(ctx)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
 	defer tx.Rollback(ctx) // Rollback if not committed
 
-	if err := utils.HashPassword(&user.Password); err != nil {
-		return "", err
+	user, err := s.userRepo.GetByUsernameOrEmail(ctx, identifier)
+	if err != nil {
+		return nil, "", errors.New("invalid credentials: " + err.Error())
 	}
 
-	valid, err := s.userRepo.ValidateUser(ctx, user)
-
-	if !valid {
-		return "", err
+	if err := utils.VerifyPassword(user.Password, password); err != nil {
+		return nil, "", errors.New("invalid credentials: " + err.Error())
 	}
 
 	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return "", err
+		return nil, "", err
 	}
 
-	return tokenString, nil
+	return user, tokenString, nil
 }
 
 func generateAndSaveNewToken(ctx context.Context, repo *repositories.TokenRepository, user models.User) (string, error) {

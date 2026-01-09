@@ -3,11 +3,12 @@ package repositories
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 )
 
 type UserRepository struct {
@@ -20,16 +21,22 @@ func NewUserRepository(db database.DBExecutor) *UserRepository {
 
 func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 	query := `
-        INSERT INTO users (name, email, password)
-        VALUES ($1, $2, $3)
-        RETURNING id;
+        INSERT INTO users (id_user, username, email, password, terms)
+        VALUES ($1, $2, $3, $4, true)
+        RETURNING id_user;
     `
-	return r.db.QueryRow(ctx, query, user.Name, user.Email, user.Password).Scan(&user.ID)
+
+	id, err := uuid.NewV7()
+	if err != nil {
+		return fmt.Errorf("Failed to generate UUID: %w", err)
+	}
+
+	return r.db.QueryRow(ctx, query, id, user.Name, user.Email, user.Password).Scan(&user.ID)
 }
 
 func (r *UserRepository) GetByID(ctx context.Context, userID string) (*models.User, error) {
 	query := `
-				SELECT id, name, email, password FROM Users WHERE id = $1
+				SELECT id_user, username, email, password FROM Users WHERE id_user = $1
 		`
 	var user models.User
 	err := r.db.QueryRow(ctx, query, userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
@@ -43,9 +50,31 @@ func (r *UserRepository) GetByID(ctx context.Context, userID string) (*models.Us
 	return &user, nil
 }
 
+func (r *UserRepository) GetByUsernameOrEmail(ctx context.Context, identifier string) (*models.User, error) {
+	query := `
+		SELECT id_user, username, email, password
+		FROM users
+		WHERE username = $1 OR email = $1
+		LIMIT 1
+	`
+
+	var user models.User
+	err := r.db.QueryRow(ctx, query, identifier).
+		Scan(&user.ID, &user.Name, &user.Email, &user.Password)
+
+	if err == pgx.ErrNoRows {
+		return nil, fmt.Errorf("GetByUsernameOrEmail %s: user not found", identifier)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (r *UserRepository) GetUserIdByToken(ctx context.Context, token string) (string, error) {
 	query := `
-				SELECT userId FROM Tokens WHERE token = $1 AND is_active = true
+				SELECT id_user FROM Tokens WHERE token = $1 AND is_active = true
 		`
 	var userId string
 	err := r.db.QueryRow(ctx, query, token).Scan(&userId)
@@ -57,21 +86,4 @@ func (r *UserRepository) GetUserIdByToken(ctx context.Context, token string) (st
 	}
 
 	return userId, nil
-}
-
-func (r *UserRepository) ValidateUser(ctx context.Context, user *models.User) (bool, error) {
-	query := `SELECT is_active FROM Users WHERE name = $1 AND password = $2`
-
-	var active bool
-	err := r.db.QueryRow(ctx, query, user.Name, user.Password).Scan(&active)
-
-	if errors.Is(err, sql.ErrNoRows) {
-		return false, nil
-	}
-
-	if err != nil {
-		return false, err
-	}
-
-	return active, nil
 }
