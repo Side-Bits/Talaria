@@ -18,25 +18,14 @@ func NewTokenRepository(db database.DBExecutor, tokenTTL time.Duration) *TokenRe
 	return &TokenRepository{db: db, tokenTTL: tokenTTL}
 }
 
-func (r *TokenRepository) Create(ctx context.Context, token *models.UserToken) error {
-	query := `
-        INSERT INTO user_tokens (id_user, token, created_at, expires_at, is_active)
-        VALUES ($1, $2, $3, $4, $5)
-    `
-	_, err := r.db.Exec(ctx, query,
-		token.UserID,
-		token.Token,
-		token.CreatedAt,
-		token.ExpiresAt,
-		token.IsActive,
-	)
-	return err
-}
-
 func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userId string) error {
 	query := `
-        INSERT INTO session_token (id_user, token, created_at, expires_at)
-        VALUES ($1, $2, $3, $4)
+	      INSERT INTO session_token (id_user, token, created_at, expires_at)
+		    VALUES ($1, $2, $3, $4) 
+	      ON CONFLICT (id_user) DO UPDATE SET 
+            token = EXCLUDED.token,
+            created_at = EXCLUDED.created_at,
+            expires_at = EXCLUDED.expires_at;
     `
 	_, err := r.db.Exec(ctx, query,
 		userId,
