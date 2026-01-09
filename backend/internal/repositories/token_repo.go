@@ -20,7 +20,7 @@ func NewTokenRepository(db database.DBExecutor, tokenTTL time.Duration) *TokenRe
 
 func (r *TokenRepository) Create(ctx context.Context, token *models.UserToken) error {
 	query := `
-        INSERT INTO user_tokens (user_id, token, created_at, expires_at, is_active)
+        INSERT INTO user_tokens (id_user, token, created_at, expires_at, is_active)
         VALUES ($1, $2, $3, $4, $5)
     `
 	_, err := r.db.Exec(ctx, query,
@@ -35,7 +35,7 @@ func (r *TokenRepository) Create(ctx context.Context, token *models.UserToken) e
 
 func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userId string) error {
 	query := `
-        INSERT INTO user_tokens (user_id, token, created_at, expires_at)
+        INSERT INTO session_token (id_user, token, created_at, expires_at)
         VALUES ($1, $2, $3, $4)
     `
 	_, err := r.db.Exec(ctx, query,
@@ -49,7 +49,7 @@ func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userI
 
 func (r *TokenRepository) FindByToken(ctx context.Context, tokenString string) (*models.UserToken, error) {
 	query := `
-        SELECT user_id, token, created_at, expires_at, is_active
+        SELECT id_user, token, created_at, expires_at, is_active
         FROM user_tokens 
         WHERE token = $1
     `
@@ -74,9 +74,9 @@ func (r *TokenRepository) FindByToken(ctx context.Context, tokenString string) (
 
 func (r *TokenRepository) FindByUserID(ctx context.Context, userID string) ([]models.UserToken, error) {
 	query := `
-        SELECT user_id, token, created_at, expires_at, is_active
+        SELECT id_user, token, created_at, expires_at, is_active
         FROM user_tokens 
-        WHERE user_id = $1 AND is_active = true
+        WHERE id_user = $1 AND is_active = true
         ORDER BY created_at DESC
     `
 

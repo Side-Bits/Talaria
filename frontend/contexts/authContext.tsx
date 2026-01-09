@@ -1,10 +1,11 @@
 import { use, createContext, type PropsWithChildren } from 'react';
 import { useStorageState } from '@/hooks/useStorageState';
-import { User, LoginCredentials } from '@/types/user';
+import { User, LoginCredentials, RegisterCredentials } from '@/types/user';
 import { api } from '@/services/api';
 
 interface AuthContextType {
 	signIn: (credentials: LoginCredentials) => Promise<void>;
+	signUp: (credentials: RegisterCredentials) => Promise<void>;
 	signOut: () => Promise<void>;
 	session?: string | null;
 	user?: User | null;
@@ -13,6 +14,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
 	signIn: async () => { },
+	signUp: async () => { },
 	signOut: async () => { },
 	session: null,
 	user: null,
@@ -35,7 +37,28 @@ export function SessionProvider({ children }: PropsWithChildren) {
 		try {
 			const response = await api.post<{ token: string; user: User }>(
 				'login',
-				{ email: credentials.email, password: credentials.password },
+				{ identifier: credentials.identifier, password: credentials.password },
+				{ requiresAuth: false }  // No auth header added
+			);
+			console.log(response);
+
+			// Store session token and user data
+			setSession(response.token);
+			setUserData(JSON.stringify(response.user));
+		} catch (error) {
+			// Clear any existing session on error
+			setSession(null);
+			setUserData(null);
+			throw error;
+		}
+	};
+
+
+	const signUp = async (credentials: RegisterCredentials): Promise<void> => {
+		try {
+			const response = await api.post<{ token: string; user: User }>(
+				'register',
+				{ username: credentials.username, identifier: credentials.identifier, password: credentials.password },
 				{ requiresAuth: false }  // No auth header added
 			);
 			console.log(response);
@@ -67,6 +90,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 		<AuthContext
 			value={{
 				signIn,
+				signUp,
 				signOut,
 				session,
 				user: userData ? JSON.parse(userData) : null,

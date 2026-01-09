@@ -39,18 +39,18 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 
 	hash, err := utils.HashPassword(user.Password)
 	if err != nil {
-		return "", err
+		return "", errors.New("Failed to hash password " + user.Password + " -> " + err.Error())
 	}
 
 	user.Password = hash
 
 	if err := s.userRepo.Create(ctx, user); err != nil {
-		return "", err
+		return "", errors.New("Failed to create user: " + err.Error())
 	}
 
 	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
 	if err != nil {
-		return "", err
+		return "", errors.New("Failed to generate auth token: " + err.Error())
 	}
 
 	// Commit transaction
@@ -71,11 +71,11 @@ func (s *AuthService) Login(ctx context.Context, identifier string, password str
 
 	user, err := s.userRepo.GetByUsernameOrEmail(ctx, identifier)
 	if err != nil {
-		return nil, "", errors.New("invalid credentials")
+		return nil, "", errors.New("invalid credentials: " + err.Error())
 	}
 
 	if err := utils.VerifyPassword(user.Password, password); err != nil {
-		return nil, "", errors.New("invalid credentials")
+		return nil, "", errors.New("invalid credentials: " + err.Error())
 	}
 
 	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
