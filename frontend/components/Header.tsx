@@ -1,19 +1,29 @@
 import { ThemedText } from './ThemedText';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { ThemedView } from './ThemedView';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
+import { router } from 'expo-router';
 
-export function Header() {
+type Props = & {
+  label: string;
+};
+
+export function Header({ label }: Props ) {
   return (
-    <View style={styles.header}>
-      <ThemedText type="title">Hola Mundo</ThemedText>
-    </View>
+    <ThemedView type='between' style={ styles.header }>
+      <Pressable onPress={() => router.replace('/(app)/travels')}>
+        <Ionicons name="arrow-back-outline" size={20} color={Colors.light.text} />
+      </Pressable>
+      <ThemedText type="title">{ label }</ThemedText>
+      <Ionicons name="options-outline" size={20} color={Colors.light.text} onPress={() => console.log('options-outline')} />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 50,
-    paddingBottom: 20,
-    paddingHorizontal: 16,
+    paddingVertical: 32,
     alignItems: 'center',
-  },
-}); 
+  }
+});

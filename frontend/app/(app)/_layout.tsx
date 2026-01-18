@@ -1,4 +1,6 @@
+import { Footer } from '@/components/Footer';
 import { ThemedBlur } from '@/components/ThemedBlur';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,25 +14,6 @@ export default function Root() {
     <ThemedView type='middle'>
       <View style={{ maxWidth: 500, width:'100%', height: height, paddingHorizontal: 16 }}>
         <RootNavigator />
-        <View style={{ position: 'absolute', bottom: 64, width: Math.min(500 - 32, width - 32), alignItems: 'center' }}>
-          <ThemedBlur style={ styles.container }>
-            <Pressable onPress={() => router.replace('/(app)/travels')}>
-              <View style={ styles.box }>
-                <Ionicons name="home-outline" size={20} color={Colors.light.gray} />
-              </View>
-            </Pressable>
-            <Pressable onPress={() => router.replace('/(app)/id-travel')}>
-              <View style={ styles.box }>
-                <Ionicons name="add-outline" size={25} color={Colors.light.tint} />
-              </View>
-            </Pressable>
-            <Pressable onPress={() => router.replace('/(app)/id-perfile')}>
-              <View style={ styles.box }>
-                <Ionicons name="person-outline" size={20} color={Colors.light.gray} />
-              </View>
-            </Pressable>
-          </ThemedBlur>
-        </View>
       </View>
     </ThemedView>
   );
@@ -48,7 +31,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 4,
+    paddingHorizontal: 4,
+    paddingVertical: 8,
   },
   box: {
     padding: 4,

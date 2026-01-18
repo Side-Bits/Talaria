@@ -13,7 +13,7 @@ export default function SignUp() {
   return (
     <ThemedView type='center'>
       <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width:'100%', paddingHorizontal: 16 }}>
-        <ThemedText type="title" style={{ marginBottom: 16 }}>Create Account</ThemedText>
+        <ThemedText type="title" style={{ marginBottom: 16, fontWeight: 'bold' }}>Create Account</ThemedText>
         <ThemedInput type='text' label='Username' />
         <ThemedInput type='email' label='Email' />
         <ThemedInput type='password' label='Password' />

@@ -4,8 +4,8 @@ import { View, StyleSheet } from 'react-native';
 
 export function ThemedBlur({ children, style }: { children: React.ReactNode; style?: any }) {
   return (
-    <BlurView intensity={30} tint="light" style={[styles.glass, style]}>
-      <LinearGradient colors={['rgba(255,255,255,0.35)', 'rgba(255,255,255,0.02)']} start={[0, 0]} end={[1, 1]} />
+    <BlurView intensity={40} tint="dark" style={[styles.glass, style]}>
+      <LinearGradient colors={['rgba(255,255,255,0.35)', 'rgba(0, 0, 0, 0.02)']} start={[0, 0]} end={[1, 1]} />
       <View style={styles.content}>{children}</View>
     </BlurView>
   );

@@ -20,7 +20,8 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
+      # DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
+      DATABASE_URL: postgresql://talaria:EVLTCmlxHrMUn5YfMPDhdDKOd423Jvvn@dpg-d5e495ili9vc73esjkj0-a.frankfurt-postgres.render.com/talaria
     # optionally mount volume for live reload in dev
     volumes:
       - ./backend:/app

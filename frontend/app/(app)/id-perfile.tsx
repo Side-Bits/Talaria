@@ -4,21 +4,28 @@ import { StyleSheet, View, Text, ScrollView, useWindowDimensions } from 'react-n
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
+import { Header } from '@/components/Header';
+import { Floating } from '@/components/Floating';
 
 export default function TabPerfile() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
 
   return (
-    <ThemedView type='left'>
-      <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-        <ThemedView type='list' style={{ marginBottom: 32, marginTop: 32 }}>
-          <ThemedText type="title">Perfil</ThemedText>
-        </ThemedView>
-        <ThemedView type='left' style={{ width:'100%' }}>
-          <ThemedInput type='text' label='Name' />
-        </ThemedView>
-      </ScrollView>
-    </ThemedView>
+    <>
+      <ThemedView type='left'>
+        <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
+          <Header label='Perfile' />
+          <ThemedView type='left' style={{ width:'100%' }}>
+            <ThemedInput type='text' label='Username' />
+            <ThemedInput type='text' label='Name' />
+            <ThemedInput type='text' label='Fist surname' />
+            <ThemedInput type='text' label='Second surname' />
+            <ThemedInput type='email' label='Email' />
+          </ThemedView>
+        </ScrollView>
+      </ThemedView>
+      <Floating />
+    </>
   );
 }
 
