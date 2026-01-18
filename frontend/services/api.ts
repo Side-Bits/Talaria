@@ -16,7 +16,7 @@ export async function apiRequest<T>(
 	options: ApiOptions = {}
 ): Promise<T> {
 	const { requiresAuth = true, headers = {}, ...rest } = options;
-	const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL
+	const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
 
 	// Get session token from storage
 	const session = await getStorageItemAsync('session');
