@@ -45,5 +45,7 @@ func (rt *Router) setupPrivateRoutes(r *gin.Engine) {
 	api.Use(middleware.AuthMiddleware(rt.tokenService))
 	{
 		api.GET("/user", rt.userHandler.GetUserByToken)
+		r.POST("/travels/create", rt.travelHandler.InsertTravel)
+		r.POST("/activities/create", rt.activityHandler.InsertActivity)
 	}
 }
