@@ -3,11 +3,12 @@ package services
 import (
 	"context"
 	"errors"
+	"time"
+
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/pkgs/utils"
 	"talaria/internal/repositories"
-	"time"
 )
 
 const (
@@ -108,7 +109,7 @@ func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (st
 		return "", err
 	}
 
-	if token.IsActive && token.ExpiresAt.After(time.Now()) {
+	if token.ExpiresAt.After(time.Now()) {
 		// TODO update last used timestamp
 		return token.UserID, nil
 	}

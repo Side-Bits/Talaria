@@ -4,9 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
+
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
-	"time"
 )
 
 type TokenRepository struct {
@@ -38,8 +39,8 @@ func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userI
 
 func (r *TokenRepository) FindByToken(ctx context.Context, tokenString string) (*models.UserToken, error) {
 	query := `
-        SELECT id_user, token, created_at, expires_at, is_active
-        FROM user_tokens 
+        SELECT id_user, token, created_at, expires_at
+        FROM session_token
         WHERE token = $1
     `
 
@@ -49,7 +50,6 @@ func (r *TokenRepository) FindByToken(ctx context.Context, tokenString string) (
 		&token.Token,
 		&token.CreatedAt,
 		&token.ExpiresAt,
-		&token.IsActive,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -63,13 +63,13 @@ func (r *TokenRepository) FindByToken(ctx context.Context, tokenString string) (
 
 func (r *TokenRepository) FindByUserID(ctx context.Context, userID string) ([]models.UserToken, error) {
 	query := `
-        SELECT id_user, token, created_at, expires_at, is_active
-        FROM user_tokens 
-        WHERE id_user = $1 AND is_active = true
+        SELECT id_user, token, created_at, expires_at
+        FROM session_token 
+        WHERE id_user = $1 AND expires_at > $2
         ORDER BY created_at DESC
     `
 
-	rows, err := r.db.Query(ctx, query, userID)
+	rows, err := r.db.Query(ctx, query, userID, time.Now())
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,6 @@ func (r *TokenRepository) FindByUserID(ctx context.Context, userID string) ([]mo
 			&token.Token,
 			&token.CreatedAt,
 			&token.ExpiresAt,
-			&token.IsActive,
 		); err != nil {
 			return nil, err
 		}
@@ -94,14 +93,14 @@ func (r *TokenRepository) FindByUserID(ctx context.Context, userID string) ([]mo
 }
 
 func (r *TokenRepository) Deactivate(ctx context.Context, tokenString string) error {
-	query := `UPDATE user_tokens SET is_active = false WHERE token = $1`
+	query := `DELETE FROM session_token WHERE token = $1`
 	_, err := r.db.Exec(ctx, query, tokenString)
 	return err
 }
 
 // CleanupExpiredTokens removes expired tokens from the database
 func (r *TokenRepository) CleanupExpiredTokens(ctx context.Context) (int64, error) {
-	query := `DELETE FROM user_tokens WHERE expires_at < $1`
+	query := `DELETE FROM session_token WHERE expires_at < $1`
 	result, err := r.db.Exec(ctx, query, time.Now())
 	if err != nil {
 		return 0, err
