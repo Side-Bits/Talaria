@@ -2,26 +2,26 @@
 package routes
 
 import (
+	"github.com/gin-gonic/gin"
 	"talaria/internal/api/handlers"
 	"talaria/internal/api/middleware"
-	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
-	authHandler   *handlers.AuthHandler
-	userHandler   *handlers.UserHandler
-	travelHandler *handlers.TravelHandler
+	authHandler     *handlers.AuthHandler
+	userHandler     *handlers.UserHandler
+	travelHandler   *handlers.TravelHandler
 	activityHandler *handlers.ActivityHandler
-	tokenService  middleware.TokenValidator
+	tokenService    middleware.TokenValidator
 }
 
 func NewRouter(authHandler *handlers.AuthHandler, userHandler *handlers.UserHandler, travelHandler *handlers.TravelHandler, activityHandler *handlers.ActivityHandler, tokenService middleware.TokenValidator) *Router {
 	return &Router{
-		authHandler:   authHandler,
-		userHandler:   userHandler,
-		travelHandler: travelHandler,
+		authHandler:     authHandler,
+		userHandler:     userHandler,
+		travelHandler:   travelHandler,
 		activityHandler: activityHandler,
-		tokenService:  tokenService,
+		tokenService:    tokenService,
 	}
 }
 
@@ -45,7 +45,7 @@ func (rt *Router) setupPrivateRoutes(r *gin.Engine) {
 	api.Use(middleware.AuthMiddleware(rt.tokenService))
 	{
 		api.GET("/user", rt.userHandler.GetUserByToken)
-		r.POST("/travels/create", rt.travelHandler.InsertTravel)
-		r.POST("/activities/create", rt.activityHandler.InsertActivity)
+		api.POST("/travels/create", rt.travelHandler.InsertTravel)
+		api.POST("/activities/create", rt.activityHandler.InsertActivity)
 	}
 }

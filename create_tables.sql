@@ -1,4 +1,5 @@
 -- TABLES
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE users (
     id_user VARCHAR(36) PRIMARY KEY,
@@ -35,7 +36,7 @@ CREATE TABLE clients (
 );
 
 CREATE TABLE travels (
-    id_travel VARCHAR(36) PRIMARY KEY,
+    id_travel UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(64) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
@@ -43,8 +44,8 @@ CREATE TABLE travels (
 );
 
 CREATE TABLE activities (
-    id_activity VARCHAR(36) PRIMARY KEY,
-    id_travel VARCHAR(36) NOT NULL,
+    id_activity UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_travel UUID NOT NULL,
     name VARCHAR(64) NOT NULL,
     description TEXT,
     location VARCHAR(128),
@@ -60,7 +61,7 @@ CREATE TABLE activities (
 
 CREATE TABLE clients_travels (
     id_user VARCHAR(36),
-    id_travel VARCHAR(36),
+    id_travel UUID NOT NULL,
     PRIMARY KEY (id_user, id_travel),
     CONSTRAINT fk_ct_user
         FOREIGN KEY (id_user)
@@ -74,7 +75,7 @@ CREATE TABLE clients_travels (
 
 CREATE TABLE clients_activities (
     id_user VARCHAR(36),
-    id_activity VARCHAR(36),
+    id_activity UUID NOT NULL,
     PRIMARY KEY (id_user, id_activity),
     CONSTRAINT fk_ca_user
         FOREIGN KEY (id_user)
@@ -122,30 +123,30 @@ INSERT INTO travels (
     'ACTIVE'
 );
 
-INSERT INTO travels VALUES
-('11111111-1111-1111-1111-111111111111','Viaje a Roma','2026-06-01','2026-06-05','ACTIVE'),
-('22222222-2222-2222-2222-222222222222','Viaje a París','2026-07-10','2026-07-14','ACTIVE'),
-('33333333-3333-3333-3333-333333333333','Viaje a Berlín','2026-08-01','2026-08-04','ACTIVE'),
-('44444444-4444-4444-4444-444444444444','Viaje a Lisboa','2026-09-05','2026-09-08','ACTIVE'),
-('55555555-5555-5555-5555-555555555555','Viaje a Praga','2026-10-01','2026-10-04','ACTIVE'),
-('66666666-6666-6666-6666-666666666666','Viaje a Viena','2026-11-02','2026-11-05','ACTIVE'),
-('77777777-7777-7777-7777-777777777777','Viaje a Ámsterdam','2026-12-01','2026-12-04','ACTIVE'),
-('88888888-8888-8888-8888-888888888888','Viaje a Bruselas','2027-01-10','2027-01-13','ACTIVE'),
-('99999999-9999-9999-9999-999999999999','Viaje a Londres','2027-02-01','2027-02-05','ACTIVE'),
-('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','Viaje a Dublín','2027-03-01','2027-03-04','ACTIVE'),
-('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb','Viaje a Madrid','2027-04-01','2027-04-04','ACTIVE'),
-('cccccccc-cccc-cccc-cccc-cccccccccccc','Viaje a Barcelona','2027-05-01','2027-05-04','ACTIVE'),
-('dddddddd-dddd-dddd-dddd-dddddddddddd','Viaje a Sevilla','2027-06-01','2027-06-04','ACTIVE'),
-('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee','Viaje a Granada','2027-07-01','2027-07-04','ACTIVE'),
-('ffffffff-ffff-ffff-ffff-ffffffffffff','Viaje a Atenas','2027-08-01','2027-08-04','ACTIVE'),
-('12121212-1212-1212-1212-121212121212','Viaje a Estambul','2027-09-01','2027-09-05','ACTIVE'),
-('13131313-1313-1313-1313-131313131313','Viaje a Budapest','2027-10-01','2027-10-04','ACTIVE'),
-('14141414-1414-1414-1414-141414141414','Viaje a Cracovia','2027-11-01','2027-11-04','ACTIVE'),
-('15151515-1515-1515-1515-151515151515','Viaje a Estocolmo','2027-12-01','2027-12-04','ACTIVE');
+INSERT INTO travels (id_travel, name, start_date, end_date, id_status) VALUES 
+    ('16fc20c4-ad32-48f0-99c6-c2d866742810', 'Viaje a Roma', '2026-06-01', '2026-06-05', 'ACTIVE'),
+    ('80a51d4f-d581-476e-bff9-e301ef5dc58d', 'Viaje a París', '2026-07-10', '2026-07-14', 'ACTIVE'),
+    ('30bae467-4a20-49df-a65b-34b345658c18', 'Viaje a Berlín', '2026-08-01', '2026-08-04', 'ACTIVE'),
+    ('b6d46a2e-7623-4fc4-93d4-d39b16c27061', 'Viaje a Lisboa', '2026-09-05', '2026-09-08', 'ACTIVE'),
+    ('bea0f224-b384-4866-ab5f-4d39a754a545', 'Viaje a Praga', '2026-10-01', '2026-10-04', 'ACTIVE'),
+    ('b11dad51-d293-4de3-9985-4f0d05d703cc', 'Viaje a Viena', '2026-11-02', '2026-11-05', 'ACTIVE'),
+    ('2ffdd9c9-d1be-4f96-9865-164e37f2cab3', 'Viaje a Ámsterdam', '2026-12-01', '2026-12-04', 'ACTIVE'),
+    ('f695e769-ac95-4c19-8668-909d20f4f5ad', 'Viaje a Bruselas', '2027-01-10', '2027-01-13', 'ACTIVE'),
+    ('238d55c7-c069-4108-b24d-34ccb84554af', 'Viaje a Londres', '2027-02-01', '2027-02-05', 'ACTIVE'),
+    ('d0848591-219b-4fcd-9bb9-eee439cca2ca', 'Viaje a Dublín', '2027-03-01', '2027-03-04', 'ACTIVE'),
+    ('1159f9b7-225a-4e23-a92c-78c9d6d9385d', 'Viaje a Madrid', '2027-04-01', '2027-04-04', 'ACTIVE'),
+    ('6652f361-4235-4c6e-9f70-96d21edcce80', 'Viaje a Barcelona', '2027-05-01', '2027-05-04', 'ACTIVE'),
+    ('8247523e-893b-46df-b69f-b552794a9ead', 'Viaje a Sevilla', '2027-06-01', '2027-06-04', 'ACTIVE'),
+    ('bd760ecd-1b0d-4d6b-9f93-8e9edfb8001f', 'Viaje a Granada', '2027-07-01', '2027-07-04', 'ACTIVE'),
+    ('e13118cf-2289-43df-bcca-92449efee702', 'Viaje a Atenas', '2027-08-01', '2027-08-04', 'ACTIVE'),
+    ('009ef2b8-36db-4152-b6fb-7c56f85493e2', 'Viaje a Estambul', '2027-09-01', '2027-09-05', 'ACTIVE'),
+    ('59bb24e2-9fe2-46d0-bafd-2a811e1a95a3', 'Viaje a Budapest', '2027-10-01', '2027-10-04', 'ACTIVE'),
+    ('da6166fd-9763-404a-ae68-c6b25cf09880', 'Viaje a Cracovia', '2027-11-01', '2027-11-04', 'ACTIVE'),
+    ('e70852f1-23ae-4316-b05f-4486b868c1d8', 'Viaje a Estocolmo', '2027-12-01', '2027-12-04', 'ACTIVE');
 
 INSERT INTO clients_travels
 SELECT
-    '550e8400-e29b-41d4-a716-446655440000',
+    '16fc20c4-ad32-48f0-99c6-c2d866742810',
     id_travel
 FROM travels;
 

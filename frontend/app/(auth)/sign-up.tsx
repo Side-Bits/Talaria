@@ -15,7 +15,7 @@ export default function SignUp() {
   const { signUp } = useSession()
   const [user, setUser] = useState<RegisterCredentials>({
     username: '',
-    email: '',
+    identifier: '',
     password: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,7 +35,7 @@ export default function SignUp() {
       <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width: '100%', paddingHorizontal: 16 }}>
         <ThemedText type="title" style={{ marginBottom: 16 }}>Create Account</ThemedText>
         <ThemedInput type='text' label='Username' value={user.username} onChangeText={text => setUser({ ...user, username: text })} />
-        <ThemedInput type='email' label='Email' value={user.email} onChangeText={text => setUser({ ...user, email: text })} />
+        <ThemedInput type='email' label='Email' value={user.identifier} onChangeText={text => setUser({ ...user, identifier: text })} />
         <ThemedInput type='password' label='Password' value={user.password} onChangeText={text => setUser({ ...user, password: text })} />
         <ThemedInput type='password' label='Confirm password' />
         <ThemedView type='left' style={{ marginBottom: 16 }}>

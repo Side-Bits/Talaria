@@ -24,12 +24,21 @@ func NewAuthHandler(authService services.AuthService) *AuthHandler {
 }
 
 func (h *AuthHandler) Register(c *gin.Context) {
-	var user models.User
+	var data map[string]string
 
-	err := c.BindJSON(&user)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+	if err := c.BindJSON(&data); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
+	}
+
+	identifier := data["identifier"]
+	password := data["password"]
+	username := data["username"]
+
+	user := models.User{
+		Email:    identifier,
+		Password: password,
+		Name:     username,
 	}
 
 	token, err := h.authService.Register(c, &user)
