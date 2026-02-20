@@ -27,7 +27,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	var data map[string]string
 
 	if err := c.BindJSON(&data); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		respondBadRequest(c, "invalid request body", err)
 		return
 	}
 
@@ -43,7 +43,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 
 	token, err := h.authService.Register(c, &user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		respondBadRequest(c, "failed to register user", err)
 		return
 	}
 
@@ -57,7 +57,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	var data map[string]string
 
 	if err := c.BindJSON(&data); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		respondBadRequest(c, "invalid request body", err)
 		return
 	}
 
@@ -66,7 +66,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	user, token, err := h.authService.Login(c, identifier, password)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		respondBadRequest(c, "invalid credentials", err)
 		return
 	}
 

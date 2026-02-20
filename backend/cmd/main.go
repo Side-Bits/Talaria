@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"time"
-
 	"talaria/internal/api/handlers"
 	"talaria/internal/api/routes"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/services"
+	"time"
 
 	"github.com/gin-contrib/cors"
 

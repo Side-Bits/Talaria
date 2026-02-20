@@ -8,6 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CreateTravelRequest struct {
+	Name      string `json:"name" binding:"required"`
+	StartDate string `json:"start_date" binding:"required"`
+	EndDate   string `json:"end_date" binding:"required"`
+}
+
 type TravelHandler struct {
 	userService services.UserService
 }
@@ -26,13 +32,13 @@ func (h *TravelHandler) getTravels(c *gin.Context) {
 	id_user := c.Query("id_user")
 
 	if id_user == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id_user is required"})
+		respondBadRequest(c, "id_user is required", nil)
 		return
 	}
 
 	travels, err := h.userService.GetTravels(c.Request.Context(), id_user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		respondInternalError(c, "failed to fetch travels", err)
 		return
 	}
 
@@ -40,28 +46,27 @@ func (h *TravelHandler) getTravels(c *gin.Context) {
 }
 
 func (h *TravelHandler) InsertTravel(c *gin.Context) {
-	var data map[string]string
+	var req CreateTravelRequest
 
-	if err := c.BindJSON(&data); err != nil {
-		c.JSON(400, gin.H{"error 1": err.Error()})
+	if err := c.ShouldBindJSON(&req); err != nil {
+		respondBadRequest(c, "invalid request body", err)
 		return
 	}
 
 	id_user := middleware.GetUserID(c)
 
 	if id_user == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error 2": "id_user is required "})
+		respondBadRequest(c, "id_user is required", nil)
 		return
 	}
 
-	name := data["name"]
-	start_date := data["start_date"]
-	end_date := data["end_date"]
+	name := req.Name
+	start_date := req.StartDate
+	end_date := req.EndDate
 
-	err2 := h.userService.CreateTravel(c.Request.Context(), id_user, name, start_date, end_date)
-	
-	if err2 != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error 3": err2.Error()})
+	err := h.userService.CreateTravel(c.Request.Context(), id_user, name, start_date, end_date)
+	if err != nil {
+		respondInternalError(c, "failed to create travel", err)
 		return
 	}
 }

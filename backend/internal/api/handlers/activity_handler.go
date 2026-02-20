@@ -26,13 +26,13 @@ func (h *ActivityHandler) getActivities(c *gin.Context) {
 	id_travel := c.Query("id_travel")
 
 	if id_travel == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id_travel is required"})
+		respondBadRequest(c, "id_travel is required", nil)
 		return
 	}
 
 	activities, err := h.userService.GetActivities(c.Request.Context(), id_travel)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		respondInternalError(c, "failed to fetch activities", err)
 		return
 	}
 
@@ -43,14 +43,14 @@ func (h *ActivityHandler) InsertActivity(c *gin.Context) {
 	var data map[string]string
 
 	if err := c.BindJSON(&data); err != nil {
-		c.JSON(400, gin.H{"error 1": err.Error()})
+		respondBadRequest(c, "invalid request body", err)
 		return
 	}
 
 	id_user := middleware.GetUserID(c)
 
 	if id_user == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error 2": "id_user is required "})
+		respondBadRequest(c, "id_user is required", nil)
 		return
 	}
 
@@ -64,7 +64,7 @@ func (h *ActivityHandler) InsertActivity(c *gin.Context) {
 	err2 := h.userService.CreateActivity(c.Request.Context(), id_user, id_travel, name, description, location, start_date, end_date)
 
 	if err2 != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error 3": err2.Error()})
+		respondInternalError(c, "failed to create activity", err2)
 		return
 	}
 }
