@@ -39,7 +39,7 @@ export default function TabActivities() {
           <ThemedView type='list' style={{ marginBottom: 32, marginTop: 32 }}>
             <ThemedView type='between'>
               <ThemedText type="title">Viaje a Venecia</ThemedText>
-              <Ionicons name="options-outline" size={20} color={Colors.light.gray} />
+              {/*<Ionicons name="options-outline" size={20} color={Colors.light.gray} />*/}
             </ThemedView>
             {/* <ThemedText type="default" style={{ color: Colors.light.gray, marginBottom: 8 }}>Italy</ThemedText>
             <Participants size={16} gap={2}/> */}

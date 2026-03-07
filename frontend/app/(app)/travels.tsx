@@ -41,7 +41,7 @@ export default function TabTravels() {
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
           <ThemedView type='between' style={{ marginBottom: 32, marginTop: 32 }}>
             <ThemedText type="title">My trips</ThemedText>
-            <Ionicons name="options-outline" size={20} color={Colors.light.gray} />
+            {/*<Ionicons name="options-outline" size={20} color={Colors.light.gray} />*/}
           </ThemedView>
           <ThemedView type='left' style={{ width:'100%' }}>
             {/* {Array.from({ length: 3 }).map((_, i) => (
@@ -57,7 +57,7 @@ export default function TabTravels() {
             ))} */}
             <ThemedView type='between' style={{ marginBottom: 8, marginTop: 16 }}>
               <ThemedText type="subtitle">On going</ThemedText>
-              <ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
+              {/*<ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>*/}
             </ThemedView>
             {data.G?.map(travel => (
               <Pressable key={travel.id} style={ styles.container } onPress={() => router.replace('/(app)/activities')}>
@@ -69,7 +69,7 @@ export default function TabTravels() {
             ))}
             <ThemedView type='between' style={{ marginBottom: 8, marginTop: 16 }}>
               <ThemedText type="subtitle">Done</ThemedText>
-              <ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
+              {/*<ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>*/}
             </ThemedView>
             {data.D?.map(travel => (
               <Pressable key={travel.id} style={ styles.container } onPress={() => router.replace('/(app)/activities')}>
