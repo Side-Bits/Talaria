@@ -2,91 +2,81 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE users (
-    id_user VARCHAR(36) PRIMARY KEY,
-    id_role VARCHAR(36),
-    username VARCHAR(16) NOT NULL UNIQUE,
-    email VARCHAR(32) NOT NULL UNIQUE,
-    password VARCHAR(156) NOT NULL,
-    created_at DATE NOT NULL DEFAULT CURRENT_DATE,
-    last_login DATE,
-    terms BOOLEAN NOT NULL
+    id_user     BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_role     BIGINT REFERENCES roles(id_role) ON DELETE SET NULL,
+    username    VARCHAR(32) NOT NULL UNIQUE,
+    email       VARCHAR(254) NOT NULL UNIQUE,
+    password    VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_login  TIMESTAMPTZ,
+    terms       BOOLEAN NOT NULL
 );
 
 CREATE TABLE session_token (
-    id_user VARCHAR(36) PRIMARY KEY,
-    token CHAR(156) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    expires_at TIMESTAMPTZ NOT NULL,
-    CONSTRAINT fk_session_user
-        FOREIGN KEY (id_user)
-        REFERENCES users(id_user)
-        ON DELETE CASCADE
+    id_user     BIGINT PRIMARY KEY REFERENCES users(id_user) ON DELETE CASCADE,
+    token       VARCHAR(255) NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    expires_at  TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE clients (
-    id_user VARCHAR(36) PRIMARY KEY,
-    name VARCHAR(16) NOT NULL,
-    surname1 VARCHAR(32) NOT NULL,
-    surname2 VARCHAR(32),
-    photo VARCHAR(255),
-    CONSTRAINT fk_client_user
-        FOREIGN KEY (id_user)
-        REFERENCES users(id_user)
-        ON DELETE CASCADE
+    id_user     BIGINT PRIMARY KEY REFERENCES users(id_user) ON DELETE CASCADE,
+    name        VARCHAR(64) NOT NULL,
+    surname1    VARCHAR(64) NOT NULL,
+    surname2    VARCHAR(64),
+    photo       TEXT
+);
+
+CREATE TABLE roles (
+    id_role     BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name        VARCHAR(64) NOT NULL UNIQUE
+);
+
+CREATE TABLE statuses (
+    id_status   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name        VARCHAR(64) NOT NULL UNIQUE
 );
 
 CREATE TABLE travels (
-    id_travel UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(64) NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    id_status VARCHAR(36)
+    id_travel   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name        VARCHAR(64) NOT NULL,
+    start_date  DATE NOT NULL,
+    end_date    DATE NOT NULL,
+    id_status   BIGINT REFERENCES statuses(id_status) ON DELETE SET NULL,
+    CONSTRAINT chk_travel_dates CHECK (end_date >= start_date)
 );
 
 CREATE TABLE activities (
-    id_activity UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    id_travel UUID NOT NULL,
-    name VARCHAR(64) NOT NULL,
+    id_activity BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_travel   BIGINT NOT NULL REFERENCES travels(id_travel) ON DELETE CASCADE,
+    name        VARCHAR(64) NOT NULL,
     description TEXT,
-    location VARCHAR(128),
-    start_date TIMESTAMP NOT NULL,
-    end_date TIMESTAMP NOT NULL,
-    price NUMERIC(10,2),
-    id_status VARCHAR(36),
-    CONSTRAINT fk_activity_travel
-        FOREIGN KEY (id_travel)
-        REFERENCES travels(id_travel)
-        ON DELETE CASCADE
+    location    VARCHAR(128),
+    start_date  TIMESTAMPTZ NOT NULL,
+    end_date    TIMESTAMPTZ NOT NULL,
+    price       NUMERIC(10,2) DEFAULT 0,
+    id_status   BIGINT REFERENCES statuses(id_status) ON DELETE SET NULL,
+    CONSTRAINT chk_activity_dates CHECK (end_date >= start_date)
 );
 
 CREATE TABLE clients_travels (
-    id_user VARCHAR(36),
-    id_travel UUID NOT NULL,
-    PRIMARY KEY (id_user, id_travel),
-    CONSTRAINT fk_ct_user
-        FOREIGN KEY (id_user)
-        REFERENCES clients(id_user)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_ct_travel
-        FOREIGN KEY (id_travel)
-        REFERENCES travels(id_travel)
-        ON DELETE CASCADE
+    id_user     BIGINT REFERENCES clients(id_user) ON DELETE CASCADE,
+    id_travel   BIGINT NOT NULL REFERENCES travels(id_travel) ON DELETE CASCADE,
+    PRIMARY KEY (id_user, id_travel)
 );
 
 CREATE TABLE clients_activities (
-    id_user VARCHAR(36),
-    id_activity UUID NOT NULL,
-    PRIMARY KEY (id_user, id_activity),
-    CONSTRAINT fk_ca_user
-        FOREIGN KEY (id_user)
-        REFERENCES clients(id_user)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_ca_activity
-        FOREIGN KEY (id_activity)
-        REFERENCES activities(id_activity)
-        ON DELETE CASCADE
+    id_user     BIGINT REFERENCES clients(id_user) ON DELETE CASCADE,
+    id_activity BIGINT NOT NULL REFERENCES activities(id_activity) ON DELETE CASCADE,
+    PRIMARY KEY (id_user, id_activity)
 );
 
+-- Indexes
+CREATE INDEX idx_activities_travel             ON activities(id_travel);
+CREATE INDEX idx_clients_travels_user          ON clients_travels(id_user);
+CREATE INDEX idx_clients_travels_travel        ON clients_travels(id_travel);
+CREATE INDEX idx_clients_activities_user       ON clients_activities(id_user);
+CREATE INDEX idx_clients_activities_activity   ON clients_activities(id_activity);
 
 -- INSERTS
 

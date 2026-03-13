@@ -33,9 +33,14 @@ func (s *UserService) GetActivities(ctx context.Context, id_user string) ([]mode
 func (s *UserService) CreateActivity(ctx context.Context, id_user string, id_travel string, name string, description string, location string, start_date string, end_date string) error {
 	// Start transaction
 
-	id_activity, nil := s.userRepo.CreateActivity(ctx, id_travel, name, description, location, start_date, end_date)
+	id_activity, err := s.userRepo.CreateActivity(ctx, id_travel, name, description, location, start_date, end_date)
+	if err != nil {
+		return err
+	}
 
-	s.userRepo.AddClientActivities(ctx, id_activity, id_user)
+	if err := s.userRepo.AddClientActivities(ctx, id_activity, id_user); err != nil {
+		return err
+	}
 
 	// Commit transaction
 
@@ -43,4 +48,3 @@ func (s *UserService) CreateActivity(ctx context.Context, id_user string, id_tra
 }
 
 // TODO GetActivity
-
