@@ -1,6 +1,6 @@
 export interface Activity {
-	id_activity: string;
-	id_travel: string;
+	id_activity: number;
+	id_travel: number;
 	name: string;
 	description: string;
 	location: string;
@@ -10,8 +10,8 @@ export interface Activity {
 }
 
 export const DEFAULT_ACTIVITY = {
-	id_activity: '',
-	id_travel: '',
+	id_activity: 0,
+	id_travel: 0,
 	name: '',
 	description: '',
 	location: '',

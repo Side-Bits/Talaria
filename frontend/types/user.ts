@@ -1,12 +1,12 @@
 export interface User {
-	id: string;
+	id: number;
 	username: string;
 	email: string;
 	password: string;
 }
 
 export interface LoginCredentials {
-	identifier: string;
+	identifier: 0;
 	password: string;
 }
 

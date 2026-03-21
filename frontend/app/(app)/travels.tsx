@@ -13,7 +13,7 @@ export default function TabTravels() {
   const { width, height } = useWindowDimensions(); // TODO: generic parameter
 
   type Travel = {
-    id: string;
+    id: number;
     name: string;
     start_date: string;
     end_date: string;
@@ -23,7 +23,7 @@ export default function TabTravels() {
   const [data, setTravels] = useState<Record<string, Travel[]>>({});
 
   useEffect(() => {
-    fetch('http://localhost:8080/travels?id_user=550e8400-e29b-41d4-a716-446655440000', { method: 'GET' })
+    fetch('http://localhost:8080/travels?id_user=1', { method: 'GET' })
       .then(res => {
         if (!res.ok) throw new Error(res.statusText);
         return res.json();

@@ -1,12 +1,12 @@
 export interface Travel {
-	id: string;
+	id: number;
 	name: string;
 	start_date: string;
 	end_date: string;
 }
 
 export const DEFAULT_TRAVEL = {
-	id: '',
+	id: 0,
 	name: '',
 	start_date: '',
 	end_date: '',

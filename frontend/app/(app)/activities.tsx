@@ -13,7 +13,7 @@ export default function TabActivities() {
   const { height, width } = useWindowDimensions(); // TODO: generic parameter
 
     type Activity = {
-      id: string;
+      id: number;
       name: string;
       start_date: string;
       end_date: string;
