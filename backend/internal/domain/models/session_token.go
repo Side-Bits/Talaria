@@ -5,7 +5,7 @@ import (
 )
 
 type UserToken struct {
-	UserID    string    `json:"user_id" db:"user_id"`
+	UserID    int64     `json:"user_id" db:"user_id"`
 	Token     string    `json:"token" db:"token"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	ExpiresAt time.Time `json:"expires_at" db:"expires_at"`

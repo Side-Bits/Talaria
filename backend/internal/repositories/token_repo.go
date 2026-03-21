@@ -4,10 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"time"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
+	"time"
 )
 
 type TokenRepository struct {
@@ -19,7 +18,7 @@ func NewTokenRepository(db database.DBExecutor, tokenTTL time.Duration) *TokenRe
 	return &TokenRepository{db: db, tokenTTL: tokenTTL}
 }
 
-func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userId string) error {
+func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userId int64) error {
 	query := `
 	      INSERT INTO session_token (id_user, token, created_at, expires_at)
 		    VALUES ($1, $2, $3, $4) 

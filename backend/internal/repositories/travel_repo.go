@@ -7,9 +7,9 @@ import (
 
 func (r *UserRepository) GetTravels(ctx context.Context, id_user string) (map[string][]models.Travel, error) {
 	rows, err := r.db.Query(ctx, `
-		SELECT name, start_date, end_date, tag
+		SELECT id_travel, name, start_date, end_date, tag
 		FROM (
-			SELECT travels.name, travels.start_date, travels.end_date,
+			SELECT travels.id_travel, travels.name, travels.start_date, travels.end_date,
 			CASE WHEN end_date >= CURRENT_DATE THEN 'G' ELSE 'D' END AS tag,
 			ROW_NUMBER() OVER (
 				PARTITION BY CASE WHEN end_date >= CURRENT_DATE THEN 'G' ELSE 'D' END
@@ -23,19 +23,22 @@ func (r *UserRepository) GetTravels(ctx context.Context, id_user string) (map[st
 		WHERE n <= 5
 		ORDER BY tag, start_date ASC;
 	`, id_user)
-	
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, err
+	}
 
 	defer rows.Close()
-	
+
 	tags := make(map[string][]models.Travel)
 
 	for rows.Next() {
 		var travel models.Travel
-		var tag string = "";
+		var tag string = ""
 
-		if err := rows.Scan(&travel.Name, &travel.StartDate, &travel.EndDate, &tag); err != nil { return nil, err }
-		
+		if err := rows.Scan(&travel.ID, &travel.Name, &travel.StartDate, &travel.EndDate, &tag); err != nil {
+			return nil, err
+		}
+
 		tags[tag] = append(tags[tag], travel)
 	}
 
@@ -58,11 +61,11 @@ func (r *UserRepository) CreateTravel(ctx context.Context, name string, start_da
 
 func (r *UserRepository) AddClientTravels(ctx context.Context, id_travel string, id_user string) error {
 	query := `
-        INSERT INTO travels (id_travel, id_user)
+        INSERT INTO clients_travels (id_travel, id_user)
         VALUES ($1, $2)
 	`
 
-	_, err := r.db.Query(ctx, query, id_travel, id_user)
+	_, err := r.db.Exec(ctx, query, id_travel, id_user)
 
 	return err
 }

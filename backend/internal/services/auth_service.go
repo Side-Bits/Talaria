@@ -3,12 +3,11 @@ package services
 import (
 	"context"
 	"errors"
-	"time"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/pkgs/utils"
 	"talaria/internal/repositories"
+	"time"
 )
 
 const (
@@ -103,10 +102,10 @@ func generateAndSaveNewToken(ctx context.Context, repo *repositories.TokenReposi
 	return tokenString, nil
 }
 
-func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (string, error) {
+func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (int64, error) {
 	token, err := s.tokenRepo.FindByToken(ctx, tokenString)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	if token.ExpiresAt.After(time.Now()) {
@@ -114,7 +113,7 @@ func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (st
 		return token.UserID, nil
 	}
 
-	return "", nil
+	return 0, nil
 }
 
 // RevokeToken explicitly revokes a token

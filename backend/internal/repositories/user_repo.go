@@ -2,12 +2,10 @@ package repositories
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -21,30 +19,25 @@ func NewUserRepository(db database.DBExecutor) *UserRepository {
 
 func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 	query := `
-        INSERT INTO users (id_user, username, email, password, terms)
-        VALUES ($1, $2, $3, $4, true)
+        INSERT INTO users (username, email, password, terms)
+        VALUES ($1, $2, $3, true)
         RETURNING id_user;
     `
 
-	id, err := uuid.NewV7()
-	if err != nil {
-		return fmt.Errorf("Failed to generate UUID: %w", err)
-	}
-
-	return r.db.QueryRow(ctx, query, id, user.Name, user.Email, user.Password).Scan(&user.ID)
+	return r.db.QueryRow(ctx, query, user.Name, user.Email, user.Password).Scan(&user.ID)
 }
 
 func (r *UserRepository) GetByID(ctx context.Context, userID string) (*models.User, error) {
 	query := `
-				SELECT id_user, username, email, password FROM Users WHERE id_user = $1
+				SELECT id_user, username, email, password FROM users WHERE id_user = $1
 		`
 	var user models.User
 	err := r.db.QueryRow(ctx, query, userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == pgx.ErrNoRows {
 			return nil, fmt.Errorf("GetByID %s: user not found", userID)
 		}
-		return nil, fmt.Errorf("GetByID %s: %e", userID, err)
+		return nil, fmt.Errorf("GetByID %s: %w", userID, err)
 	}
 
 	return &user, nil
@@ -74,15 +67,17 @@ func (r *UserRepository) GetByUsernameOrEmail(ctx context.Context, identifier st
 
 func (r *UserRepository) GetUserIdByToken(ctx context.Context, token string) (string, error) {
 	query := `
-				SELECT id_user FROM Tokens WHERE token = $1 AND is_active = true
+				SELECT id_user
+				FROM session_token
+				WHERE token = $1 AND expires_at > NOW()
 		`
 	var userId string
 	err := r.db.QueryRow(ctx, query, token).Scan(&userId)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == pgx.ErrNoRows {
 			return "", fmt.Errorf("getUserIdByToken %s: unknown token", token)
 		}
-		return "", fmt.Errorf("getUserIdByToken %s: %e", token, err)
+		return "", fmt.Errorf("getUserIdByToken %s: %w", token, err)
 	}
 
 	return userId, nil
