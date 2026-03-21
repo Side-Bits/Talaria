@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 
@@ -27,7 +28,7 @@ func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 	return r.db.QueryRow(ctx, query, user.Name, user.Email, user.Password).Scan(&user.ID)
 }
 
-func (r *UserRepository) GetByID(ctx context.Context, userID string) (*models.User, error) {
+func (r *UserRepository) GetByID(ctx context.Context, userID int64) (*models.User, error) {
 	query := `
 				SELECT id_user, username, email, password FROM users WHERE id_user = $1
 		`
@@ -35,9 +36,9 @@ func (r *UserRepository) GetByID(ctx context.Context, userID string) (*models.Us
 	err := r.db.QueryRow(ctx, query, userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			return nil, fmt.Errorf("GetByID %s: user not found", userID)
+			return nil, fmt.Errorf("GetByID %d: user not found", userID)
 		}
-		return nil, fmt.Errorf("GetByID %s: %w", userID, err)
+		return nil, fmt.Errorf("GetByID %d: %w", userID, err)
 	}
 
 	return &user, nil
@@ -65,20 +66,20 @@ func (r *UserRepository) GetByUsernameOrEmail(ctx context.Context, identifier st
 	return &user, nil
 }
 
-func (r *UserRepository) GetUserIdByToken(ctx context.Context, token string) (string, error) {
+func (r *UserRepository) GetUserIdByToken(ctx context.Context, token string) (int64, error) {
 	query := `
 				SELECT id_user
 				FROM session_token
 				WHERE token = $1 AND expires_at > NOW()
 		`
-	var userId string
-	err := r.db.QueryRow(ctx, query, token).Scan(&userId)
+	var userID int64
+	err := r.db.QueryRow(ctx, query, token).Scan(&userID)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			return "", fmt.Errorf("getUserIdByToken %s: unknown token", token)
+			return -1, fmt.Errorf("getUserIdByToken %s: unknown token", token)
 		}
-		return "", fmt.Errorf("getUserIdByToken %s: %w", token, err)
+		return -1, fmt.Errorf("getUserIdByToken %s: %w", token, err)
 	}
 
-	return userId, nil
+	return userID, nil
 }

@@ -67,13 +67,13 @@ func extractBearerToken(c *gin.Context) (string, error) {
 }
 
 // GetUserID is a helper to retrieve the userID from context
-func GetUserID(c *gin.Context) string {
+func GetUserID(c *gin.Context) int64 {
 	userID, exists := c.Get("userID")
 	if !exists {
-		return ""
+		return -1
 	}
 
-	id, _ := userID.(string)
+	id, _ := userID.(int64)
 
 	return id
 }

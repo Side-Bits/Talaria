@@ -2,14 +2,15 @@ package services
 
 import (
 	"context"
+
 	"talaria/internal/domain/models"
 )
 
-func (s *UserService) GetTravels(ctx context.Context, id_user string) (map[string][]models.Travel, error) {
-	return s.userRepo.GetTravels(ctx, id_user)
+func (s *UserService) GetTravels(ctx context.Context, userID int64) (map[string][]models.Travel, error) {
+	return s.userRepo.GetTravels(ctx, userID)
 }
 
-func (s *UserService) CreateTravel(ctx context.Context, id_user string, name string, start_date string, end_date string) error {
+func (s *UserService) CreateTravel(ctx context.Context, userID int64, name string, start_date string, end_date string) error {
 	// Start transaction
 
 	id_travel, err := s.userRepo.CreateTravel(ctx, name, start_date, end_date)
@@ -17,7 +18,7 @@ func (s *UserService) CreateTravel(ctx context.Context, id_user string, name str
 		return err
 	}
 
-	err = s.userRepo.AddClientTravels(ctx, id_travel, id_user)
+	err = s.userRepo.AddClientTravels(ctx, id_travel, userID)
 
 	// Commit transaction
 
@@ -26,19 +27,19 @@ func (s *UserService) CreateTravel(ctx context.Context, id_user string, name str
 
 // TODO GetTravel
 
-func (s *UserService) GetActivities(ctx context.Context, id_user string) ([]models.Activity, error) {
-	return s.userRepo.GetActivities(ctx, id_user)
+func (s *UserService) GetActivities(ctx context.Context, userID string) ([]models.Activity, error) {
+	return s.userRepo.GetActivities(ctx, userID)
 }
 
-func (s *UserService) CreateActivity(ctx context.Context, id_user string, id_travel string, name string, description string, location string, start_date string, end_date string) error {
+func (s *UserService) CreateActivity(ctx context.Context, userID int64, activity models.Activity) error {
 	// Start transaction
 
-	id_activity, err := s.userRepo.CreateActivity(ctx, id_travel, name, description, location, start_date, end_date)
+	id_activity, err := s.userRepo.CreateActivity(ctx, activity)
 	if err != nil {
 		return err
 	}
 
-	if err := s.userRepo.AddClientActivities(ctx, id_activity, id_user); err != nil {
+	if err := s.userRepo.AddClientActivities(ctx, id_activity, userID); err != nil {
 		return err
 	}
 

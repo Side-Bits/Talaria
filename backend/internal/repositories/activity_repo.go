@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+
 	"talaria/internal/domain/models"
 )
 
@@ -42,27 +43,34 @@ func (r *UserRepository) GetActivities(ctx context.Context, id_travel string) ([
 	return activities, rows.Err()
 }
 
-func (r *UserRepository) CreateActivity(ctx context.Context, id_travel string, name string, description string, location string, start_date string, end_date string) (string, error) {
+func (r *UserRepository) CreateActivity(ctx context.Context, activity models.Activity) (int64, error) {
 	query := `
         INSERT INTO activities (id_travel, name, description, location, start_date, end_date)
         VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id_activity
 	`
 
-	var id_activity string
+	var id_activity int64
 
-	err := r.db.QueryRow(ctx, query, id_travel, name, description, location, start_date, end_date).Scan(&id_activity)
+	err := r.db.QueryRow(ctx, query,
+		activity.Id_travel,
+		activity.Name,
+		activity.Description,
+		activity.Location,
+		activity.StartDate,
+		activity.EndDate,
+	).Scan(&id_activity)
 
 	return id_activity, err
 }
 
-func (r *UserRepository) AddClientActivities(ctx context.Context, id_activity string, id_user string) error {
+func (r *UserRepository) AddClientActivities(ctx context.Context, id_activity int64, userID int64) error {
 	query := `
         INSERT INTO clients_activities (id_activity, id_user)
         VALUES ($1, $2)
 	`
 
-	_, err := r.db.Exec(ctx, query, id_activity, id_user)
+	_, err := r.db.Exec(ctx, query, id_activity, userID)
 
 	return err
 }

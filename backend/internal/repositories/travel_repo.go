@@ -2,10 +2,11 @@ package repositories
 
 import (
 	"context"
+
 	"talaria/internal/domain/models"
 )
 
-func (r *UserRepository) GetTravels(ctx context.Context, id_user string) (map[string][]models.Travel, error) {
+func (r *UserRepository) GetTravels(ctx context.Context, userID int64) (map[string][]models.Travel, error) {
 	rows, err := r.db.Query(ctx, `
 		SELECT id_travel, name, start_date, end_date, tag
 		FROM (
@@ -22,7 +23,7 @@ func (r *UserRepository) GetTravels(ctx context.Context, id_user string) (map[st
 		) t
 		WHERE n <= 5
 		ORDER BY tag, start_date ASC;
-	`, id_user)
+	`, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -45,27 +46,27 @@ func (r *UserRepository) GetTravels(ctx context.Context, id_user string) (map[st
 	return tags, rows.Err()
 }
 
-func (r *UserRepository) CreateTravel(ctx context.Context, name string, start_date string, end_date string) (string, error) {
+func (r *UserRepository) CreateTravel(ctx context.Context, name string, start_date string, end_date string) (int64, error) {
 	query := `
         INSERT INTO travels (name, start_date, end_date)
         VALUES ($1, $2, $3)
 		RETURNING id_travel
 	`
 
-	var id_travel string
+	var id_travel int64
 
 	err := r.db.QueryRow(ctx, query, name, start_date, end_date).Scan(&id_travel)
 
 	return id_travel, err
 }
 
-func (r *UserRepository) AddClientTravels(ctx context.Context, id_travel string, id_user string) error {
+func (r *UserRepository) AddClientTravels(ctx context.Context, id_travel int64, userID int64) error {
 	query := `
         INSERT INTO clients_travels (id_travel, id_user)
         VALUES ($1, $2)
 	`
 
-	_, err := r.db.Exec(ctx, query, id_travel, id_user)
+	_, err := r.db.Exec(ctx, query, id_travel, userID)
 
 	return err
 }

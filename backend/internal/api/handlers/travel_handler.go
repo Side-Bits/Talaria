@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+
 	"talaria/internal/api/middleware"
 	"talaria/internal/services"
 
@@ -25,18 +26,14 @@ func NewTravelHandler(userService services.UserService) *TravelHandler {
 }
 
 func (h *TravelHandler) Travel(c *gin.Context) {
-	h.getTravels(c)
-}
+	userID := middleware.GetUserID(c)
 
-func (h *TravelHandler) getTravels(c *gin.Context) {
-	id_user := c.Query("id_user")
-
-	if id_user == "" {
+	if userID == -1 {
 		respondBadRequest(c, "id_user is required", nil)
 		return
 	}
 
-	travels, err := h.userService.GetTravels(c.Request.Context(), id_user)
+	travels, err := h.userService.GetTravels(c.Request.Context(), userID)
 	if err != nil {
 		respondInternalError(c, "failed to fetch travels", err)
 		return
@@ -53,9 +50,9 @@ func (h *TravelHandler) InsertTravel(c *gin.Context) {
 		return
 	}
 
-	id_user := middleware.GetUserID(c)
+	userID := middleware.GetUserID(c)
 
-	if id_user == "" {
+	if userID == -1 {
 		respondBadRequest(c, "id_user is required", nil)
 		return
 	}
@@ -64,7 +61,7 @@ func (h *TravelHandler) InsertTravel(c *gin.Context) {
 	start_date := req.StartDate
 	end_date := req.EndDate
 
-	err := h.userService.CreateTravel(c.Request.Context(), id_user, name, start_date, end_date)
+	err := h.userService.CreateTravel(c.Request.Context(), userID, name, start_date, end_date)
 	if err != nil {
 		respondInternalError(c, "failed to create travel", err)
 		return
