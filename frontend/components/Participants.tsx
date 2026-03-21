@@ -8,10 +8,10 @@ type Props = & {
 
 export function Participants({ size, gap }: Props ) {
   return (
-    <ThemedView type='row'>
-        {Array.from({ length: 3 }).map((_, i) => (
-            <View style={{ width: size, height: size, backgroundColor: '#ccc', borderRadius: 50, marginRight: gap }} />
-        ))}
+    <ThemedView type='row' style={{ marginBottom: 8 }}>
+      {Array.from({ length: 3 }).map((_, i) => (
+        <View style={{ width: size, height: size, backgroundColor: '#ccc', borderRadius: 50, marginRight: gap }} />
+      ))}
     </ThemedView>
   );
 }
