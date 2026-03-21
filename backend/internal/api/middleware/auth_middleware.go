@@ -11,7 +11,7 @@ import (
 
 // TokenValidator is an interface for validating tokens
 type TokenValidator interface {
-	ValidateToken(ctx context.Context, token string) (string, error)
+	ValidateToken(ctx context.Context, token string) (int64, error)
 }
 
 // AuthMiddleware creates a middleware that validates JWT/tokens
@@ -67,11 +67,13 @@ func extractBearerToken(c *gin.Context) (string, error) {
 }
 
 // GetUserID is a helper to retrieve the userID from context
-func GetUserID(c *gin.Context) (string) {
+func GetUserID(c *gin.Context) string {
 	userID, exists := c.Get("userID")
-	if !exists { return "" }
+	if !exists {
+		return ""
+	}
 
-	id,_ := userID.(string)
+	id, _ := userID.(string)
 
 	return id
 }
