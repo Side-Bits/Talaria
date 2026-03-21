@@ -10,7 +10,9 @@ export function Footer()
 {
   const { height, width } = useWindowDimensions(); // TODO: generic parameter
   const pathname = usePathname();
+  
   const title = pathname.startsWith('/travels') ? 'travel' : pathname.startsWith('/activities') ? 'activity' : '';
+  const route = pathname.startsWith('/activities') ? 'id-activity' : 'id-travel';
 
   return (
     <View style={[ styles.footer, { width: Math.min(500 - 32, width - 32) }]}>
@@ -21,7 +23,7 @@ export function Footer()
             <ThemedText type='small'>Home</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={() => router.replace('/(app)/id-travel')}>
+        <Pressable onPress={() => router.replace(`/(app)/${route}`)}>
           <ThemedView type='middle' style={ styles.box }>
             <Ionicons name="add-outline" size={25} color={Colors.light.text} />
             <ThemedText type='small'>Create {title}</ThemedText>

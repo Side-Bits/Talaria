@@ -8,7 +8,7 @@ import { router, Stack } from 'expo-router';
 import { View, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
 
 export default function Root() {
-  const { height, width } = useWindowDimensions(); // TODO: generic parameter
+  const { height } = useWindowDimensions(); // TODO: generic parameter
 
   return (
     <ThemedView type='middle'>

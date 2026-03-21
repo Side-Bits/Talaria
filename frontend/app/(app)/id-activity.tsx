@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { StyleSheet, View, Text, ScrollView, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, useWindowDimensions, Alert } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { Colors } from '@/constants/Colors';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
 import { Floating } from '@/components/Floating';
+import { ThemedButton } from '@/components/ThemedButton';
+import { api } from '@/services/api';
+import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
 
 export default function TabActivity() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
+
+  const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
+
+  const handleActivity = async () => {
+    try {
+      api.post('api/activities/create', activity);
+    } catch (error) {
+      Alert.alert('Error', 'Invalid credentials');
+    }
+  };
 
   return (
     <>
@@ -17,22 +29,17 @@ export default function TabActivity() {
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
           <Header label='New activity' />
           <ThemedView type='left' style={{ width:'100%' }}>
-            <ThemedInput type='text' label='Activity name' />
+            <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })}/>
             <ThemedView type='between' style={{ width: '100%' }}>
-              <View><ThemedInput type='date' label='Start date' /></View>
+              <View><ThemedInput type='date' label='Start date' value={activity.start_date} onChangeText={text => setActivity({ ...activity, name: text })}/></View>
               <View><ThemedText>a</ThemedText></View>
-              <View><ThemedInput type='date' label='End date' /></View>
+              <View><ThemedInput type='date' label='End date' value={activity.end_date} onChangeText={text => setActivity({ ...activity, name: text })}/></View>
             </ThemedView>
-            <ThemedInput type='text' label='Location' />
-            <ThemedInput type='text' label='Notes' />
-            {/* <ThemedView type='left'>
-              <Text style={{ marginBottom: 4, fontSize: 12, color: Colors.light.text }}>Participants</Text>
-              <ThemedView type='row'>
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <View style={ styles.perfile } />
-                ))}
-              </ThemedView>
-            </ThemedView> */}
+            <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, name: text })} />
+            <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, name: text })} />
+            {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
+            {/*<Participants size={32} gap={4}/>*/}
+            <ThemedButton title='+' onPress={ handleActivity } />
           </ThemedView>
         </ScrollView>
       </ThemedView>
