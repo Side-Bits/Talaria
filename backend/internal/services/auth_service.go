@@ -3,11 +3,12 @@ package services
 import (
 	"context"
 	"errors"
+	"time"
+
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/pkgs/utils"
 	"talaria/internal/repositories"
-	"time"
 )
 
 const (
@@ -37,6 +38,10 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 	}
 	defer tx.Rollback(ctx) // Rollback if not committed
 
+	userRepo := repositories.NewUserRepository(tx)
+	tokenRepo := repositories.NewTokenRepository(tx, tokenValidityPeriod)
+	clientRepo := repositories.NewClientRepository(tx)
+
 	hash, err := utils.HashPassword(user.Password)
 	if err != nil {
 		return "", errors.New("Failed to hash password " + user.Password + " -> " + err.Error())
@@ -44,13 +49,19 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 
 	user.Password = hash
 
-	if err := s.userRepo.Create(ctx, user); err != nil {
+	if err := userRepo.Create(ctx, user); err != nil {
 		return "", errors.New("Failed to create user: " + err.Error())
 	}
 
-	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
+	tokenString, err := generateAndSaveNewToken(ctx, tokenRepo, *user)
 	if err != nil {
 		return "", errors.New("Failed to generate auth token: " + err.Error())
+	}
+
+	// TODO create client with more info (surname, photo, etc) and update user with client id.
+	// For now, we just create a client with the same id as the user and empty info
+	if err := clientRepo.Create(ctx, &models.Client{ID: user.ID, Name: user.Name, Surname1: "", Surname2: "", Photo: ""}); err != nil {
+		return "", errors.New("Failed to create client: " + err.Error())
 	}
 
 	// Commit transaction
@@ -69,7 +80,10 @@ func (s *AuthService) Login(ctx context.Context, identifier string, password str
 	}
 	defer tx.Rollback(ctx) // Rollback if not committed
 
-	user, err := s.userRepo.GetByUsernameOrEmail(ctx, identifier)
+	userRepo := repositories.NewUserRepository(tx)
+	tokenRepo := repositories.NewTokenRepository(tx, tokenValidityPeriod)
+
+	user, err := userRepo.GetByUsernameOrEmail(ctx, identifier)
 	if err != nil {
 		return nil, "", errors.New("invalid credentials: " + err.Error())
 	}
@@ -78,7 +92,7 @@ func (s *AuthService) Login(ctx context.Context, identifier string, password str
 		return nil, "", errors.New("invalid credentials: " + err.Error())
 	}
 
-	tokenString, err := generateAndSaveNewToken(ctx, s.tokenRepo, *user)
+	tokenString, err := generateAndSaveNewToken(ctx, tokenRepo, *user)
 	if err != nil {
 		return nil, "", err
 	}

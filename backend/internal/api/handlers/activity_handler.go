@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"net/http"
+
 	"talaria/internal/api/middleware"
+	"talaria/internal/domain/models"
 	"talaria/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -40,28 +42,21 @@ func (h *ActivityHandler) getActivities(c *gin.Context) {
 }
 
 func (h *ActivityHandler) InsertActivity(c *gin.Context) {
-	var data map[string]string
+	var newActivity models.Activity
 
-	if err := c.BindJSON(&data); err != nil {
+	if err := c.ShouldBindJSON(&newActivity); err != nil {
 		respondBadRequest(c, "invalid request body", err)
 		return
 	}
 
-	id_user := middleware.GetUserID(c)
+	userID := middleware.GetUserID(c)
 
-	if id_user == "" {
+	if userID == -1 {
 		respondBadRequest(c, "id_user is required", nil)
 		return
 	}
 
-	id_travel := data["id_travel"]
-	name := data["name"]
-	description := data["description"]
-	location := data["loaction"]
-	start_date := data["start_date"]
-	end_date := data["end_date"]
-
-	err2 := h.userService.CreateActivity(c.Request.Context(), id_user, id_travel, name, description, location, start_date, end_date)
+	err2 := h.userService.CreateActivity(c.Request.Context(), userID, newActivity)
 
 	if err2 != nil {
 		respondInternalError(c, "failed to create activity", err2)

@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/repositories"
@@ -17,6 +18,7 @@ func NewUserService(db database.DBExecutor) *UserService {
 	}
 }
 
-func (s *UserService) GetUserByID(ctx context.Context, id_user string) (*models.User, error) {
-	return s.userRepo.GetByID(ctx, id_user)
+func (s *UserService) GetUserByID(ctx context.Context, userID int64) (*models.User, error) {
+	return s.userRepo.GetByID(ctx, userID)
 }
+
