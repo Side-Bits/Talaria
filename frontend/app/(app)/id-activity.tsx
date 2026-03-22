@@ -5,7 +5,6 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
-import { Floating } from '@/components/Floating';
 import { ThemedButton } from '@/components/ThemedButton';
 import { api } from '@/services/api';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
@@ -43,7 +42,6 @@ export default function TabActivity() {
           </ThemedView>
         </ScrollView>
       </ThemedView>
-      <Floating />
     </>
   );
 }

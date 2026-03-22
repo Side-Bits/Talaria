@@ -5,7 +5,6 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
-import { Floating } from '@/components/Floating';
 
 export default function TabPerfile() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
@@ -24,7 +23,6 @@ export default function TabPerfile() {
           </ThemedView>
         </ScrollView>
       </ThemedView>
-      <Floating />
     </>
   );
 }
