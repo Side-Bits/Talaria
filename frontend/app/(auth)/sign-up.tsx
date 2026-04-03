@@ -42,12 +42,12 @@ export default function SignUp() {
           <ThemedCheckbox label='I agree with privacy and policy'></ThemedCheckbox>
         </ThemedView>
         <ThemedButton title='Sign up' onPress={handleSignUp} disabled={isSubmitting} />
-        <ThemedView type='between' style={{ marginTop: 16, marginBottom: 16 }}>
+        {/* <ThemedView type='between' style={{ marginTop: 16, marginBottom: 16 }}>
           <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
-          <ThemedText type="default" style={{ color: Colors.light.gray, marginLeft: 16, marginRight: 16 }}>Or</ThemedText>
+            <ThemedText type="default" style={{ color: Colors.light.gray, marginLeft: 16, marginRight: 16 }}>Or</ThemedText> 
           <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
         </ThemedView>
-        <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.text }} onPress={() => console.log('Continue with Google')} />
+        <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.text }} onPress={() => console.log('Continue with Google')} /> */}
         <ThemedText type="default" style={{ marginTop: 16 }} onPress={() => { router.replace('/(auth)/sign-in'); }}>Already have an account? Log in</ThemedText>
       </ThemedView>
     </ThemedView>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect,  useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-
+import { api } from '@/services/api';
 import { StyleSheet, ScrollView, useWindowDimensions, View, Pressable } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
@@ -8,29 +8,27 @@ import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import { Footer } from '@/components/Footer';
 import { Participants } from '@/components/Participants';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function TabActivities() {
-  const { height, width } = useWindowDimensions(); // TODO: generic parameter
+  const { height } = useWindowDimensions(); // TODO: generic parameter
+  const { id_travel } = useLocalSearchParams();
 
-    type Activity = {
-      id: number;
-      name: string;
-      start_date: string;
-      end_date: string;
-      finished?: boolean;
-    };
+  type Activity = {
+    id: number;
+    name: string;
+    start_date: string;
+    end_date: string;
+    finished?: boolean;
+  };
   
-    const [activity, setActivities] = useState<Activity[]>([]);
+  const [activity, setActivities] = useState<Activity[]>([]);
   
-    useEffect(() => {
-      fetch('http://localhost:8080/activities?id_travel=c9bf9e57-1685-4c89-bafb-ff5af830be8a', { method: 'GET' })
-        .then(res => {
-          if (!res.ok) throw new Error(res.statusText);
-          return res.json();
-        })
-        .then(data => Array.isArray(data) ? setActivities(data) : setActivities([]))
-        .catch(e => console.error('Failed to fetch activities', e));
-    }, []);
+  useEffect(() => {
+    api.get<{A?: Activity[];}>('api/activities?id_travel=' + id_travel)
+    .then(data => Array.isArray(data) ? setActivities(data) : setActivities([]))
+    .catch(e => console.error('Failed to fetch activities', e));
+  }, []);
 
   return (
     <>

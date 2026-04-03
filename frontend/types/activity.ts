@@ -1,3 +1,5 @@
+const today = new Date();
+
 export interface Activity {
 	id_activity: number;
 	id_travel: number;
@@ -15,7 +17,7 @@ export const DEFAULT_ACTIVITY = {
 	name: '',
 	description: '',
 	location: '',
-	start_date: '',
-	end_date: '',
+	start_date: today.getFullYear() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0') + '',
+	end_date: today.getFullYear() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0') + '',
 	price: 0,
 }
