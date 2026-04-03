@@ -6,7 +6,6 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedCheckbox } from '@/components/ThemedCheckbox';
-import { Colors } from '@/constants/Colors';
 import { Alert, View } from 'react-native';
 import { useState } from 'react';
 import { LoginCredentials } from '@/types/user';

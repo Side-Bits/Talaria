@@ -21,7 +21,7 @@ export default function TabTravel() {
       Alert.alert('Error', 'Invalid credentials');
     }
   };
-
+  
   return (
     <>
       <ThemedView type='left'>

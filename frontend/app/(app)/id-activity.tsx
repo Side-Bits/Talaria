@@ -8,15 +8,18 @@ import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
 import { api } from '@/services/api';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function TabActivity() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
 
   const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
 
+  const { id_travel } = useLocalSearchParams();
+
   const handleActivity = async () => {
     try {
-      api.post('api/activities/create', activity);
+      api.post('api/activities/create?id_travel?id_travel=' + id_travel, activity);
     } catch (error) {
       Alert.alert('Error', 'Invalid credentials');
     }

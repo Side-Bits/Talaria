@@ -11,7 +11,7 @@ func (s *UserService) GetTravels(ctx context.Context, userID int64) (map[string]
 }
 
 func (s *UserService) CreateTravel(ctx context.Context, userID int64, name string, start_date string, end_date string) error {
-	// Start transaction
+	// TODO: Start transaction
 
 	id_travel, err := s.userRepo.CreateTravel(ctx, name, start_date, end_date)
 	if err != nil {
@@ -20,7 +20,7 @@ func (s *UserService) CreateTravel(ctx context.Context, userID int64, name strin
 
 	err = s.userRepo.AddClientTravels(ctx, id_travel, userID)
 
-	// Commit transaction
+	// TODO Commit transaction
 
 	return err
 }
@@ -32,7 +32,7 @@ func (s *UserService) GetActivities(ctx context.Context, userID string) ([]model
 }
 
 func (s *UserService) CreateActivity(ctx context.Context, userID int64, activity models.Activity) error {
-	// Start transaction
+	// TODO Start transaction
 
 	id_activity, err := s.userRepo.CreateActivity(ctx, activity)
 	if err != nil {
@@ -43,7 +43,7 @@ func (s *UserService) CreateActivity(ctx context.Context, userID int64, activity
 		return err
 	}
 
-	// Commit transaction
+	// TODO Commit transaction
 
 	return nil
 }

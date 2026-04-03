@@ -5,12 +5,15 @@ import { ThemedView } from './ThemedView';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
+import { useLocalSearchParams } from 'expo-router';
 
 export function Footer()
 {
-  const { height, width } = useWindowDimensions(); // TODO: generic parameter
+  const { width } = useWindowDimensions(); // TODO: generic parameter
   const pathname = usePathname();
   
+  const { id_travel } = useLocalSearchParams();
+
   const title = pathname.startsWith('/travels') ? 'travel' : pathname.startsWith('/activities') ? 'activity' : '';
   const route = pathname.startsWith('/activities') ? 'id-activity' : 'id-travel';
 

@@ -1,19 +1,17 @@
 import { Footer } from '@/components/Footer';
-import { ThemedBlur } from '@/components/ThemedBlur';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
-import { Ionicons } from '@expo/vector-icons';
-import { router, Stack } from 'expo-router';
-import { View, StyleSheet, Pressable, useWindowDimensions } from 'react-native';
+import { Stack } from 'expo-router';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
 
 export default function Root() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
-
+  
   return (
     <ThemedView type='middle'>
       <View style={{ maxWidth: 500, width:'100%', height: height, paddingHorizontal: 16 }}>
         <RootNavigator />
+        <Footer />
       </View>
     </ThemedView>
   );
