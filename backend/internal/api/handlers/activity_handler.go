@@ -20,7 +20,33 @@ func NewActivityHandler(activityService services.ActivityService) *ActivityHandl
 	}
 }
 
+// Activity godoc
+// @Summary List activities
+// @Description Returns activities for a travel.
+// @Tags activities
+// @Produce json
+// @Param id_travel query string true "Travel ID"
+// @Success 200 {array} models.Activity
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /activities [get]
 func (h *ActivityHandler) Activity(c *gin.Context) {
+	h.getActivities(c)
+}
+
+// AuthenticatedActivity godoc
+// @Summary List activities
+// @Description Returns activities for a travel.
+// @Tags activities
+// @Produce json
+// @Security BearerAuth
+// @Param id_travel query string true "Travel ID"
+// @Success 200 {array} models.Activity
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/activities [get]
+func (h *ActivityHandler) AuthenticatedActivity(c *gin.Context) {
 	h.getActivities(c)
 }
 
@@ -41,6 +67,18 @@ func (h *ActivityHandler) getActivities(c *gin.Context) {
 	c.JSON(http.StatusOK, activities)
 }
 
+// InsertActivity godoc
+// @Summary Create an activity
+// @Description Creates an activity for the authenticated user.
+// @Tags activities
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body models.Activity true "Activity payload"
+// @Success 200
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/activities/create [post]
 func (h *ActivityHandler) InsertActivity(c *gin.Context) {
 	var newActivity models.Activity
 

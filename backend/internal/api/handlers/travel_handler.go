@@ -4,16 +4,19 @@ import (
 	"net/http"
 
 	"talaria/internal/api/middleware"
+	"talaria/internal/domain/models"
 	"talaria/internal/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 type CreateTravelRequest struct {
-	Name      string `json:"name" binding:"required"`
-	StartDate string `json:"start_date" binding:"required"`
-	EndDate   string `json:"end_date" binding:"required"`
+	Name      string `json:"name" binding:"required" example:"Summer vacation"`
+	StartDate string `json:"start_date" binding:"required" example:"2026-07-01"`
+	EndDate   string `json:"end_date" binding:"required" example:"2026-07-10"`
 }
+
+type TravelGroupResponse map[string][]models.Travel
 
 type TravelHandler struct {
 	travelService services.TravelService
@@ -25,6 +28,16 @@ func NewTravelHandler(travelService services.TravelService) *TravelHandler {
 	}
 }
 
+// Travel godoc
+// @Summary List travels
+// @Description Returns travels for the authenticated user.
+// @Tags travels
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} TravelGroupResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/travels [get]
 func (h *TravelHandler) Travel(c *gin.Context) {
 	userID := middleware.GetUserID(c)
 
@@ -42,6 +55,18 @@ func (h *TravelHandler) Travel(c *gin.Context) {
 	c.JSON(http.StatusOK, travels)
 }
 
+// InsertTravel godoc
+// @Summary Create a travel
+// @Description Creates a travel for the authenticated user.
+// @Tags travels
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body CreateTravelRequest true "Travel payload"
+// @Success 200
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/travels/create [post]
 func (h *TravelHandler) InsertTravel(c *gin.Context) {
 	var req CreateTravelRequest
 

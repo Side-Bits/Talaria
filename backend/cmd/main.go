@@ -4,16 +4,27 @@ import (
 	"fmt"
 	"time"
 
+	_ "talaria/docs"
 	"talaria/internal/api/handlers"
 	"talaria/internal/api/routes"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/services"
 
 	"github.com/gin-contrib/cors"
-
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Talaria API
+// @version 1.0
+// @description API for Talaria travel planning.
+// @host localhost:8080
+// @BasePath /
+// @schemes http
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	r := gin.Default() // Includes logger and recovery middleware
 
@@ -44,6 +55,7 @@ func main() {
 
 	router := routes.NewRouter(authHandler, userHandler, travelHandler, activityHandler, authService)
 	router.SetupRoutes(r)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Start server on port 8080
 	r.Run(":8080")

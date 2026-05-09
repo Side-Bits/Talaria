@@ -1,0 +1,361 @@
+basePath: /
+definitions:
+  handlers.CreateTravelRequest:
+    properties:
+      end_date:
+        example: "2026-07-10"
+        type: string
+      name:
+        example: Summer vacation
+        type: string
+      start_date:
+        example: "2026-07-01"
+        type: string
+    required:
+    - end_date
+    - name
+    - start_date
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  handlers.LoginRequest:
+    properties:
+      identifier:
+        example: user@example.com
+        type: string
+      password:
+        example: secret-password
+        type: string
+    required:
+    - identifier
+    - password
+    type: object
+  handlers.RegisterRequest:
+    properties:
+      identifier:
+        example: user@example.com
+        type: string
+      password:
+        example: secret-password
+        type: string
+      username:
+        example: Jane Doe
+        type: string
+    required:
+    - identifier
+    - password
+    - username
+    type: object
+  handlers.RegisterResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  handlers.TravelGroupResponse:
+    additionalProperties:
+      items:
+        $ref: '#/definitions/models.Travel'
+      type: array
+    type: object
+  handlers.UserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Activity:
+    properties:
+      description:
+        type: string
+      end_date:
+        type: string
+      finished:
+        type: boolean
+      id:
+        type: integer
+      id_travel:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      start_date:
+        type: string
+    type: object
+  models.Travel:
+    properties:
+      end_date:
+        type: string
+      finished:
+        type: boolean
+      id:
+        type: integer
+      name:
+        type: string
+      start_date:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for Talaria travel planning.
+  title: Talaria API
+  version: "1.0"
+paths:
+  /activities:
+    get:
+      description: Returns activities for a travel.
+      parameters:
+      - description: Travel ID
+        in: query
+        name: id_travel
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Activity'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: List activities
+      tags:
+      - activities
+  /api/activities:
+    get:
+      description: Returns activities for a travel.
+      parameters:
+      - description: Travel ID
+        in: query
+        name: id_travel
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Activity'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List activities
+      tags:
+      - activities
+  /api/activities/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates an activity for the authenticated user.
+      parameters:
+      - description: Activity payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Activity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create an activity
+      tags:
+      - activities
+  /api/travels:
+    get:
+      description: Returns travels for the authenticated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.TravelGroupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List travels
+      tags:
+      - travels
+  /api/travels/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a travel for the authenticated user.
+      parameters:
+      - description: Travel payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateTravelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a travel
+      tags:
+      - travels
+  /api/user:
+    get:
+      description: Returns the authenticated user from the bearer token.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get current user
+      tags:
+      - users
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns an authentication token.
+      parameters:
+      - description: Login payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/handlers.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Log in
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a user account and returns an authentication token.
+      parameters:
+      - description: Registration payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handlers.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Register a new user
+      tags:
+      - auth
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

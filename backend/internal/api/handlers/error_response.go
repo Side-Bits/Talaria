@@ -7,6 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 func respondBadRequest(c *gin.Context, message string, err error) {
 	respondError(c, http.StatusBadRequest, message, err)
 }
