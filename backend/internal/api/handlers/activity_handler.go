@@ -11,12 +11,12 @@ import (
 )
 
 type ActivityHandler struct {
-	userService services.UserService
+	activityService services.ActivityService
 }
 
-func NewActivityHandler(userService services.UserService) *ActivityHandler {
+func NewActivityHandler(activityService services.ActivityService) *ActivityHandler {
 	return &ActivityHandler{
-		userService: userService,
+		activityService: activityService,
 	}
 }
 
@@ -32,7 +32,7 @@ func (h *ActivityHandler) getActivities(c *gin.Context) {
 		return
 	}
 
-	activities, err := h.userService.GetActivities(c.Request.Context(), id_travel)
+	activities, err := h.activityService.GetActivities(c.Request.Context(), id_travel)
 	if err != nil {
 		respondInternalError(c, "failed to fetch activities", err)
 		return
@@ -56,7 +56,7 @@ func (h *ActivityHandler) InsertActivity(c *gin.Context) {
 		return
 	}
 
-	err2 := h.userService.CreateActivity(c.Request.Context(), userID, newActivity)
+	err2 := h.activityService.CreateActivity(c.Request.Context(), userID, newActivity)
 
 	if err2 != nil {
 		respondInternalError(c, "failed to create activity", err2)

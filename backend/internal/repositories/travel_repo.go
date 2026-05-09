@@ -4,9 +4,18 @@ import (
 	"context"
 
 	"talaria/internal/domain/models"
+	"talaria/internal/pkgs/database"
 )
 
-func (r *UserRepository) GetTravels(ctx context.Context, userID int64) (map[string][]models.Travel, error) {
+type TravelRepository struct {
+	db database.DBExecutor
+}
+
+func NewTravelRepository(db database.DBExecutor) *TravelRepository {
+	return &TravelRepository{db: db}
+}
+
+func (r *TravelRepository) GetTravels(ctx context.Context, userID int64) (map[string][]models.Travel, error) {
 	rows, err := r.db.Query(ctx, `
 		SELECT id_travel, name, start_date, end_date, tag
 		FROM (
@@ -46,7 +55,7 @@ func (r *UserRepository) GetTravels(ctx context.Context, userID int64) (map[stri
 	return tags, rows.Err()
 }
 
-func (r *UserRepository) CreateTravel(ctx context.Context, name string, start_date string, end_date string) (int64, error) {
+func (r *TravelRepository) CreateTravel(ctx context.Context, name string, start_date string, end_date string) (int64, error) {
 	query := `
         INSERT INTO travels (name, start_date, end_date)
         VALUES ($1, $2, $3)
@@ -60,7 +69,7 @@ func (r *UserRepository) CreateTravel(ctx context.Context, name string, start_da
 	return id_travel, err
 }
 
-func (r *UserRepository) AddClientTravels(ctx context.Context, id_travel int64, userID int64) error {
+func (r *TravelRepository) AddClientTravels(ctx context.Context, id_travel int64, userID int64) error {
 	query := `
         INSERT INTO clients_travels (id_travel, id_user)
         VALUES ($1, $2)

@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"talaria/internal/api/handlers"
 	"talaria/internal/api/routes"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/services"
-	"time"
 
 	"github.com/gin-contrib/cors"
 
@@ -36,8 +37,10 @@ func main() {
 
 	userService := services.NewUserService(dbpool)
 	userHandler := handlers.NewUserHandler(*userService)
-	travelHandler := handlers.NewTravelHandler(*userService)
-	activityHandler := handlers.NewActivityHandler(*userService)
+	travelService := services.NewTravelService(dbpool)
+	travelHandler := handlers.NewTravelHandler(*travelService)
+	activityService := services.NewActivityService(dbpool)
+	activityHandler := handlers.NewActivityHandler(*activityService)
 
 	router := routes.NewRouter(authHandler, userHandler, travelHandler, activityHandler, authService)
 	router.SetupRoutes(r)

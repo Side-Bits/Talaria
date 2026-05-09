@@ -5,20 +5,18 @@ import (
 
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
-	"talaria/internal/repositories"
 )
 
 type UserService struct {
-	userRepo repositories.UserRepository
+	store *RepositoryStore
 }
 
-func NewUserService(db database.DBExecutor) *UserService {
+func NewUserService(db database.TxBeginner) *UserService {
 	return &UserService{
-		userRepo: *repositories.NewUserRepository(db),
+		store: NewStore(db),
 	}
 }
 
 func (s *UserService) GetUserByID(ctx context.Context, userID int64) (*models.User, error) {
-	return s.userRepo.GetByID(ctx, userID)
+	return s.store.Repos().Users.GetByID(ctx, userID)
 }
-

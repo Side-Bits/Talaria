@@ -4,9 +4,18 @@ import (
 	"context"
 
 	"talaria/internal/domain/models"
+	"talaria/internal/pkgs/database"
 )
 
-func (r *UserRepository) GetActivities(ctx context.Context, id_travel string) ([]models.Activity, error) {
+type ActivityRepository struct {
+	db database.DBExecutor
+}
+
+func NewActivityRepository(db database.DBExecutor) *ActivityRepository {
+	return &ActivityRepository{db: db}
+}
+
+func (r *ActivityRepository) GetActivities(ctx context.Context, id_travel string) ([]models.Activity, error) {
 	var activities []models.Activity
 
 	rows, err := r.db.Query(ctx, `
@@ -43,7 +52,7 @@ func (r *UserRepository) GetActivities(ctx context.Context, id_travel string) ([
 	return activities, rows.Err()
 }
 
-func (r *UserRepository) CreateActivity(ctx context.Context, activity models.Activity) (int64, error) {
+func (r *ActivityRepository) CreateActivity(ctx context.Context, activity models.Activity) (int64, error) {
 	query := `
         INSERT INTO activities (id_travel, name, description, location, start_date, end_date)
         VALUES ($1, $2, $3, $4, $5, $6)
@@ -64,7 +73,7 @@ func (r *UserRepository) CreateActivity(ctx context.Context, activity models.Act
 	return id_activity, err
 }
 
-func (r *UserRepository) AddClientActivities(ctx context.Context, id_activity int64, userID int64) error {
+func (r *ActivityRepository) AddClientActivities(ctx context.Context, id_activity int64, userID int64) error {
 	query := `
         INSERT INTO clients_activities (id_activity, id_user)
         VALUES ($1, $2)
