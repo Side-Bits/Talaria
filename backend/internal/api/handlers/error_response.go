@@ -11,10 +11,18 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
+// Returns http.StatusBadRequest (400) with the message and the error if debud mode is enabled
 func respondBadRequest(c *gin.Context, message string, err error) {
 	respondError(c, http.StatusBadRequest, message, err)
 }
 
+// Returns http.StatusNotFound (404) with the message and the error if debud mode is enabled
+func respondNotFound(c *gin.Context, message string, err error) {
+	respondError(c, http.StatusNotFound, message, err)
+}
+
+// Returns http.StatusInternalServerError (500) with the message and the error if debud mode is
+// enabled
 func respondInternalError(c *gin.Context, message string, err error) {
 	respondError(c, http.StatusInternalServerError, message, err)
 }

@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 )
@@ -19,6 +18,10 @@ func NewTravelService(db database.TxBeginner) *TravelService {
 
 func (s *TravelService) GetTravels(ctx context.Context, userID int64) (map[string][]models.Travel, error) {
 	return s.store.Repos().Travels.GetTravels(ctx, userID)
+}
+
+func (s *TravelService) GetTravelByID(ctx context.Context, userID int64, travelID int64) (models.Travel, error) {
+	return s.store.Repos().Travels.GetTravelByID(ctx, userID, travelID)
 }
 
 func (s *TravelService) CreateTravel(ctx context.Context, userID int64, name string, start_date string, end_date string) error {

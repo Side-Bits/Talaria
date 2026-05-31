@@ -61,7 +61,8 @@ func (r *ActivityRepository) CreateActivity(ctx context.Context, activity models
 
 	var id_activity int64
 
-	err := r.db.QueryRow(ctx, query,
+	err := r.db.QueryRow(
+		ctx, query,
 		activity.Id_travel,
 		activity.Name,
 		activity.Description,
@@ -82,4 +83,35 @@ func (r *ActivityRepository) AddClientActivities(ctx context.Context, id_activit
 	_, err := r.db.Exec(ctx, query, id_activity, userID)
 
 	return err
+}
+
+func (r *ActivityRepository) GetActivity(ctx context.Context, userID int64, travelID int64, activityID int64) (models.Activity, error) {
+	query := `
+			SELECT 
+				a.id,
+				a.name,
+				a.description,
+				a.location,
+				a.start_date,
+				a.end_date,
+				a.price,
+				NOW() > a.end_date AS finished
+			FROM Activities a
+			INNER JOIN clients_activities ca on ct.id_activity = a.id
+			WHERE ca.id_user = $1 AND a.id = $2 AND a.id_travel = $3 
+	`
+
+	var activity models.Activity
+	err := r.db.QueryRow(ctx, query, userID, activityID, travelID).Scan(
+		&activity.ID,
+		&activity.Name,
+		&activity.Description,
+		&activity.Location,
+		&activity.StartDate,
+		&activity.EndDate,
+		&activity.Price,
+		&activity.Finished,
+	)
+
+	return activity, err
 }

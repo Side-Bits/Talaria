@@ -32,4 +32,6 @@ func (s *ActivityService) CreateActivity(ctx context.Context, userID int64, acti
 	})
 }
 
-// TODO GetActivity
+func (s *ActivityService) GetActivity(ctx context.Context, userID int64, travelID int64, activityID int64) (models.Activity, error) {
+	return s.store.repos.Activities.GetActivity(ctx, userID, travelID, activityID)
+}

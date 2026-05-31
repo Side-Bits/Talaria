@@ -55,6 +55,31 @@ func (r *TravelRepository) GetTravels(ctx context.Context, userID int64) (map[st
 	return tags, rows.Err()
 }
 
+func (r *TravelRepository) GetTravelByID(ctx context.Context, userID int64, travelID int64) (models.Travel, error) {
+	query := `
+		SELECT t.id_travel, t.name, t.start_date, t.end_date, t.end_date < CURRENT_DATE AS finished
+		FROM travels t
+		INNER JOIN clients_travels ct ON ct.id_travel = t.id_travel
+		WHERE ct.id_user = $1
+			AND t.id_travel = $2
+		LIMIT 1
+	`
+
+	var travel models.Travel
+	err := r.db.QueryRow(ctx, query, userID, travelID).Scan(
+		&travel.ID,
+		&travel.Name,
+		&travel.StartDate,
+		&travel.EndDate,
+		&travel.Finished,
+	)
+	if err != nil {
+		return models.Travel{}, err
+	}
+
+	return travel, nil
+}
+
 func (r *TravelRepository) CreateTravel(ctx context.Context, name string, start_date string, end_date string) (int64, error) {
 	query := `
         INSERT INTO travels (name, start_date, end_date)

@@ -1,13 +1,16 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"talaria/internal/api/middleware"
 	"talaria/internal/domain/models"
+	"talaria/internal/pkgs/utils"
 	"talaria/internal/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 )
 
 type CreateTravelRequest struct {
@@ -28,7 +31,7 @@ func NewTravelHandler(travelService services.TravelService) *TravelHandler {
 	}
 }
 
-// Travel godoc
+// GetTravels godoc
 // @Summary List travels
 // @Description Returns travels for the authenticated user.
 // @Tags travels
@@ -38,11 +41,9 @@ func NewTravelHandler(travelService services.TravelService) *TravelHandler {
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
 // @Router /api/travels [get]
-func (h *TravelHandler) Travel(c *gin.Context) {
-	userID := middleware.GetUserID(c)
-
-	if userID == -1 {
-		respondBadRequest(c, "id_user is required", nil)
+func (h *TravelHandler) GetTravels(c *gin.Context) {
+	userID, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
 		return
 	}
 
@@ -55,7 +56,45 @@ func (h *TravelHandler) Travel(c *gin.Context) {
 	c.JSON(http.StatusOK, travels)
 }
 
-// InsertTravel godoc
+// GetTravelByID godoc
+// @Summary Get a travel
+// @Description Returns a travel for the authenticated user.
+// @Tags travels
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Travel ID"
+// @Success 200 {object} models.Travel
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/travels/{id} [get]
+func (h *TravelHandler) GetTravelByID(c *gin.Context) {
+	userID, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
+		return
+	}
+
+	travelID, err := utils.ParsePositiveInt64Param(c, "id")
+	if err != nil {
+		respondBadRequest(c, "Invalid id", err)
+		return
+	}
+
+	travel, err := h.travelService.GetTravelByID(c.Request.Context(), userID, travelID)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			respondNotFound(c, "travel not found", err)
+			return
+		}
+
+		respondInternalError(c, "failed to fetch travel", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, travel)
+}
+
+// CreateTravel godoc
 // @Summary Create a travel
 // @Description Creates a travel for the authenticated user.
 // @Tags travels
@@ -67,7 +106,7 @@ func (h *TravelHandler) Travel(c *gin.Context) {
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
 // @Router /api/travels/create [post]
-func (h *TravelHandler) InsertTravel(c *gin.Context) {
+func (h *TravelHandler) CreateTravel(c *gin.Context) {
 	var req CreateTravelRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -75,10 +114,9 @@ func (h *TravelHandler) InsertTravel(c *gin.Context) {
 		return
 	}
 
-	userID := middleware.GetUserID(c)
+	userID, ok := middleware.GetUserIDOrAbort(c)
 
-	if userID == -1 {
-		respondBadRequest(c, "id_user is required", nil)
+	if !ok {
 		return
 	}
 

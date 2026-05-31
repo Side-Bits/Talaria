@@ -5,6 +5,7 @@ import (
 
 	"talaria/internal/api/middleware"
 	"talaria/internal/domain/models"
+	"talaria/internal/pkgs/utils"
 	"talaria/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -20,66 +21,88 @@ func NewActivityHandler(activityService services.ActivityService) *ActivityHandl
 	}
 }
 
-// Activity godoc
-// @Summary List activities
-// @Description Returns activities for a travel.
-// @Tags activities
-// @Produce json
-// @Param id_travel query string true "Travel ID"
-// @Success 200 {array} models.Activity
-// @Failure 400 {object} ErrorResponse
-// @Failure 500 {object} ErrorResponse
-// @Router /activities [get]
-func (h *ActivityHandler) Activity(c *gin.Context) {
-	h.getActivities(c)
-}
-
-// AuthenticatedActivity godoc
+// GetActivities godoc
 // @Summary List activities
 // @Description Returns activities for a travel.
 // @Tags activities
 // @Produce json
 // @Security BearerAuth
-// @Param id_travel query string true "Travel ID"
+// @Param travel_id path int true "Travel ID"
 // @Success 200 {array} models.Activity
 // @Failure 400 {object} ErrorResponse
 // @Failure 401 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
-// @Router /api/activities [get]
-func (h *ActivityHandler) AuthenticatedActivity(c *gin.Context) {
-	h.getActivities(c)
-}
-
-func (h *ActivityHandler) getActivities(c *gin.Context) {
-	id_travel := c.Query("id_travel")
+// @Router /api/travels/{travel_id}/activities [get]
+func (h *ActivityHandler) GetActivities(c *gin.Context) {
+	id_travel := c.Param("travel_id")
 
 	if id_travel == "" {
-		respondBadRequest(c, "id_travel is required", nil)
+		respondBadRequest(c, "travel id is required", nil)
 		return
 	}
 
 	activities, err := h.activityService.GetActivities(c.Request.Context(), id_travel)
 	if err != nil {
-		respondInternalError(c, "failed to fetch activities", err)
+		respondBadRequest(c, "failed to fetch activities", err)
 		return
 	}
 
 	c.JSON(http.StatusOK, activities)
 }
 
-// InsertActivity godoc
+// GetActivityById godoc
+// @Summary Get an Activity by ID
+// @Description Returns an activity of a travel
+// @Tags activities
+// @Produce json
+// @Security BearerAuth
+// @Param travel_id path int true "Travel ID"
+// @Param activity_id path int true "Activity ID"
+// @Success 200 {object} models.Activity
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/travels/{travel_id}/activities/{activity_id} [get]
+func (h *ActivityHandler) GetActivityById(c *gin.Context) {
+	userID, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
+		return
+	}
+
+	travelID, err := utils.ParsePositiveInt64Param(c, "travel_id")
+	if err != nil {
+		respondBadRequest(c, "invalid travel id", err)
+		return
+	}
+
+	activityID, err := utils.ParsePositiveInt64Param(c, "activity_id")
+	if err != nil {
+		respondBadRequest(c, "invalid activity id", err)
+		return
+	}
+
+	activity, err := h.activityService.GetActivity(c.Request.Context(), userID, travelID, activityID)
+	if err != nil {
+		respondInternalError(c, "error getitng the activity", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, activity)
+}
+
+// CreateActivity godoc
 // @Summary Create an activity
 // @Description Creates an activity for the authenticated user.
 // @Tags activities
 // @Accept json
 // @Produce json
 // @Security BearerAuth
+// @Param travel_id path int true "Travel id of the activity"
 // @Param request body models.Activity true "Activity payload"
 // @Success 200
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
-// @Router /api/activities/create [post]
-func (h *ActivityHandler) InsertActivity(c *gin.Context) {
+// @Router /api/travels/{travel_id}/activities/create [post]
+func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 	var newActivity models.Activity
 
 	if err := c.ShouldBindJSON(&newActivity); err != nil {
@@ -87,10 +110,8 @@ func (h *ActivityHandler) InsertActivity(c *gin.Context) {
 		return
 	}
 
-	userID := middleware.GetUserID(c)
-
-	if userID == -1 {
-		respondBadRequest(c, "id_user is required", nil)
+	userID, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
 		return
 	}
 

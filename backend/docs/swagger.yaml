@@ -125,24 +125,16 @@ info:
   title: Talaria API
   version: "1.0"
 paths:
-  /activities:
+  /api/travels:
     get:
-      description: Returns activities for a travel.
-      parameters:
-      - description: Travel ID
-        in: query
-        name: id_travel
-        required: true
-        type: string
+      description: Returns travels for the authenticated user.
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Activity'
-            type: array
+            $ref: '#/definitions/handlers.TravelGroupResponse'
         "400":
           description: Bad Request
           schema:
@@ -151,18 +143,53 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handlers.ErrorResponse'
-      summary: List activities
+      security:
+      - BearerAuth: []
+      summary: List travels
       tags:
-      - activities
-  /api/activities:
+      - travels
+  /api/travels/{id}:
+    get:
+      description: Returns a travel for the authenticated user.
+      parameters:
+      - description: Travel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Travel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a travel
+      tags:
+      - travels
+  /api/travels/{travel_id}/activities:
     get:
       description: Returns activities for a travel.
       parameters:
       - description: Travel ID
-        in: query
-        name: id_travel
+        in: path
+        name: travel_id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -189,12 +216,51 @@ paths:
       summary: List activities
       tags:
       - activities
-  /api/activities/create:
+  /api/travels/{travel_id}/activities/{activity_id}:
+    get:
+      description: Returns an activity of a travel
+      parameters:
+      - description: Travel ID
+        in: path
+        name: travel_id
+        required: true
+        type: integer
+      - description: Activity ID
+        in: path
+        name: activity_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Activity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get an Activity by ID
+      tags:
+      - activities
+  /api/travels/{travel_id}/activities/create:
     post:
       consumes:
       - application/json
       description: Creates an activity for the authenticated user.
       parameters:
+      - description: Travel id of the activity
+        in: path
+        name: travel_id
+        required: true
+        type: integer
       - description: Activity payload
         in: body
         name: request
@@ -219,29 +285,6 @@ paths:
       summary: Create an activity
       tags:
       - activities
-  /api/travels:
-    get:
-      description: Returns travels for the authenticated user.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handlers.TravelGroupResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-      security:
-      - BearerAuth: []
-      summary: List travels
-      tags:
-      - travels
   /api/travels/create:
     post:
       consumes:

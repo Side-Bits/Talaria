@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+
 	"talaria/internal/api/middleware"
 	"talaria/internal/domain/models"
 	"talaria/internal/services"
@@ -33,9 +34,8 @@ func NewUserHandler(userService services.UserService) *UserHandler {
 // @Failure 500 {object} ErrorResponse
 // @Router /api/user [get]
 func (h *UserHandler) GetUserByToken(c *gin.Context) {
-	userID := middleware.GetUserID(c)
-	if userID == -1 {
-		respondBadRequest(c, "id_user is required", nil)
+	userID, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
 		return
 	}
 
