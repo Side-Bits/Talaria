@@ -11,15 +11,14 @@ import (
 )
 
 type TokenRepository struct {
-	db       database.DBExecutor
-	tokenTTL time.Duration
+	db database.DBExecutor
 }
 
-func NewTokenRepository(db database.DBExecutor, tokenTTL time.Duration) *TokenRepository {
-	return &TokenRepository{db: db, tokenTTL: tokenTTL}
+func NewTokenRepository(db database.DBExecutor) *TokenRepository {
+	return &TokenRepository{db: db}
 }
 
-func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userID int64) error {
+func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userID int64, tokenTTL time.Duration) error {
 	query := `
 	      INSERT INTO session_token (id_user, token, created_at, expires_at)
 		    VALUES ($1, $2, $3, $4) 
@@ -32,7 +31,7 @@ func (r *TokenRepository) CreateDefault(ctx context.Context, token string, userI
 		userID,
 		token,
 		time.Now(),
-		time.Now().Add(r.tokenTTL),
+		time.Now().Add(tokenTTL),
 	)
 	return err
 }

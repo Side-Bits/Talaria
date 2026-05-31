@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -67,13 +68,23 @@ func extractBearerToken(c *gin.Context) (string, error) {
 }
 
 // GetUserID is a helper to retrieve the userID from context
-func GetUserID(c *gin.Context) int64 {
+func GetUserID(c *gin.Context) (int64, error) {
 	userID, exists := c.Get("userID")
 	if !exists {
-		return -1
+		return -1, fmt.Errorf("User ID not loaded")
 	}
 
 	id, _ := userID.(int64)
 
-	return id
+	return id, nil
+}
+
+func GetUserIDOrAbort(c *gin.Context) (int64, bool) {
+	userID, err := GetUserID(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return 0, false
+	}
+
+	return userID, true
 }

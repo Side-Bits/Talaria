@@ -4,9 +4,18 @@ import (
 	"context"
 
 	"talaria/internal/domain/models"
+	"talaria/internal/pkgs/database"
 )
 
-func (r *UserRepository) GetActivities(ctx context.Context, id_travel string) ([]models.Activity, error) {
+type ActivityRepository struct {
+	db database.DBExecutor
+}
+
+func NewActivityRepository(db database.DBExecutor) *ActivityRepository {
+	return &ActivityRepository{db: db}
+}
+
+func (r *ActivityRepository) GetActivities(ctx context.Context, id_travel string) ([]models.Activity, error) {
 	var activities []models.Activity
 
 	rows, err := r.db.Query(ctx, `
@@ -43,7 +52,7 @@ func (r *UserRepository) GetActivities(ctx context.Context, id_travel string) ([
 	return activities, rows.Err()
 }
 
-func (r *UserRepository) CreateActivity(ctx context.Context, activity models.Activity) (int64, error) {
+func (r *ActivityRepository) CreateActivity(ctx context.Context, activity models.Activity) (int64, error) {
 	query := `
         INSERT INTO activities (id_travel, name, description, location, start_date, end_date)
         VALUES ($1, $2, $3, $4, $5, $6)
@@ -52,7 +61,8 @@ func (r *UserRepository) CreateActivity(ctx context.Context, activity models.Act
 
 	var id_activity int64
 
-	err := r.db.QueryRow(ctx, query,
+	err := r.db.QueryRow(
+		ctx, query,
 		activity.Id_travel,
 		activity.Name,
 		activity.Description,
@@ -64,7 +74,7 @@ func (r *UserRepository) CreateActivity(ctx context.Context, activity models.Act
 	return id_activity, err
 }
 
-func (r *UserRepository) AddClientActivities(ctx context.Context, id_activity int64, userID int64) error {
+func (r *ActivityRepository) AddClientActivities(ctx context.Context, id_activity int64, userID int64) error {
 	query := `
         INSERT INTO clients_activities (id_activity, id_user)
         VALUES ($1, $2)
@@ -73,4 +83,35 @@ func (r *UserRepository) AddClientActivities(ctx context.Context, id_activity in
 	_, err := r.db.Exec(ctx, query, id_activity, userID)
 
 	return err
+}
+
+func (r *ActivityRepository) GetActivity(ctx context.Context, userID int64, travelID int64, activityID int64) (models.Activity, error) {
+	query := `
+			SELECT 
+				a.id,
+				a.name,
+				a.description,
+				a.location,
+				a.start_date,
+				a.end_date,
+				a.price,
+				NOW() > a.end_date AS finished
+			FROM Activities a
+			INNER JOIN clients_activities ca on ct.id_activity = a.id
+			WHERE ca.id_user = $1 AND a.id = $2 AND a.id_travel = $3 
+	`
+
+	var activity models.Activity
+	err := r.db.QueryRow(ctx, query, userID, activityID, travelID).Scan(
+		&activity.ID,
+		&activity.Name,
+		&activity.Description,
+		&activity.Location,
+		&activity.StartDate,
+		&activity.EndDate,
+		&activity.Price,
+		&activity.Finished,
+	)
+
+	return activity, err
 }
