@@ -15,21 +15,20 @@ export default function Root() {
 function RootNavigator() {
   const { session } = useSession();
 
-  console.log('Session:', session);
+  const DEV_BYPASS_AUTH = true // TODO: remove before commit
+  const isAuthenticated = DEV_BYPASS_AUTH || !!session
 
   return (
     <Stack screenOptions={{
       headerShown: false,
       contentStyle: { backgroundColor: "white" }
     }}>
-      <Stack.Protected guard={!!session} >
+      <Stack.Protected guard={isAuthenticated}>
         <Stack.Screen name="(app)" options={{ headerTitle: 'Talaria' }} />
       </Stack.Protected>
-
-      <Stack.Protected guard={!session}>
+      <Stack.Protected guard={!isAuthenticated}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack.Protected>
     </Stack>
   );
 }
-

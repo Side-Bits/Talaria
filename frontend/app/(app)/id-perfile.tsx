@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { StyleSheet, View, Text, ScrollView, useWindowDimensions } from 'react-native';
+import { StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
 
@@ -14,7 +13,7 @@ export default function TabPerfile() {
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
           <Header label='Perfile' />
-          <ThemedView type='left' style={{ width:'100%' }}>
+          <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Username' />
             <ThemedInput type='text' label='Name' />
             <ThemedInput type='text' label='Fist surname' />

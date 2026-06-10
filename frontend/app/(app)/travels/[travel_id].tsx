@@ -9,7 +9,7 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { api } from '@/services/api';
 import { DEFAULT_TRAVEL, Travel } from '@/types/travel';
 
-export default function TabTravel() {
+export default function TravelDetails() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
 
   const [travel, setTravel] = useState<Travel>(DEFAULT_TRAVEL);
