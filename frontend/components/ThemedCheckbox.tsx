@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Colors } from '@/constants/Colors';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { Checkbox } from 'expo-checkbox';
 
@@ -16,18 +15,3 @@ export function ThemedCheckbox({ label, ...rest }: Props) {
         <ThemedText>{label}</ThemedText>
     </View>
 }
-
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: Colors.light.tint,
-        borderRadius: 12,
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        alignItems: 'center',
-    },
-    text: {
-        color: 'white',
-        fontSize: 14,
-        fontWeight: '600',
-    },
-});

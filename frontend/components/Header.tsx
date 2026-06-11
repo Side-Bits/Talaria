@@ -1,24 +1,21 @@
 import { ThemedText } from './ThemedText';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import { router, usePathname } from 'expo-router';
+import { router } from 'expo-router';
 
 type Props = & {
   label: string;
 };
 
-export function Header({ label }: Props ) {
-
-  const route = usePathname().startsWith('/id-activity') ? 'activities' : 'travels';
-
+export function Header({ label }: Props) {
   return (
-    <ThemedView type='between' style={ styles.header }>
-      <Pressable onPress={() => router.replace(`/(app)/${route}`)}>
+    <ThemedView type='between' style={styles.header}>
+      <Pressable onPress={() => router.back()} >
         <Ionicons name="arrow-back-outline" size={20} color={Colors.light.text} />
       </Pressable>
-      <ThemedText type="title">{ label }</ThemedText>
+      <ThemedText type="title">{label}</ThemedText>
       <Ionicons name="options-outline" size={20} color={Colors.light.text} onPress={() => console.log('options-outline')} />
     </ThemedView>
   );

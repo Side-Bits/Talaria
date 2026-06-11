@@ -1,10 +1,5 @@
-import { Slot } from "expo-router";
+import { AuthLayout } from '@/layouts/AuthLayout';
 
 export default function RootLayout() {
-  // TODO: if first time show onboarding then register
-  // else show sign-in
-
-  return (
-    <Slot />
-  );
+  return <AuthLayout />;
 }
