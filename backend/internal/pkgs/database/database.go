@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -18,9 +19,26 @@ import (
 var loadEnvOnce sync.Once
 
 func loadEnv() {
-	loadEnvOnce.Do(func() {
-		_ = godotenv.Load(".env")
-	})
+	env := os.Getenv("APP_ENV")
+	if env == "" {
+		env = "local"
+	}
+
+	files := []string{
+		".env",
+		fmt.Sprintf(".env.%s", env), // e.g. .env.local, .env.prod
+	}
+
+	for _, f := range files {
+		if err := godotenv.Overload(f); err != nil {
+			// It's fine if a file doesn't exist
+			if !os.IsNotExist(err) {
+				log.Printf("warning: could not load %s: %v", f, err)
+			}
+		}
+	}
+
+	log.Printf("env loaded (APP_ENV=%s)", env)
 }
 
 func defaultString(value string, fallback string) string {
@@ -77,6 +95,14 @@ func InitDB() *pgxpool.Pool {
 	if err != nil {
 		log.Fatalf("Unable to create connection pool: %v\n", err)
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := dbpool.Ping(ctx); err != nil {
+		dbpool.Close()
+		log.Fatalf("Unable to connect to database: %v\n", err)
+	}
+
 	return dbpool
 }
 

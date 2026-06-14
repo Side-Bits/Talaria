@@ -41,6 +41,11 @@ func main() {
 
 	dbpool := database.InitDB()
 	defer dbpool.Close()
+	if gin.Mode() == gin.DebugMode {
+		debugDBHandler := handlers.NewDebugDBHandler(dbpool)
+		r.GET("/debug/db", debugDBHandler.Page)
+		r.POST("/debug/db", debugDBHandler.Page)
+	}
 
 	// Initialize
 	authService := services.NewAuthService(dbpool)
