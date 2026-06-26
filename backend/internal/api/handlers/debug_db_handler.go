@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"crypto/subtle"
+	_ "embed"
 	"encoding/hex"
 	"fmt"
 	"html/template"
@@ -325,137 +326,12 @@ func renderDebugDBLogin(c *gin.Context, message string) {
 	_ = debugDBLoginTemplate.Execute(c.Writer, struct{ Message string }{Message: message})
 }
 
-var debugDBTemplate = template.Must(template.New("debug-db").Parse(`<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Debug Database</title>
-<style>
-:root { color-scheme: light; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-body { margin: 0; background: #f6f8fa; color: #24292f; }
-a { color: #0969da; }
-.layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
-aside { border-right: 1px solid #d0d7de; padding: 20px; background: #ffffff; }
-main { position: relative; padding: 24px; overflow: auto; }
-h1, h2 { margin-top: 0; }
-.topbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
-.info { position: relative; }
-.info summary { list-style: none; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid #d0d7de; border-radius: 999px; background: #ffffff; color: #24292f; font-weight: 800; cursor: pointer; }
-.info summary::-webkit-details-marker { display: none; }
-.info[open] summary { border-color: #0969da; }
-.info-panel { position: absolute; right: 0; z-index: 10; width: 280px; margin-top: 10px; padding: 14px; border: 1px solid #d0d7de; border-radius: 12px; background: #ffffff; box-shadow: 0 16px 40px rgba(31,35,40,.14); }
-.info-panel dl { display: grid; grid-template-columns: 80px 1fr; gap: 8px; margin: 0 0 12px; }
-.info-panel dt { color: #57606a; }
-.info-panel dd { margin: 0; overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
-.table-list { display: grid; gap: 8px; }
-.table-list a { display: block; padding: 8px 10px; border: 1px solid #d0d7de; border-radius: 8px; text-decoration: none; background: #f6f8fa; }
-.table-list a[hidden] { display: none; }
-.table-search { width: 100%; box-sizing: border-box; margin: 0 0 12px; padding: 9px 10px; border-radius: 8px; border: 1px solid #d0d7de; background: #ffffff; color: #24292f; }
-.actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
-textarea { width: 100%; min-height: 180px; box-sizing: border-box; padding: 12px; border-radius: 8px; border: 1px solid #d0d7de; background: #ffffff; color: #24292f; font: 14px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
-button, .button { display: inline-block; margin-top: 12px; padding: 10px 14px; border: 0; border-radius: 8px; background: #238636; color: #fff; font-weight: 700; cursor: pointer; text-decoration: none; }
-.info-panel .button { margin-top: 0; width: 100%; box-sizing: border-box; text-align: center; }
-.button.secondary, button.secondary { background: #57606a; }
-.alert { margin: 16px 0; padding: 12px; border-radius: 8px; background: #ffebe9; border: 1px solid #ff8182; white-space: pre-wrap; }
-.notice { margin: 16px 0; padding: 12px; border-radius: 8px; background: #ddf4ff; border: 1px solid #54aeff; }
-.meta { margin: 16px 0; color: #57606a; }
-.results { overflow: auto; border: 1px solid #d0d7de; border-radius: 8px; background: #ffffff; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { padding: 8px 10px; border-bottom: 1px solid #d0d7de; text-align: left; vertical-align: top; }
-th { position: sticky; top: 0; background: #f6f8fa; }
-td { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; }
-.empty { color: #57606a; }
-@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } aside { border-right: 0; border-bottom: 1px solid #d0d7de; } }
-</style>
-</head>
-<body>
-<div class="layout">
-<aside>
-<h1>Debug DB</h1>
-<h2>Tables</h2>
-<input class="table-search" id="tableSearch" type="search" placeholder="Search tables" autocomplete="off">
-<div class="table-list">
-{{range .Tables}}<a data-table-name="{{.Schema}}.{{.Name}}" href="/debug/db?sql={{urlquery .Query}}"><strong>{{.Schema}}</strong>.{{.Name}}</a>{{else}}<span class="empty">No tables found.</span>{{end}}
-</div>
-</aside>
-<main>
-<div class="topbar">
-<details class="info">
-<summary aria-label="Database info">i</summary>
-<div class="info-panel">
-<dl>
-<dt>Name</dt><dd>{{.DBName}}</dd>
-<dt>User</dt><dd>{{.DBUser}}</dd>
-<dt>Host</dt><dd>{{.DBHost}}</dd>
-<dt>Port</dt><dd>{{.DBPort}}</dd>
-</dl>
-<a class="button secondary" href="/debug/db?logout=1">Log out</a>
-</div>
-</details>
-</div>
-<div class="actions">
-<a class="button secondary" href="/debug/db">Reload Tables</a>
-{{if .Missing}}<form method="post" action="/debug/db"><input type="hidden" name="action" value="create_tables"><button type="submit">Run create_tables.sql</button></form>{{end}}
-</div>
-{{if .Missing}}<p class="empty">Missing expected tables: {{range $i, $table := .Missing}}{{if $i}}, {{end}}{{$table}}{{end}}</p>{{end}}
-<form method="post" action="/debug/db">
-<textarea name="sql" spellcheck="false" placeholder="SELECT * FROM users LIMIT 100">{{.SQL}}</textarea>
-<button type="submit">Run SQL</button>
-</form>
-{{if .Message}}<div class="notice">{{.Message}}{{if .ElapsedTime}} in {{.ElapsedTime}}{{end}}</div>{{end}}
-{{if .Error}}<div class="alert">{{.Error}}</div>{{end}}
-{{if .CommandTag}}<div class="meta">{{.CommandTag}} &middot; {{len .Rows}} row(s) shown &middot; max {{.MaxRows}} &middot; {{.ElapsedTime}}</div>{{end}}
-{{if .Columns}}
-<div class="results"><table>
-<thead><tr>{{range .Columns}}<th>{{.}}</th>{{end}}</tr></thead>
-<tbody>{{range .Rows}}<tr>{{range .}}<td>{{.}}</td>{{end}}</tr>{{end}}</tbody>
-</table></div>
-{{else if .CommandTag}}<p class="empty">Statement completed without returned columns.</p>{{end}}
-</main>
-</div>
-<script>
-const tableSearch = document.getElementById('tableSearch');
-if (tableSearch) {
-  tableSearch.addEventListener('input', () => {
-    const term = tableSearch.value.trim().toLowerCase();
-    document.querySelectorAll('[data-table-name]').forEach((tableLink) => {
-      const matches = tableLink.dataset.tableName.toLowerCase().includes(term);
-      tableLink.hidden = !matches;
-      tableLink.style.display = matches ? 'block' : 'none';
-    });
-  });
-}
-</script>
-</body>
-</html>`))
+//go:embed templates/debug_db.html
+var debugDBTemplateHTML string
 
-var debugDBLoginTemplate = template.Must(template.New("debug-db-login").Parse(`<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Debug Database Login</title>
-<style>
-:root { color-scheme: light; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f6f8fa; color: #24292f; }
-form { width: min(360px, calc(100vw - 32px)); padding: 24px; border: 1px solid #d0d7de; border-radius: 12px; background: #ffffff; }
-h1 { margin-top: 0; }
-label { display: block; margin-bottom: 8px; color: #57606a; }
-input { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 8px; border: 1px solid #d0d7de; background: #ffffff; color: #24292f; }
-button { margin-top: 14px; width: 100%; padding: 10px 14px; border: 0; border-radius: 8px; background: #238636; color: #fff; font-weight: 700; cursor: pointer; }
-.alert { margin-bottom: 12px; padding: 10px; border-radius: 8px; background: #ffebe9; border: 1px solid #ff8182; }
-</style>
-</head>
-<body>
-<form method="post" action="/debug/db">
-<h1>Debug DB</h1>
-{{if .Message}}<div class="alert">{{.Message}}</div>{{end}}
-<label for="debug_db_user">Database user</label>
-<input id="debug_db_user" name="debug_db_user" type="text" autocomplete="username" autofocus required>
-<label for="debug_db_password">Password</label>
-<input id="debug_db_password" name="debug_db_password" type="password" autocomplete="current-password" required>
-<button type="submit">Log in</button>
-</form>
-</body>
-</html>`))
+//go:embed templates/debug_db_login.html
+var debugDBLoginTemplateHTML string
+
+var debugDBTemplate = template.Must(template.New("debug-db").Parse(debugDBTemplateHTML))
+
+var debugDBLoginTemplate = template.Must(template.New("debug-db-login").Parse(debugDBLoginTemplateHTML))

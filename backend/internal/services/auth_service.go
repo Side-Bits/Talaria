@@ -3,11 +3,11 @@ package services
 import (
 	"context"
 	"errors"
-	"time"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/pkgs/utils"
+	"talaria/internal/repositories"
+	"time"
 )
 
 const (
@@ -93,7 +93,7 @@ func (s *AuthService) Login(ctx context.Context, identifier string, password str
 	return user, tokenString, nil
 }
 
-func generateAndSaveNewToken(ctx context.Context, repo TokenWriter, user models.User) (string, error) {
+func generateAndSaveNewToken(ctx context.Context, repo *repositories.TokenRepository, user models.User) (string, error) {
 	tokenString, err := utils.GenerateRandomToken(tokenLength)
 	if err != nil {
 		return "", err
@@ -103,10 +103,6 @@ func generateAndSaveNewToken(ctx context.Context, repo TokenWriter, user models.
 		return "", err
 	}
 	return tokenString, nil
-}
-
-type TokenWriter interface {
-	CreateDefault(ctx context.Context, token string, userID int64, tokenTTL time.Duration) error
 }
 
 func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (int64, error) {
