@@ -15,7 +15,7 @@ export function RootLayout() {
 function RootNavigator() {
   const { session } = useSession();
 
-  const DEV_BYPASS_AUTH = true // TODO: remove before commit
+  const DEV_BYPASS_AUTH = false  // TODO: remove before commit
   const isAuthenticated = DEV_BYPASS_AUTH || !!session
 
   return (
