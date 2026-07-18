@@ -2,18 +2,14 @@ package main
 
 import (
 	"fmt"
-	"time"
-
-	_ "talaria/docs"
 	"talaria/internal/api/handlers"
 	"talaria/internal/api/routes"
 	"talaria/internal/pkgs/database"
 	"talaria/internal/services"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title Talaria API
@@ -28,6 +24,9 @@ import (
 func main() {
 	r := gin.Default() // Includes logger and recovery middleware
 
+	dbpool := database.InitDB()
+	defer dbpool.Close()
+
 	if gin.Mode() == gin.DebugMode {
 		fmt.Println("🚧 Gin running in DEBUG mode - CORS is OPEN")
 		r.Use(cors.New(cors.Config{
@@ -37,11 +36,7 @@ func main() {
 			AllowCredentials: true,
 			MaxAge:           12 * time.Hour,
 		}))
-	}
 
-	dbpool := database.InitDB()
-	defer dbpool.Close()
-	if gin.Mode() == gin.DebugMode {
 		debugDBHandler := handlers.NewDebugDBHandler(dbpool)
 		r.GET("/debug/db", debugDBHandler.Page)
 		r.POST("/debug/db", debugDBHandler.Page)
@@ -60,7 +55,6 @@ func main() {
 
 	router := routes.NewRouter(authHandler, userHandler, travelHandler, activityHandler, authService)
 	router.SetupRoutes(r)
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Start server on port 8080
 	r.Run(":8080")
