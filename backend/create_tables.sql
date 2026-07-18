@@ -1,5 +1,15 @@
 -- TABLES
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS roles (
+    id_role     BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name        VARCHAR(64) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS statuses (
+    id_status   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name        VARCHAR(64) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS users (
     id_user     BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_role     BIGINT REFERENCES roles(id_role) ON DELETE SET NULL,
     username    VARCHAR(32) NOT NULL UNIQUE,
@@ -10,14 +20,14 @@ CREATE TABLE users (
     terms       BOOLEAN NOT NULL
 );
 
-CREATE TABLE session_token (
+CREATE TABLE IF NOT EXISTS session_token (
     id_user     BIGINT PRIMARY KEY REFERENCES users(id_user) ON DELETE CASCADE,
     token       VARCHAR(255) NOT NULL,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     expires_at  TIMESTAMPTZ NOT NULL
 );
 
-CREATE TABLE clients (
+CREATE TABLE IF NOT EXISTS clients (
     id_user     BIGINT PRIMARY KEY REFERENCES users(id_user) ON DELETE CASCADE,
     name        VARCHAR(64) NOT NULL,
     surname1    VARCHAR(64) NOT NULL,
@@ -25,17 +35,7 @@ CREATE TABLE clients (
     photo       TEXT
 );
 
-CREATE TABLE roles (
-    id_role     BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name        VARCHAR(64) NOT NULL UNIQUE
-);
-
-CREATE TABLE statuses (
-    id_status   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name        VARCHAR(64) NOT NULL UNIQUE
-);
-
-CREATE TABLE travels (
+CREATE TABLE IF NOT EXISTS travels (
     id_travel   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name        VARCHAR(64) NOT NULL,
     start_date  DATE NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE travels (
     CONSTRAINT chk_travel_dates CHECK (end_date >= start_date)
 );
 
-CREATE TABLE activities (
+CREATE TABLE IF NOT EXISTS activities (
     id_activity BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_travel   BIGINT NOT NULL REFERENCES travels(id_travel) ON DELETE CASCADE,
     name        VARCHAR(64) NOT NULL,
@@ -57,24 +57,24 @@ CREATE TABLE activities (
     CONSTRAINT chk_activity_dates CHECK (end_date >= start_date)
 );
 
-CREATE TABLE clients_travels (
+CREATE TABLE IF NOT EXISTS clients_travels (
     id_user     BIGINT REFERENCES clients(id_user) ON DELETE CASCADE,
     id_travel   BIGINT NOT NULL REFERENCES travels(id_travel) ON DELETE CASCADE,
     PRIMARY KEY (id_user, id_travel)
 );
 
-CREATE TABLE clients_activities (
+CREATE TABLE IF NOT EXISTS clients_activities (
     id_user     BIGINT REFERENCES clients(id_user) ON DELETE CASCADE,
     id_activity BIGINT NOT NULL REFERENCES activities(id_activity) ON DELETE CASCADE,
     PRIMARY KEY (id_user, id_activity)
 );
 
 -- Indexes
-CREATE INDEX idx_activities_travel             ON activities(id_travel);
-CREATE INDEX idx_clients_travels_user          ON clients_travels(id_user);
-CREATE INDEX idx_clients_travels_travel        ON clients_travels(id_travel);
-CREATE INDEX idx_clients_activities_user       ON clients_activities(id_user);
-CREATE INDEX idx_clients_activities_activity   ON clients_activities(id_activity);
+CREATE INDEX IF NOT EXISTS idx_activities_travel             ON activities(id_travel);
+CREATE INDEX IF NOT EXISTS idx_clients_travels_user          ON clients_travels(id_user);
+CREATE INDEX IF NOT EXISTS idx_clients_travels_travel        ON clients_travels(id_travel);
+CREATE INDEX IF NOT EXISTS idx_clients_activities_user       ON clients_activities(id_user);
+CREATE INDEX IF NOT EXISTS idx_clients_activities_activity   ON clients_activities(id_activity);
 
 -- INSERTS
 
@@ -162,4 +162,3 @@ INSERT INTO activities (
 ('a18','c9bf9e57-1685-4c89-bafb-ff5af830be8a','Paseo final','Último recorrido','Venecia','2026-05-04 12:30','2026-05-04 13:30',0,'ACTIVE'),
 ('a19','c9bf9e57-1685-4c89-bafb-ff5af830be8a','Check-out','Salida del hotel','Venecia','2026-05-04 14:00','2026-05-04 15:00',0,'ACTIVE'),
 ('a20','c9bf9e57-1685-4c89-bafb-ff5af830be8a','Salida','Viaje de regreso','Aeropuerto','2026-05-04 17:00','2026-05-04 19:00',0,'ACTIVE');
-

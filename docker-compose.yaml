@@ -3,7 +3,7 @@ services:
     image: postgres:15-alpine
     restart: always
     env_file:
-      - ./backend/.env
+      - ./backend/.env.local
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -17,8 +17,10 @@ services:
       - db
     ports:
       - "8080:8080"
+    environment:
+     - APP_ENV=local 
     env_file:
-      - ./backend/.env
+      - ./backend/.env.local
     # optionally mount volume for live reload in dev
     volumes:
       - ./backend:/app

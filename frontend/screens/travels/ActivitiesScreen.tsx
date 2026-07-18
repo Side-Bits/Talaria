@@ -1,18 +1,17 @@
-import React, { useEffect,  useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { api } from '@/services/api';
-import { StyleSheet, ScrollView, useWindowDimensions, View, Pressable } from 'react-native';
+import { StyleSheet, ScrollView, useWindowDimensions, Pressable } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Footer } from '@/components/Footer';
-import { Participants } from '@/components/Participants';
-import { useLocalSearchParams } from 'expo-router';
 
-export default function TabActivities() {
+export function ActivitiesScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
   const { id_travel } = useLocalSearchParams();
+  const travelId = Array.isArray(id_travel) ? id_travel[0] : id_travel;
 
   type Activity = {
     id: number;
@@ -21,14 +20,16 @@ export default function TabActivities() {
     end_date: string;
     finished?: boolean;
   };
-  
+
   const [activity, setActivities] = useState<Activity[]>([]);
-  
+
   useEffect(() => {
-    api.get<{A?: Activity[];}>('api/activities?id_travel=' + id_travel)
-    .then(data => Array.isArray(data) ? setActivities(data) : setActivities([]))
-    .catch(e => console.error('Failed to fetch activities', e));
-  }, []);
+    if (!travelId) return;
+
+    api.get<{ A?: Activity[]; }>(`api/travels/${travelId}/activities`)
+      .then(data => Array.isArray(data) ? setActivities(data) : setActivities([]))
+      .catch(e => console.error('Failed to fetch activities', e));
+  }, [travelId]);
 
   return (
     <>
@@ -42,14 +43,14 @@ export default function TabActivities() {
             {/* <ThemedText type="default" style={{ color: Colors.light.gray, marginBottom: 8 }}>Italy</ThemedText>
             <Participants size={16} gap={2}/> */}
           </ThemedView>
-          <ThemedView type='left' style={{ width:'100%' }}>
+          <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedView type='between' style={{ marginBottom: 8 }}>
               <ThemedText type="subtitle">Monday</ThemedText>
               <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} />
             </ThemedView>
             {activity.map((activity) => (
-              <Pressable style={ styles.container } onPress={() => router.replace('/(app)/id-activity')}>
-                <ThemedView key={activity.id} type='list'>
+              <Pressable key={activity.id} style={styles.container} onPress={() => router.replace({ pathname: '/(app)/travels/activity/[activity_id]', params: { id_travel: travelId, activity_id: activity.id } })}>
+                <ThemedView type='list'>
                   <ThemedText type="default" style={{ fontWeight: 500 }}>{activity.name}</ThemedText>
                   <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(activity.start_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} a {new Date(activity.end_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} </ThemedText>
                   {/* <Participants size={16} gap={2}/> */}
@@ -66,7 +67,7 @@ export default function TabActivities() {
 
 const styles = StyleSheet.create({
   container: {
-    width:'100%',
+    width: '100%',
     padding: 8,
     borderRadius: 8,
     borderWidth: 1,

@@ -1,36 +1,39 @@
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { usePathname } from 'expo-router';
+import { router, useLocalSearchParams, usePathname } from 'expo-router';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 
-export function Footer()
-{
-  const { height, width } = useWindowDimensions(); // TODO: generic parameter
+export function Footer() {
+  const { width } = useWindowDimensions(); // TODO: generic parameter
   const pathname = usePathname();
-  
-  const title = pathname.startsWith('/travels') ? 'travel' : pathname.startsWith('/activities') ? 'activity' : '';
-  const route = pathname.startsWith('/activities') ? 'id-activity' : 'id-travel';
+  const { id_travel } = useLocalSearchParams();
+  const travelId = Array.isArray(id_travel) ? id_travel[0] : id_travel;
+
+  const isActivityRoute = pathname.startsWith('/travels/activity');
+  const title = isActivityRoute ? 'activity' : 'travel';
 
   return (
-    <View style={[ styles.footer, { width: Math.min(500 - 32, width - 32) }]}>
+    <View style={[styles.footer, { width: Math.min(500 - 32, width - 32) }]}>
       <ThemedView type='between'>
         <Pressable onPress={() => router.replace('/(app)/travels')}>
-          <ThemedView type='middle' style={ styles.box }>
+          <ThemedView type='middle' style={styles.box}>
             <Ionicons name="home-outline" size={20} color={Colors.light.text} />
             <ThemedText type='small'>Home</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={() => router.replace(`/(app)/${route}`)}>
-          <ThemedView type='middle' style={ styles.box }>
+        <Pressable onPress={() => router.replace(isActivityRoute
+          ? { pathname: '/(app)/travels/activity/[activity_id]', params: { id_travel: travelId ?? '', activity_id: 'new' } }
+          : { pathname: '/(app)/travels/[travel_id]', params: { travel_id: 'new' } }
+        )}>
+          <ThemedView type='middle' style={styles.box}>
             <Ionicons name="add-outline" size={25} color={Colors.light.text} />
             <ThemedText type='small'>Create {title}</ThemedText>
           </ThemedView>
         </Pressable>
         <Pressable onPress={() => router.replace('/(app)/id-perfile')}>
-          <ThemedView type='middle' style={ styles.box }>
+          <ThemedView type='middle' style={styles.box}>
             <Ionicons name="person-outline" size={20} color={Colors.light.text} />
             <ThemedText type='small'>Perfile</ThemedText>
           </ThemedView>

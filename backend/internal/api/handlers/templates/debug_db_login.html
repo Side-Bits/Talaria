@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debug Database Login</title>
+<style>
+:root { color-scheme: light; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f6f8fa; color: #24292f; }
+form { width: min(360px, calc(100vw - 32px)); padding: 24px; border: 1px solid #d0d7de; border-radius: 12px; background: #ffffff; }
+h1 { margin-top: 0; }
+label { display: block; margin-bottom: 8px; color: #57606a; }
+input { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 8px; border: 1px solid #d0d7de; background: #ffffff; color: #24292f; }
+button { margin-top: 14px; width: 100%; padding: 10px 14px; border: 0; border-radius: 8px; background: #238636; color: #fff; font-weight: 700; cursor: pointer; }
+.alert { margin-bottom: 12px; padding: 10px; border-radius: 8px; background: #ffebe9; border: 1px solid #ff8182; }
+</style>
+</head>
+<body>
+<form method="post" action="/debug/db">
+<h1>Debug DB</h1>
+{{if .Message}}<div class="alert">{{.Message}}</div>{{end}}
+<label for="debug_db_user">Database user</label>
+<input id="debug_db_user" name="debug_db_user" type="text" autocomplete="username" autofocus required>
+<label for="debug_db_password">Password</label>
+<input id="debug_db_password" name="debug_db_password" type="password" autocomplete="current-password" required>
+<button type="submit">Log in</button>
+</form>
+</body>
+</html>

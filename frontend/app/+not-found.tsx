@@ -1,11 +1,5 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import React from 'react';
+import { NotFoundScreen as NotFoundContent } from '@/screens/NotFoundScreen';
 
 export default function NotFoundScreen() {
-  return (
-    <ThemedView type='center'>
-      <ThemedText type="title">Not Found!</ThemedText>
-    </ThemedView>
-  );
+  return <NotFoundContent />;
 }

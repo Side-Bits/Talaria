@@ -1,10 +1,14 @@
 package routes
 
 import (
+	"net/http"
+	_ "talaria/docs"
 	"talaria/internal/api/handlers"
 	"talaria/internal/api/middleware"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Router struct {
@@ -26,6 +30,12 @@ func NewRouter(authHandler *handlers.AuthHandler, userHandler *handlers.UserHand
 }
 
 func (rt *Router) SetupRoutes(r *gin.Engine) {
+	// Swagger docs
+	r.GET("/api/docs", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/api/docs/index.html")
+	})
+	r.GET("api/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	// Public routes
 	rt.setupPublicRoutes(r)
 

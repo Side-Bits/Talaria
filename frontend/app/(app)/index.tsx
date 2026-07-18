@@ -1,12 +1,6 @@
-import { router } from 'expo-router';
-import { useEffect } from 'react';
+import { AppIndexRedirect } from '@/screens/AppIndexRedirect';
 
 
 export default function Index() {
-  useEffect(() => {
-    router.replace('/travels');
-  }, []);
-
-  return null;
+  return <AppIndexRedirect />;
 }
-
