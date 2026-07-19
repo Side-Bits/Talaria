@@ -15,7 +15,10 @@ export function TravelCard({ travel, onPress }: TravelCardProps) {
   const router = useRouter()
   const colors = useThemeColors()
 
-  const handlePress = onPress ?? (() => router.push(`/travels/${travel.id}`))
+  const handlePress = onPress ?? (() => router.push({
+    pathname: '/(app)/travels/[travel_id]/activities',
+    params: { travel_id: String(travel.id) },
+  }))
   const dateRange = formatTravelDates(travel.start_date, travel.end_date)
 
   return (

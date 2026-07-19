@@ -8,11 +8,24 @@ import { Colors } from '@/constants/Colors';
 export function Footer() {
   const { width } = useWindowDimensions(); // TODO: generic parameter
   const pathname = usePathname();
-  const { id_travel } = useLocalSearchParams();
-  const travelId = Array.isArray(id_travel) ? id_travel[0] : id_travel;
+  const { travel_id } = useLocalSearchParams();
+  const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
 
-  const isActivityRoute = pathname.startsWith('/travels/activity');
+  const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
   const title = isActivityRoute ? 'activity' : 'travel';
+
+  const handleCreate = () => {
+    if (isActivityRoute) {
+      if (!travelId) return;
+
+      router.push({
+        pathname: '/(app)/travels/[travel_id]/activities/[activity_id]',
+        params: { travel_id: travelId, activity_id: 'new' },
+      });
+    } else {
+      router.push({ pathname: '/(app)/travels/[travel_id]', params: { travel_id: 'new' } });
+    }
+  };
 
   return (
     <View style={[styles.footer, { width: Math.min(500 - 32, width - 32) }]}>
@@ -23,10 +36,7 @@ export function Footer() {
             <ThemedText type='small'>Home</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={() => router.replace(isActivityRoute
-          ? { pathname: '/(app)/travels/activity/[activity_id]', params: { id_travel: travelId ?? '', activity_id: 'new' } }
-          : { pathname: '/(app)/travels/[travel_id]', params: { travel_id: 'new' } }
-        )}>
+        <Pressable onPress={handleCreate}>
           <ThemedView type='middle' style={styles.box}>
             <Ionicons name="add-outline" size={25} color={Colors.light.text} />
             <ThemedText type='small'>Create {title}</ThemedText>

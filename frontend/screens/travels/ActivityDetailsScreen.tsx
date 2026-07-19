@@ -12,8 +12,8 @@ import { useLocalSearchParams } from 'expo-router';
 
 export function ActivityDetailsScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
-  const { id_travel } = useLocalSearchParams();
-  const travelId = Array.isArray(id_travel) ? id_travel[0] : id_travel;
+  const { travel_id } = useLocalSearchParams();
+  const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
 
   const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
 
@@ -38,12 +38,12 @@ export function ActivityDetailsScreen() {
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>
-              <View><ThemedInput type='date' label='Start date' value={activity.start_date} onChangeText={text => setActivity({ ...activity, name: text })} /></View>
+              <View><ThemedInput type='date' label='Start date' value={activity.start_date} onChangeText={text => setActivity({ ...activity, start_date: text })} /></View>
               <View><ThemedText>a</ThemedText></View>
-              <View><ThemedInput type='date' label='End date' value={activity.end_date} onChangeText={text => setActivity({ ...activity, name: text })} /></View>
+              <View><ThemedInput type='date' label='End date' value={activity.end_date} onChangeText={text => setActivity({ ...activity, end_date: text })} /></View>
             </ThemedView>
-            <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, name: text })} />
-            <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, name: text })} />
+            <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, location: text })} />
+            <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
             {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
             {/*<Participants size={32} gap={4}/>*/}
             <ThemedButton title='+' onPress={handleActivity} />

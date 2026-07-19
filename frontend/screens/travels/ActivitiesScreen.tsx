@@ -10,8 +10,8 @@ import { Footer } from '@/components/Footer';
 
 export function ActivitiesScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
-  const { id_travel } = useLocalSearchParams();
-  const travelId = Array.isArray(id_travel) ? id_travel[0] : id_travel;
+  const { travel_id } = useLocalSearchParams();
+  const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
 
   type Activity = {
     id: number;
@@ -49,7 +49,7 @@ export function ActivitiesScreen() {
               <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} />
             </ThemedView>
             {activity.map((activity) => (
-              <Pressable key={activity.id} style={styles.container} onPress={() => router.replace({ pathname: '/(app)/travels/activity/[activity_id]', params: { id_travel: travelId, activity_id: activity.id } })}>
+              <Pressable key={activity.id} style={styles.container} onPress={() => router.push({ pathname: '/(app)/travels/[travel_id]/activities/[activity_id]', params: { travel_id: travelId, activity_id: String(activity.id) } })}>
                 <ThemedView type='list'>
                   <ThemedText type="default" style={{ fontWeight: 500 }}>{activity.name}</ThemedText>
                   <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(activity.start_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} a {new Date(activity.end_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} </ThemedText>
