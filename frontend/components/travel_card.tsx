@@ -4,17 +4,11 @@ import { ThemedText } from "./ThemedText"
 import { Travel } from "@/types/travel"
 import { useRouter } from "expo-router"
 import { useThemeColors } from "@/hooks/useThemeColors"
+import { formatTravelDates } from "@/scripts/DataScripts"
 
 type TravelCardProps = {
   travel: Travel
   onPress?: () => void
-}
-
-function formatTravelDates(start: string, end: string) {
-  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long' }
-  const startStr = new Date(start).toLocaleDateString('es-ES', options)
-  const endStr = new Date(end).toLocaleDateString('es-ES', options)
-  return `${startStr} a ${endStr}`
 }
 
 export function TravelCard({ travel, onPress }: TravelCardProps) {
