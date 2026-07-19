@@ -5,6 +5,7 @@ import { Travel } from "@/types/travel"
 import { useRouter } from "expo-router"
 import { useThemeColors } from "@/hooks/useThemeColors"
 import { formatTravelDates } from "@/scripts/DataScripts"
+import { Colors } from "@/constants/Colors"
 
 type TravelCardProps = {
   travel: Travel
@@ -17,8 +18,9 @@ export function TravelCard({ travel, onPress }: TravelCardProps) {
 
   const handlePress = onPress ?? (() => router.push({
     pathname: '/(app)/travels/[travel_id]/activities',
-    params: { travel_id: String(travel.id) },
+    params: { travel_id: String(travel.id), name: String(travel.name) },
   }))
+
   const dateRange = formatTravelDates(travel.start_date, travel.end_date)
 
   return (
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     marginBottom: 8,
+    backgroundColor: Colors.light.template,
   },
   name: {
     fontWeight: '500',

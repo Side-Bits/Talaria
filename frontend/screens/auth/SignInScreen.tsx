@@ -34,7 +34,7 @@ export function SignInScreen() {
   return (
     <ThemedView type='center'>
       <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width: '100%', paddingHorizontal: 16 }}>
-        <ThemedText type="title" style={{ marginBottom: 16, fontWeight: 'bold' }}>Welcome back!</ThemedText>
+        <ThemedText type="title" style={{ marginBottom: 16 }}>Welcome back!</ThemedText>
         <ThemedInput type='email' label='Email' value={credentials.identifier} onChangeText={text => setCredentials({ ...credentials, identifier: text })} />
         <ThemedInput type='password' label='Password' value={credentials.password} onChangeText={text => setCredentials({ ...credentials, password: text })} />
         <ThemedView type='between' style={{ marginBottom: 16 }}>

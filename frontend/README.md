@@ -1,1 +1,1 @@
-expo start
+expo start or npm start

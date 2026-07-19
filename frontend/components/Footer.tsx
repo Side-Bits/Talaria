@@ -42,7 +42,7 @@ export function Footer() {
             <ThemedText type='small'>Create {title}</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={() => router.replace('/(app)/id-perfile')}>
+        <Pressable onPress={() => router.replace('/(app)/id-profile')}>
           <ThemedView type='middle' style={styles.box}>
             <Ionicons name="person-outline" size={20} color={Colors.light.text} />
             <ThemedText type='small'>Perfile</ThemedText>

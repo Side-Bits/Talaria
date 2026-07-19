@@ -5,10 +5,11 @@ export const Colors = {
     background: '#FFF',
     tint: '#F6511E',
     icon: '#687076',
-    border: '#E6E6E6',
-    gradient: '#FF9777',
-    template: '#FAFAFA',
-    footer: '#FFF'
+    border: '#F3E8E4',
+    gradient: '#FCFAF8',
+    template: '#FCFAF8',
+    footer: '#FFF',
+    signout: '#ff4747'
   },
   dark: {
     text: '#ECEDEE',
@@ -18,7 +19,8 @@ export const Colors = {
     icon: '#9BA1A6',
     border: '#E6E6E6',
     gradient: '#FF9777',
-    template: '#FAFAFA',
-    footer: '#151718'
+    template: '#FCFAF8',
+    footer: '#151718',
+    signout: '#ff4747'
   },
 };

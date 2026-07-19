@@ -7,10 +7,12 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Footer } from '@/components/Footer';
+import { formatActivityDates } from "@/scripts/DataScripts"
 
 export function ActivitiesScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
   const { travel_id } = useLocalSearchParams();
+  const { name } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
 
   type Activity = {
@@ -37,7 +39,9 @@ export function ActivitiesScreen() {
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
           <ThemedView type='list' style={{ marginBottom: 32, marginTop: 32 }}>
             <ThemedView type='between'>
-              <ThemedText type="title">Viaje a Venecia</ThemedText>
+              <Pressable onPress={() => router.back()} ><Ionicons name="arrow-back-outline" size={20} color={Colors.light.text} /></Pressable>
+              <ThemedText type="title">{ name }</ThemedText>
+              <ThemedText type="title"></ThemedText>
               {/*<Ionicons name="options-outline" size={20} color={Colors.light.gray} />*/}
             </ThemedView>
             {/* <ThemedText type="default" style={{ color: Colors.light.gray, marginBottom: 8 }}>Italy</ThemedText>
@@ -45,14 +49,14 @@ export function ActivitiesScreen() {
           </ThemedView>
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedView type='between' style={{ marginBottom: 8 }}>
-              <ThemedText type="subtitle">Monday</ThemedText>
-              <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} />
+              <ThemedText type="subtitle">Activities</ThemedText>
+              {/* <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} /> */}
             </ThemedView>
             {activity.map((activity) => (
               <Pressable key={activity.id} style={styles.container} onPress={() => router.push({ pathname: '/(app)/travels/[travel_id]/activities/[activity_id]', params: { travel_id: travelId, activity_id: String(activity.id) } })}>
                 <ThemedView type='list'>
                   <ThemedText type="default" style={{ fontWeight: 500 }}>{activity.name}</ThemedText>
-                  <ThemedText type="default" style={{ color: Colors.light.gray }}>{new Date(activity.start_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} a {new Date(activity.end_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} </ThemedText>
+                  <ThemedText type="default" style={{ color: Colors.light.gray }}>{ formatActivityDates(activity.start_date, activity.end_date) }</ThemedText>
                   {/* <Participants size={16} gap={2}/> */}
                 </ThemedView>
               </Pressable>
@@ -72,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.light.border,
-    // backgroundColor: Colors.light.template,
+    backgroundColor: Colors.light.template,
     marginBottom: 8,
   },
   perfile: {

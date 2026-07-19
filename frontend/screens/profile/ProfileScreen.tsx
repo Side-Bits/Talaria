@@ -6,22 +6,25 @@ import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useSession } from '@/contexts/authContext';
+import { Colors } from '@/constants/Colors';
 
 export function ProfileScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
   const session = useSession();
+  
+  const user = session.user;
 
   return (
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header label='Perfile' />
+          <Header label='Profile' />
           <ThemedView type='left' style={{ width: '100%' }}>
-            <ThemedInput type='text' label='Username' />
-            <ThemedInput type='text' label='Name' />
-            <ThemedInput type='text' label='Fist surname' />
-            <ThemedInput type='text' label='Second surname' />
-            <ThemedInput type='email' label='Email' />
+            <ThemedInput type='text' label='Username' value={user?.username} />
+            <ThemedInput type='text' label='Name' value={''} />
+            <ThemedInput type='text' label='Fist surname' value={''} />
+            <ThemedInput type='text' label='Second surname' value={''} />
+            <ThemedInput type='email' label='Email' value={user?.email} />
           </ThemedView>
         </ScrollView>
         <ThemedButton title='Log Out' buttonStyle={styles.signout_button} onPress={session.signOut} />
@@ -40,8 +43,7 @@ const styles = StyleSheet.create({
   },
 
   signout_button: {
-    backgroundColor: "#ff6666",
+    backgroundColor: Colors.light.signout,
     alignItems: 'center',
   }
-
 });

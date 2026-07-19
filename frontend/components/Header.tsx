@@ -16,7 +16,8 @@ export function Header({ label }: Props) {
         <Ionicons name="arrow-back-outline" size={20} color={Colors.light.text} />
       </Pressable>
       <ThemedText type="title">{label}</ThemedText>
-      <Ionicons name="options-outline" size={20} color={Colors.light.text} onPress={() => console.log('options-outline')} />
+      {/*<Ionicons name="options-outline" size={20} color={Colors.light.text} onPress={() => console.log('options-outline')} /> */}
+      <ThemedText type="title"></ThemedText>
     </ThemedView>
   );
 }

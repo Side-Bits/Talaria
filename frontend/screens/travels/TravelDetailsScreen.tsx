@@ -34,7 +34,7 @@ export function TravelDetailsScreen() {
               <View><ThemedText>a</ThemedText></View>
               <View><ThemedInput type='date' label='End date' value={travel.end_date} onChangeText={text => setTravel({ ...travel, end_date: text })} /></View>
             </ThemedView>
-            <ThemedButton title='+' onPress={handleTravel} />
+            <ThemedButton title='Add' style={{ marginTop: 8 }} onPress={handleTravel} />
             {/* <ThemedView type='left'>
               <Text style={{ marginBottom: 4, fontSize: 12, color: Colors.light.text }}>Participants</Text>
               <Participants size={40} gap={4} />

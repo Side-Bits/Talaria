@@ -110,6 +110,15 @@ func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 		return
 	}
 
+	// TODO: Està bé?
+	travelID, err := utils.ParsePositiveInt64Param(c, "travel_id")
+	if err != nil {
+		respondBadRequest(c, "invalid travel id", err)
+		return
+	}
+
+	newActivity.Id_travel = travelID
+
 	userID, ok := middleware.GetUserIDOrAbort(c)
 	if !ok {
 		return

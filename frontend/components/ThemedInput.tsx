@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     label: {
         marginBottom: 4,
         fontSize: 12,
-        color: Colors.light.text,
+        color: Colors.light.gray,
     },
     input: {
         borderWidth: 1,
