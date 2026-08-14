@@ -398,6 +398,8 @@ schemes:
 - http
 securityDefinitions:
   BearerAuth:
+    description: Paste the session token returned by /login or /register. The "Bearer
+      <token>" form is also accepted.
     in: header
     name: Authorization
     type: apiKey

@@ -618,6 +618,7 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "BearerAuth": {
+            "description": "Paste the session token returned by /login or /register. The \"Bearer \u003ctoken\u003e\" form is also accepted.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
