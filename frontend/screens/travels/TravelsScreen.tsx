@@ -8,6 +8,7 @@ import { TravelCard } from '@/components/travel_card';
 
 export function TravelsScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
+  const mode: string = 'V';
 
   type Travel = {
     id: number;
@@ -53,14 +54,14 @@ export function TravelsScreen() {
               {/*<ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>*/}
             </ThemedView>
             {data.Going?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} />
+              <TravelCard key={travel.id} travel={travel} mode={mode}/>
             ))}
             <ThemedView type='between' style={{ marginBottom: 8, marginTop: 8 }}>
               <ThemedText type="subtitle">Done</ThemedText>
               {/*<ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>*/}
             </ThemedView>
             {data.Done?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} />
+              <TravelCard key={travel.id} travel={travel} mode={mode} />
             ))}
           </ThemedView>
         </ScrollView>

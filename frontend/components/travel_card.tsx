@@ -10,15 +10,16 @@ import { Colors } from "@/constants/Colors"
 type TravelCardProps = {
   travel: Travel
   onPress?: () => void
+  mode: string
 }
 
-export function TravelCard({ travel, onPress }: TravelCardProps) {
+export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
   const router = useRouter()
   const colors = useThemeColors()
 
   const handlePress = onPress ?? (() => router.push({
     pathname: '/(app)/travels/[travel_id]/activities',
-    params: { travel_id: String(travel.id), name: String(travel.name) },
+    params: { travel_id: String(travel.id), name: String(travel.name), mode: String(mode) },
   }))
 
   const dateRange = formatTravelDates(travel.start_date, travel.end_date)
@@ -26,7 +27,7 @@ export function TravelCard({ travel, onPress }: TravelCardProps) {
   return (
     <Pressable
       style={[styles.container, { borderColor: colors.border }]}
-      onPress={handlePress}
+      onPress={ handlePress }
     >
       <ThemedView type="list">
         <ThemedText type="default" style={styles.name}>

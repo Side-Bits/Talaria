@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { View, ScrollView, useWindowDimensions, Alert } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
@@ -9,11 +9,13 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { api } from '@/services/api';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
 import { useLocalSearchParams } from 'expo-router';
+import { inputMode } from '@/scripts/InputScripts';
 
 export function ActivityDetailsScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
-  const { travel_id } = useLocalSearchParams();
+  const { travel_id, activity_id, mode } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+  const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
 
   const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
 
@@ -29,6 +31,18 @@ export function ActivityDetailsScreen() {
       Alert.alert('Error', 'Invalid credentials');
     }
   };
+
+  useEffect(() => {
+    if (!travelId || !activityId) return;
+
+    inputMode(String(mode))
+
+    api.get<Activity>(`api/travels/${travelId}/activities/${activityId}`)
+      .then(data => setActivity(data))
+      .catch(e => {
+        Alert.alert('Error', 'Failed to fetch activity');
+      });
+  }, [travelId, activityId]);
 
   return (
     <>
@@ -46,7 +60,7 @@ export function ActivityDetailsScreen() {
             <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
             {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
             {/*<Participants size={32} gap={4}/>*/}
-            <ThemedButton title='Add' style={{ marginTop: 8 }} onPress={handleActivity} />
+            <ThemedButton title='Add' id='buttonAdd' style={{ marginTop: 8 }} onPress={handleActivity} />
           </ThemedView>
         </ScrollView>
       </ThemedView>

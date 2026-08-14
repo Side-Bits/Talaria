@@ -20,29 +20,38 @@ export function Footer() {
 
       router.push({
         pathname: '/(app)/travels/[travel_id]/activities/[activity_id]',
-        params: { travel_id: travelId, activity_id: 'new' },
+        params: { travel_id: travelId, activity_id: 'new', mode: 'C' },
       });
     } else {
-      router.push({ pathname: '/(app)/travels/[travel_id]', params: { travel_id: 'new' } });
+      router.push({
+        pathname: '/(app)/travels/[travel_id]',
+        params: { travel_id: 'new', mode: 'C' }
+      });
     }
   };
 
   return (
     <View style={[styles.footer, { width: Math.min(500 - 32, width - 32) }]}>
       <ThemedView type='between'>
-        <Pressable onPress={() => router.replace('/(app)/travels')}>
+        <Pressable onPress={() => router.replace({
+            pathname: '/(app)/travels',
+            params: { mode: 'V' }}
+          )}>
           <ThemedView type='middle' style={styles.box}>
             <Ionicons name="home-outline" size={20} color={Colors.light.text} />
             <ThemedText type='small'>Home</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={handleCreate}>
+        <Pressable onPress={ handleCreate }>
           <ThemedView type='middle' style={styles.box}>
             <Ionicons name="add-outline" size={25} color={Colors.light.text} />
             <ThemedText type='small'>Create {title}</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={() => router.replace('/(app)/id-profile')}>
+        <Pressable onPress={() => router.replace({
+            pathname: '/(app)/id-profile',
+            params: { mode: 'V' }}
+          )}>
           <ThemedView type='middle' style={styles.box}>
             <Ionicons name="person-outline" size={20} color={Colors.light.text} />
             <ThemedText type='small'>Perfile</ThemedText>
