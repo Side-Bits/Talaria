@@ -74,7 +74,7 @@ func (h *TravelHandler) GetTravelByID(c *gin.Context) {
 		return
 	}
 
-	travelID, err := utils.ParsePositiveInt64Param(c, "id")
+	travelID, err := utils.ParsePositiveInt64Param(c, "travel_id")
 	if err != nil {
 		respondBadRequest(c, "Invalid id", err)
 		return

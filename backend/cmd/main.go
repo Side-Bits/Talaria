@@ -21,6 +21,7 @@ import (
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
+// @description Paste the session token returned by /login or /register. The "Bearer <token>" form is also accepted.
 func main() {
 	r := gin.Default() // Includes logger and recovery middleware
 

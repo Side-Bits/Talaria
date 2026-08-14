@@ -43,28 +43,26 @@ func AuthMiddleware(validator TokenValidator) gin.HandlerFunc {
 	}
 }
 
-// extractBearerToken extracts the token from the Authorization header
+// extractBearerToken extracts a bearer token or a raw Swagger API-key token.
 func extractBearerToken(c *gin.Context) (string, error) {
-	authHeader := c.GetHeader("Authorization")
+	authHeader := strings.TrimSpace(c.GetHeader("Authorization"))
 	if authHeader == "" {
 		return "", gin.Error{Err: errors.New("missing authorization header")}
 	}
 
-	// Check if it starts with "Bearer "
 	const bearerPrefix = "Bearer "
-	if !strings.HasPrefix(authHeader, bearerPrefix) {
-		return "", gin.Error{Err: errors.New("invalid authorization header format")}
+	if authHeader == strings.TrimSpace(bearerPrefix) {
+		return "", gin.Error{Err: errors.New("empty token")}
+	}
+	if strings.HasPrefix(authHeader, bearerPrefix) {
+		authHeader = strings.TrimSpace(strings.TrimPrefix(authHeader, bearerPrefix))
 	}
 
-	// Extract token
-	token := strings.TrimPrefix(authHeader, bearerPrefix)
-	token = strings.TrimSpace(token)
-
-	if token == "" {
+	if authHeader == "" {
 		return "", gin.Error{Err: errors.New("empty token")}
 	}
 
-	return token, nil
+	return authHeader, nil
 }
 
 // GetUserID is a helper to retrieve the userID from context
