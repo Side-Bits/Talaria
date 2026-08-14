@@ -8,9 +8,10 @@ import (
 )
 
 func ParsePositiveInt64Param(c *gin.Context, name string) (int64, error) {
-	value, err := strconv.ParseInt(c.Param(name), 10, 64)
+	param := c.Param(name)
+	value, err := strconv.ParseInt(param, 10, 64)
 	if err != nil {
-		return 0, fmt.Errorf("must be a valid integer")
+		return 0, fmt.Errorf("invalid param %q: %w", param, err)
 	}
 
 	if value <= 0 {
