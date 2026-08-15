@@ -26,7 +26,7 @@ export function TravelDetailsScreen() {
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header label='New trip' />
+          <Header code='004' label='New trip' />
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Travel name' value={travel.name} onChangeText={text => setTravel({ ...travel, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>

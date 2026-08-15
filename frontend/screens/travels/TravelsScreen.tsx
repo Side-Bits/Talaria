@@ -5,9 +5,12 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Footer } from '@/components/Footer';
 import { TravelCard } from '@/components/travel_card';
+import { Colors } from '@/constants/Colors';
+import { Header } from '@/components/Header';
 
 export function TravelsScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
+  
   const mode: string = 'V';
 
   type Travel = {
@@ -33,10 +36,7 @@ export function TravelsScreen() {
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <ThemedView type='between' style={{ marginBottom: 32, marginTop: 32 }}>
-            <ThemedText type="title">My trips</ThemedText>
-            {/*<Ionicons name="options-outline" size={20} color={Colors.light.gray} />*/}
-          </ThemedView>
+          <Header code="001" label="My Trips" />
           <ThemedView type='left' style={{ width: '100%' }}>
             {/* {Array.from({ length: 3 }).map((_, i) => (
               <ThemedView type='row' style={{ marginBottom: 8 }}>
@@ -51,14 +51,14 @@ export function TravelsScreen() {
             ))} */}
             <ThemedView type='between' style={{ marginBottom: 8 }}>
               <ThemedText type="subtitle">On going</ThemedText>
-              {/*<ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>*/}
+              <ThemedText type="small" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
             </ThemedView>
             {data.Going?.map(travel => (
               <TravelCard key={travel.id} travel={travel} mode={mode}/>
             ))}
             <ThemedView type='between' style={{ marginBottom: 8, marginTop: 8 }}>
               <ThemedText type="subtitle">Done</ThemedText>
-              {/*<ThemedText type="default" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>*/}
+              <ThemedText type="small" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
             </ThemedView>
             {data.Done?.map(travel => (
               <TravelCard key={travel.id} travel={travel} mode={mode} />

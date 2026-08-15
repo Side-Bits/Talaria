@@ -8,6 +8,7 @@ import { Colors } from '@/constants/Colors';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Footer } from '@/components/Footer';
 import { formatActivityDates } from "@/scripts/DataScripts"
+import { Header } from '@/components/Header';
 
 export function ActivitiesScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
@@ -36,16 +37,9 @@ export function ActivitiesScreen() {
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <ThemedView type='list' style={{ marginBottom: 32, marginTop: 32 }}>
-            <ThemedView type='between'>
-              <Pressable onPress={ () => router.back() }><Ionicons name="arrow-back-outline" size={20} color={Colors.light.text} /></Pressable>
-              <ThemedText type="title">{ name }</ThemedText>
-              <ThemedText type="title"></ThemedText>
-              {/*<Ionicons name="options-outline" size={20} color={Colors.light.gray} />*/}
-            </ThemedView>
-            {/* <ThemedText type="default" style={{ color: Colors.light.gray, marginBottom: 8 }}>Italy</ThemedText>
-            <Participants size={16} gap={2}/> */}
-          </ThemedView>
+          <Header code="002" label={String(name)} />
+          {/* <ThemedText type="default" style={{ color: Colors.light.gray, marginBottom: 8 }}>Italy</ThemedText>
+          <Participants size={16} gap={2}/> */}
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedView type='between' style={{ marginBottom: 8 }}>
               <ThemedText type="subtitle">Activities</ThemedText>

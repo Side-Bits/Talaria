@@ -12,7 +12,7 @@ export function Footer() {
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
 
   const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
-  const title = isActivityRoute ? 'activity' : 'travel';
+  const title = isActivityRoute ? 'activity' : 'trip';
 
   const handleCreate = () => {
     if (isActivityRoute) {
@@ -45,7 +45,7 @@ export function Footer() {
         <Pressable onPress={ handleCreate }>
           <ThemedView type='middle' style={styles.box}>
             <Ionicons name="add-outline" size={25} color={Colors.light.text} />
-            <ThemedText type='small'>Create {title}</ThemedText>
+            <ThemedText type='small'>New {title}</ThemedText>
           </ThemedView>
         </Pressable>
         <Pressable onPress={() => router.replace({
@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     paddingHorizontal: 64,
     backgroundColor: Colors.light.footer,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopWidth: 1,
+    borderTopColor: Colors.light.border,
   },
   box: {
     padding: 4,

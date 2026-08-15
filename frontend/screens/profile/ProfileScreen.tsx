@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,18 +7,23 @@ import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useSession } from '@/contexts/authContext';
 import { Colors } from '@/constants/Colors';
+import { inputMode } from '@/scripts/InputScripts';
 
 export function ProfileScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
-  const session = useSession();
   
+  const session = useSession();
   const user = session.user;
+
+  useEffect(() => {
+    inputMode(String('V'))
+  });
 
   return (
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header label='Profile' />
+          <Header code='005' label='Profile' />
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Username' value={user?.username} />
             <ThemedInput type='text' label='Name' value={''} />
@@ -41,7 +46,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: 4
   },
-
   signout_button: {
     backgroundColor: Colors.light.signout,
     alignItems: 'center',

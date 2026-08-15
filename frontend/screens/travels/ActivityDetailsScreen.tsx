@@ -39,16 +39,14 @@ export function ActivityDetailsScreen() {
 
     api.get<Activity>(`api/travels/${travelId}/activities/${activityId}`)
       .then(data => setActivity(data))
-      .catch(e => {
-        Alert.alert('Error', 'Failed to fetch activity');
-      });
+      .catch(e => {Alert.alert('Error', 'Failed to fetch activity');});
   }, [travelId, activityId]);
 
   return (
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header label='New activity' />
+          <Header code='003' label={activity.name} />
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>
