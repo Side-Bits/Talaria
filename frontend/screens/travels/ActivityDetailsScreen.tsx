@@ -6,10 +6,10 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
-import { api } from '@/services/api';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
 import { useLocalSearchParams } from 'expo-router';
 import { inputMode } from '@/scripts/InputScripts';
+import { createActivity, getTravelActivity } from '@/services/api/activity';
 
 export function ActivityDetailsScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
@@ -26,7 +26,7 @@ export function ActivityDetailsScreen() {
     }
 
     try {
-      await api.post(`api/travels/${travelId}/activities/create`, activity);
+      await createActivity(travelId, activity)
     } catch {
       Alert.alert('Error', 'Invalid credentials');
     }
@@ -37,16 +37,19 @@ export function ActivityDetailsScreen() {
 
     inputMode(String(mode))
 
-    api.get<Activity>(`api/travels/${travelId}/activities/${activityId}`)
+    getTravelActivity(travelId, activityId)
       .then(data => setActivity(data))
-      .catch(e => {Alert.alert('Error', 'Failed to fetch activity');});
-  }, [travelId, activityId]);
+      .catch(e => {
+        console.error(e);
+        Alert.alert('Error', 'Failed to fetch activity');
+      });
+  }, [travelId, activityId, mode]);
 
   return (
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header code='003' label={ mode == 'C' ? 'New activity' : activity.name } />
+          <Header code='003' label={mode === 'C' ? 'New activity' : activity.name} />
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>

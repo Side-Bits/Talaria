@@ -65,8 +65,13 @@ export async function apiRequest<T>(
 		);
 	}
 
-	// Parsear y devolver la respuesta
-	return response.json();
+	// Algunas operaciones exitosas no devuelven contenido.
+	const responseText = await response.text();
+	if (!responseText) {
+		return undefined as T;
+	}
+
+	return JSON.parse(responseText) as T;
 }
 
 /**

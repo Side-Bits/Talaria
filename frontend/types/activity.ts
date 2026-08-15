@@ -1,7 +1,7 @@
 const today = new Date();
 
 export interface Activity {
-	id_activity: number;
+	id: number;
 	id_travel: number;
 	name: string;
 	description: string;
@@ -12,7 +12,7 @@ export interface Activity {
 }
 
 export const DEFAULT_ACTIVITY = {
-	id_activity: 0,
+	id: 0,
 	id_travel: 0,
 	name: '',
 	description: '',

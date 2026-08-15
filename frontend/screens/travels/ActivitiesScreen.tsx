@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { api } from '@/services/api';
-import { StyleSheet, ScrollView, useWindowDimensions, Pressable, Alert } from 'react-native';
+import { StyleSheet, ScrollView, useWindowDimensions, Pressable } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
@@ -9,26 +7,20 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Footer } from '@/components/Footer';
 import { formatActivityDates } from "@/scripts/DataScripts"
 import { Header } from '@/components/Header';
+import { getTravelActivities } from '@/services/api/activity';
+import { Activity } from '@/types/activity';
 
 export function ActivitiesScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
   const { travel_id, name, mode } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
 
-  type Activity = {
-    id: number;
-    name: string;
-    start_date: string;
-    end_date: string;
-    finished?: boolean;
-  };
-
   const [activity, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
     if (!travelId) return;
 
-    api.get(`api/travels/${travelId}/activities`)
+    getTravelActivities(travelId)
       .then(data => Array.isArray(data) ? setActivities(data) : setActivities([]))
       .catch(e => console.error('Failed to fetch activities', e));
   }, [travelId]);
@@ -47,12 +39,13 @@ export function ActivitiesScreen() {
             </ThemedView>
             {activity.map((activity) => (
               <Pressable key={activity.id} style={styles.container} onPress={() => router.push({
-                 pathname: '/(app)/travels/[travel_id]/activities/[activity_id]',
-                 params: { travel_id: travelId, activity_id: String(activity.id), mode: mode }}
-                )}>
+                pathname: '/(app)/travels/[travel_id]/activities/[activity_id]',
+                params: { travel_id: travelId, activity_id: String(activity.id), mode: mode }
+              }
+              )}>
                 <ThemedView type='list'>
                   <ThemedText type="default" style={{ fontWeight: 500 }}>{activity.name}</ThemedText>
-                  <ThemedText type="default" style={{ color: Colors.light.gray }}>{ formatActivityDates(activity.start_date, activity.end_date) }</ThemedText>
+                  <ThemedText type="default" style={{ color: Colors.light.gray }}>{formatActivityDates(activity.start_date, activity.end_date)}</ThemedText>
                   {/* <Participants size={16} gap={2}/> */}
                 </ThemedView>
               </Pressable>
