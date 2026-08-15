@@ -20,12 +20,19 @@ export function Footer() {
 
       router.push({
         pathname: '/(app)/travels/[travel_id]/activities/[activity_id]',
-        params: { travel_id: travelId, activity_id: 'new', mode: 'C' },
+        params: {
+          travel_id: travelId,
+          activity_id: 'new',
+          mode: 'C'
+        },
       });
     } else {
       router.push({
         pathname: '/(app)/travels/[travel_id]',
-        params: { travel_id: 'new', mode: 'C' }
+        params: {
+          travel_id: 'new',
+          mode: 'C'
+        }
       });
     }
   };
@@ -68,7 +75,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     paddingTop: 16,
-    paddingBottom: 32,
+    paddingBottom: 16,
     paddingHorizontal: 64,
     backgroundColor: Colors.light.footer,
     borderTopWidth: 1,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { useLocalSearchParams } from 'expo-router';
 import { View, Alert, ScrollView, useWindowDimensions } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
@@ -11,7 +11,8 @@ import { DEFAULT_TRAVEL, Travel } from '@/types/travel';
 
 export function TravelDetailsScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
-
+  
+  const { mode } = useLocalSearchParams();
   const [travel, setTravel] = useState<Travel>(DEFAULT_TRAVEL);
 
   const handleTravel = async () => {
@@ -26,7 +27,7 @@ export function TravelDetailsScreen() {
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header code='004' label='New trip' />
+          <Header code='004' label={mode == 'C' ? 'New trip' : travel.name}/>
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Travel name' value={travel.name} onChangeText={text => setTravel({ ...travel, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>

@@ -46,7 +46,7 @@ export function ActivityDetailsScreen() {
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header code='003' label={activity.name} />
+          <Header code='003' label={ mode == 'C' ? 'New activity' : activity.name } />
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>

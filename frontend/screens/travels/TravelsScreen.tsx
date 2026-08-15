@@ -38,17 +38,6 @@ export function TravelsScreen() {
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
           <Header code="001" label="My Trips" />
           <ThemedView type='left' style={{ width: '100%' }}>
-            {/* {Array.from({ length: 3 }).map((_, i) => (
-              <ThemedView type='row' style={{ marginBottom: 8 }}>
-                <View style={{ width: 120 }}>
-                  <ThemedText type="default" style={{ color: Colors.light.text }}>00:00</ThemedText>
-                </View>
-                <ThemedView type='list' style={{ width: Math.min((400 - 120), width - 136) }}>
-                  <ThemedText style={{ color: Colors.light.text, fontWeight: 500 }}>Viaje</ThemedText>
-                  <ThemedText style={{ color: Colors.light.gray }}>Descripción</ThemedText>
-                </ThemedView>
-              </ThemedView>
-            ))} */}
             <ThemedView type='between' style={{ marginBottom: 8 }}>
               <ThemedText type="subtitle">On going</ThemedText>
               <ThemedText type="small" style={{ color:Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
