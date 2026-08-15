@@ -6,19 +6,20 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
-import { api } from '@/services/api';
 import { DEFAULT_TRAVEL, Travel } from '@/types/travel';
+import { createTravel } from '@/services/api/travel';
 
 export function TravelDetailsScreen() {
   const { height } = useWindowDimensions(); // TODO: generic parameter
-  
+
   const { mode } = useLocalSearchParams();
   const [travel, setTravel] = useState<Travel>(DEFAULT_TRAVEL);
 
   const handleTravel = async () => {
     try {
-      api.post('api/travels/create', travel);
+      await createTravel(travel)
     } catch (error) {
+      console.error(error)
       Alert.alert('Error', 'Invalid credentials');
     }
   };
@@ -27,7 +28,7 @@ export function TravelDetailsScreen() {
     <>
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header code='004' label={mode == 'C' ? 'New trip' : travel.name}/>
+          <Header code='004' label={mode === 'C' ? 'New trip' : travel.name} />
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Travel name' value={travel.name} onChangeText={text => setTravel({ ...travel, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>
