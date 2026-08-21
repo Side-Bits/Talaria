@@ -44,10 +44,10 @@ export function SignInScreen() {
         <ThemedButton title='Sign in' onPress={handleLogin} disabled={isSubmitting} />
         {/* <ThemedView type='between' style={{ marginTop: 16, marginBottom: 16 }}>
           <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
-           <ThemedText type="default" style={{ color: Colors.light.gray, marginLeft: 16, marginRight: 16 }}>Or</ThemedText>
+           <ThemedText type="default" style={{ color: Colors.light.textMuted, marginLeft: 16, marginRight: 16 }}>Or</ThemedText>
           <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} /> 
         </ThemedView>
-        <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.text }} onPress={() => console.log('Continue with Google')} /> */}
+        <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.onSurface }} onPress={() => console.log('Continue with Google')} /> */}
         <ThemedText type="default" style={{ marginTop: 16 }} onPress={() => { router.replace('/(auth)/sign-up'); }}>Don’t have an account? Sing up</ThemedText>
       </ThemedView>
     </ThemedView>

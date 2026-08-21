@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     marginRight: 4
   },
   signout_button: {
-    backgroundColor: Colors.light.signout,
+    backgroundColor: Colors.light.error,
     alignItems: 'center',
   }
 });

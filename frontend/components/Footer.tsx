@@ -45,13 +45,13 @@ export function Footer() {
             params: { mode: 'V' }}
           )}>
           <ThemedView type='middle' style={styles.box}>
-            <Ionicons name="home-outline" size={20} color={Colors.light.text} />
+            <Ionicons name="home-outline" size={20} color={Colors.light.onSurface} />
             <ThemedText type='small'>Home</ThemedText>
           </ThemedView>
         </Pressable>
         <Pressable onPress={ handleCreate }>
           <ThemedView type='middle' style={styles.box}>
-            <Ionicons name="add-outline" size={25} color={Colors.light.text} />
+            <Ionicons name="add-outline" size={25} color={Colors.light.onSurface} />
             <ThemedText type='small'>New {title}</ThemedText>
           </ThemedView>
         </Pressable>
@@ -60,7 +60,7 @@ export function Footer() {
             params: { mode: 'V' }}
           )}>
           <ThemedView type='middle' style={styles.box}>
-            <Ionicons name="person-outline" size={20} color={Colors.light.text} />
+            <Ionicons name="person-outline" size={20} color={Colors.light.onSurface} />
             <ThemedText type='small'>Perfile</ThemedText>
           </ThemedView>
         </Pressable>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 16,
     paddingHorizontal: 64,
-    backgroundColor: Colors.light.footer,
+    backgroundColor: Colors.light.surface,
     borderTopWidth: 1,
     borderTopColor: Colors.light.border,
   },

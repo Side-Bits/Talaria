@@ -33,7 +33,7 @@ export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
         <ThemedText type="default" style={styles.name}>
           {travel.name}
         </ThemedText>
-        <ThemedText type="default" style={{ color: colors.gray }}>
+        <ThemedText type="default" style={{ color: colors.textMuted }}>
           {dateRange}
         </ThemedText>
       </ThemedView>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     marginBottom: 8,
-    backgroundColor: Colors.light.template,
+    backgroundColor: Colors.light.surface,
   },
   name: {
     fontWeight: '500',

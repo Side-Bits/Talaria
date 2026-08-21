@@ -30,12 +30,12 @@ export function ActivitiesScreen() {
       <ThemedView type='left'>
         <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
           <Header code="002" label={String(name)} />
-          {/* <ThemedText type="default" style={{ color: Colors.light.gray, marginBottom: 8 }}>Italy</ThemedText>
+          {/* <ThemedText type="default" style={{ color: Colors.light.textMuted, marginBottom: 8 }}>Italy</ThemedText>
           <Participants size={16} gap={2}/> */}
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedView type='between' style={{ marginBottom: 8 }}>
               <ThemedText type="subtitle">Activities</ThemedText>
-              {/* <Ionicons name="chevron-down-outline" size={20} color={Colors.light.gray} /> */}
+              {/* <Ionicons name="chevron-down-outline" size={20} color={Colors.light.textMuted} /> */}
             </ThemedView>
             {activity.map((activity) => (
               <Pressable key={activity.id} style={styles.container} onPress={() => router.push({
@@ -45,7 +45,7 @@ export function ActivitiesScreen() {
               )}>
                 <ThemedView type='list'>
                   <ThemedText type="default" style={{ fontWeight: 500 }}>{activity.name}</ThemedText>
-                  <ThemedText type="default" style={{ color: Colors.light.gray }}>{formatActivityDates(activity.start_date, activity.end_date)}</ThemedText>
+                  <ThemedText type="default" style={{ color: Colors.light.textMuted }}>{formatActivityDates(activity.start_date, activity.end_date)}</ThemedText>
                   {/* <Participants size={16} gap={2}/> */}
                 </ThemedView>
               </Pressable>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.light.border,
-    backgroundColor: Colors.light.template,
+    backgroundColor: Colors.light.surface,
     marginBottom: 8,
   },
   perfile: {

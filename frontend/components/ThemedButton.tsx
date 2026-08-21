@@ -20,7 +20,7 @@ export function ThemedButton({ title, buttonStyle, textStyle, ...others }: Theme
 const styles = StyleSheet.create({
     button: {
         width: '100%',
-        backgroundColor: Colors.light.tint,
+        backgroundColor: Colors.light.primary,
         borderRadius: 8,
         paddingVertical: 8,
         paddingHorizontal: 16,

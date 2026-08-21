@@ -15,12 +15,12 @@ export function Header({ code, label }: Props) {
     <ThemedView type='between' style={styles.header}>
       {(code == "002" || code == "003" || code == "004" || code == "005") && (
         <Pressable onPress={() => router.back()} >
-          <Ionicons name="arrow-back-outline" size={20} color={Colors.light.text} />
+          <Ionicons name="arrow-back-outline" size={20} color={Colors.light.onSurface} />
         </Pressable>
       )}
       <ThemedText type="title">{label}</ThemedText>
       {(code == "ZZZ") ?
-        <Ionicons name="menu-outline" size={20} color={Colors.light.text} onPress={() => console.log('menu-outline')} />
+        <Ionicons name="menu-outline" size={20} color={Colors.light.onSurface} onPress={() => console.log('menu-outline')} />
       : <View/>}
     </ThemedView>
   );

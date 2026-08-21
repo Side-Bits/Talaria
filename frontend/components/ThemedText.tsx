@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    color: Colors.light.tint,
+    color: Colors.light.primary,
     fontWeight: 500
   },
   subtitle: {
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   link: {
-    color: Colors.light.tint,
+    color: Colors.light.primary,
     fontSize: 14,
     cursor: 'pointer'
   },

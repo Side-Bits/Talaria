@@ -38,7 +38,7 @@ export function TravelDetailsScreen() {
             </ThemedView>
             <ThemedButton title='Add' style={{ marginTop: 8 }} onPress={handleTravel} />
             {/* <ThemedView type='left'>
-              <Text style={{ marginBottom: 4, fontSize: 12, color: Colors.light.text }}>Participants</Text>
+              <Text style={{ marginBottom: 4, fontSize: 12, color: Colors.light.onSurface }}>Participants</Text>
               <Participants size={40} gap={4} />
             </ThemedView> */}
           </ThemedView>

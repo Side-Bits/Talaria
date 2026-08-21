@@ -33,14 +33,14 @@ export function TravelsScreen() {
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedView type='between' style={{ marginBottom: 8 }}>
               <ThemedText type="subtitle">On going</ThemedText>
-              <ThemedText type="small" style={{ color: Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
+              <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
             </ThemedView>
             {data.Going?.map(travel => (
               <TravelCard key={travel.id} travel={travel} mode={mode} />
             ))}
             <ThemedView type='between' style={{ marginBottom: 8, marginTop: 8 }}>
               <ThemedText type="subtitle">Done</ThemedText>
-              <ThemedText type="small" style={{ color: Colors.light.gray }} onPress={() => console.log('View more')}>View more</ThemedText>
+              <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
             </ThemedView>
             {data.Done?.map(travel => (
               <TravelCard key={travel.id} travel={travel} mode={mode} />
