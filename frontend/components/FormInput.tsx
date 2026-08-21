@@ -106,6 +106,8 @@ export function FormInput({
   const colors = useThemeColors();
   const [focused, setFocused] = useState(false);
 
+  const hasValue = Boolean(value);
+
   const isPassword = type === "password";
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -185,7 +187,7 @@ export function FormInput({
           </View>
         ) : null}
 
-        {clearable && Boolean(value) && (
+        {clearable && hasValue && (
           <ActionButton
             color={accentColor}
             disabled={disabled}
@@ -194,7 +196,7 @@ export function FormInput({
           />
         )}
 
-        {isPassword && (
+        {isPassword && hasValue && (
           <ActionButton
             color={accentColor}
             disabled={disabled}
