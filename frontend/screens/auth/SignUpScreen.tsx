@@ -8,7 +8,7 @@ import { ThemedCheckbox } from "@/components/ThemedCheckbox";
 import { Alert } from "react-native";
 import { RegisterCredentials } from "@/types/user";
 import { useSession } from "@/contexts/authContext";
-import { FormInput } from "@/components/FormInput";
+import { TextInputField } from "@/components/TextInputField";
 
 export function SignUpScreen() {
   const { signUp } = useSession();
@@ -45,7 +45,7 @@ export function SignUpScreen() {
           Create Account
         </ThemedText>
 
-        <FormInput
+        <TextInputField
           label="Username"
           required
           leadingIcon={"person-outline"}
@@ -53,7 +53,7 @@ export function SignUpScreen() {
           onChangeText={(text) => setUser({ ...user, username: text })}
         />
 
-        <FormInput
+        <TextInputField
           label="Email"
           type="email"
           required
@@ -62,7 +62,7 @@ export function SignUpScreen() {
           onChangeText={(text) => setUser({ ...user, identifier: text })}
         />
 
-        <FormInput
+        <TextInputField
           label="Password"
           type="password"
           required
@@ -71,7 +71,7 @@ export function SignUpScreen() {
           onChangeText={(text) => setUser({ ...user, password: text })}
         />
 
-        <FormInput
+        <TextInputField
           label="Confirm Password"
           type="password"
           required

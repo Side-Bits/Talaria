@@ -7,27 +7,36 @@ import { FormInput } from "@/components/FormInput";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCheckbox } from "@/components/ThemedCheckbox";
 import { Alert } from "react-native";
-import { useState } from "react";
-import { LoginCredentials } from "@/types/user";
+import { loginSchema } from "@/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export function SignInScreen() {
   const { signIn } = useSession();
 
-  const [credentials, setCredentials] = useState<LoginCredentials>({
-    identifier: "",
-    password: "",
+  const {
+    control,
+    handleSubmit,
+    trigger,
+    formState: { isSubmitting },
+  } = useForm<z.input<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
+    shouldFocusError: true,
+    defaultValues: {
+      identifier: "",
+      password: "",
+    },
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLogin = async () => {
-    setIsSubmitting(true);
+  const handleLogin = async (credentials: z.output<typeof loginSchema>) => {
     try {
       await signIn(credentials);
       // Navigation handled automatically by auth routing
     } catch {
       Alert.alert("Error", "Invalid credentials");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -46,26 +55,24 @@ export function SignInScreen() {
           Welcome back!
         </ThemedText>
         <FormInput
+          control={control}
+          trigger={trigger}
+          name="identifier"
           type="email"
           label="Email"
           leadingIcon={"mail-outline"}
           required
-          value={credentials.identifier}
-          onChangeText={(identifier) => {
-            setCredentials((current) => ({ ...current, identifier }));
-          }}
         />
         <FormInput
+          control={control}
+          trigger={trigger}
+          name="password"
           type="password"
           label="Password"
           leadingIcon={"key-outline"}
           autoComplete="current-password"
           enterKeyHint="done"
           required
-          value={credentials.password}
-          onChangeText={(password) => {
-            setCredentials((current) => ({ ...current, password }));
-          }}
         />
         <ThemedView type="between" style={{ marginBottom: 16 }}>
           <ThemedCheckbox label="Remember me"></ThemedCheckbox>
@@ -78,7 +85,7 @@ export function SignInScreen() {
         </ThemedView>
         <ThemedButton
           title="Sign in"
-          onPress={handleLogin}
+          onPress={handleSubmit(handleLogin)}
           disabled={isSubmitting}
         />
         {/* <ThemedView type='between' style={{ marginTop: 16, marginBottom: 16 }}>
