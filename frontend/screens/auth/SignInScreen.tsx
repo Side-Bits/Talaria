@@ -7,6 +7,7 @@ import { FormInput } from "@/components/FormInput";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCheckbox } from "@/components/ThemedCheckbox";
 import { Alert } from "react-native";
+import { ApiError } from "@/services/api";
 import { loginSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,10 +34,15 @@ export function SignInScreen() {
 
   const handleLogin = async (credentials: z.output<typeof loginSchema>) => {
     try {
+      await new Promise((f) => setTimeout(f, 2000));
+
       await signIn(credentials);
       // Navigation handled automatically by auth routing
-    } catch {
-      Alert.alert("Error", "Invalid credentials");
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error instanceof ApiError ? error.message : "Something went wrong",
+      );
     }
   };
 

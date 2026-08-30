@@ -6,27 +6,47 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { router } from "expo-router";
 import { ThemedCheckbox } from "@/components/ThemedCheckbox";
 import { Alert } from "react-native";
-import { RegisterCredentials } from "@/types/user";
 import { useSession } from "@/contexts/authContext";
-import { TextInputField } from "@/components/TextInputField";
+import { FormInput } from "@/components/FormInput";
+import { signUpSchema } from "@/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { ApiError } from "@/services/api";
 
 export function SignUpScreen() {
   const { signUp } = useSession();
-  const [user, setUser] = useState<RegisterCredentials>({
-    username: "",
-    identifier: "",
-    password: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSignUp = async () => {
+  const {
+    control,
+    handleSubmit,
+    trigger,
+    formState: { isSubmitting },
+  } = useForm<z.input<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
+    shouldFocusError: true,
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const handleSignUp = async (credentials: z.output<typeof signUpSchema>) => {
     try {
-      await signUp(user);
-    } catch {
-      Alert.alert("Error", "Invalid credentials");
-    } finally {
-      setIsSubmitting(false);
+      await signUp({
+        username: credentials.username,
+        identifier: credentials.email,
+        password: credentials.password,
+      });
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error instanceof ApiError ? error.message : "Something went wrong",
+      );
     }
   };
 
@@ -45,39 +65,43 @@ export function SignUpScreen() {
           Create Account
         </ThemedText>
 
-        <TextInputField
+        <FormInput
+          control={control}
+          trigger={trigger}
           label="Username"
+          name="username"
           required
           leadingIcon={"person-outline"}
-          value={user.username}
-          onChangeText={(text) => setUser({ ...user, username: text })}
         />
 
-        <TextInputField
+        <FormInput
+          control={control}
+          trigger={trigger}
           label="Email"
           type="email"
+          name="email"
           required
           leadingIcon={"mail-outline"}
-          value={user.identifier}
-          onChangeText={(text) => setUser({ ...user, identifier: text })}
         />
 
-        <TextInputField
+        <FormInput
+          control={control}
+          trigger={trigger}
           label="Password"
+          name="password"
           type="password"
           required
           leadingIcon={"key-outline"}
-          value={user.password}
-          onChangeText={(text) => setUser({ ...user, password: text })}
         />
 
-        <TextInputField
+        <FormInput
+          control={control}
+          trigger={trigger}
           label="Confirm Password"
+          name="confirmPassword"
           type="password"
           required
           leadingIcon={"key-outline"}
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
         />
 
         <ThemedView type="left" style={{ marginBottom: 16 }}>
@@ -85,7 +109,7 @@ export function SignUpScreen() {
         </ThemedView>
         <ThemedButton
           title="Sign up"
-          onPress={handleSignUp}
+          onPress={handleSubmit(handleSignUp)}
           disabled={isSubmitting}
         />
         {/* <ThemedView type='between' style={{ marginTop: 16, marginBottom: 16 }}>

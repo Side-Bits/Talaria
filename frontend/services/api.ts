@@ -12,7 +12,7 @@ interface ApiOptions extends RequestInit {
  * Error estandarizado para respuestas HTTP no exitosas.
  * Incluye el codigo de estado y el mensaje devuelto por la API.
  */
-class ApiError extends Error {
+export class ApiError extends Error {
 	constructor(public status: number, message: string) {
 		super(message);
 		this.name = 'ApiError';
