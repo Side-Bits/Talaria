@@ -6,7 +6,7 @@ import { ThemedInput } from '@/components/ThemedInput';
 import { ThemedButton } from '@/components/ThemedButton';
 import { router } from 'expo-router';
 import { ThemedCheckbox } from '@/components/ThemedCheckbox';
-import { Alert } from 'react-native';
+import { Alert, Image } from 'react-native';
 import { RegisterCredentials } from '@/types/user';
 import { useSession } from '@/contexts/authContext';
 
@@ -32,6 +32,12 @@ export function SignUpScreen() {
   return (
     <ThemedView type='center'>
       <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width: '100%', paddingHorizontal: 16 }}>
+        <ThemedView type='center' style={{ maxHeight: 150}}>
+          <Image
+            source={require('../../assets/images/favicon.png')}
+            style={{ width: 150, height: 150 }}
+          />
+        </ThemedView>
         <ThemedText type="title" style={{ marginBottom: 16 }}>Create Account</ThemedText>
         <ThemedInput type='text' label='Username' value={user.username} onChangeText={text => setUser({ ...user, username: text })} />
         <ThemedInput type='email' label='Email' value={user.identifier} onChangeText={text => setUser({ ...user, identifier: text })} />

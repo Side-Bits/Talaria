@@ -6,7 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedCheckbox } from '@/components/ThemedCheckbox';
-import { Alert } from 'react-native';
+import { Alert, Image } from 'react-native';
 import { useState } from 'react';
 import { LoginCredentials } from '@/types/user';
 
@@ -17,6 +17,7 @@ export function SignInScreen() {
     identifier: '',
     password: '',
   });
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLogin = async () => {
@@ -34,6 +35,12 @@ export function SignInScreen() {
   return (
     <ThemedView type='center'>
       <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width: '100%', paddingHorizontal: 16 }}>
+        <ThemedView type='center' style={{ maxHeight: 150}}>
+          <Image
+            source={require('../../assets/images/favicon.png')}
+            style={{ width: 150, height: 150 }}
+          />
+        </ThemedView>
         <ThemedText type="title" style={{ marginBottom: 16 }}>Welcome back!</ThemedText>
         <ThemedInput type='email' label='Email' value={credentials.identifier} onChangeText={text => setCredentials({ ...credentials, identifier: text })} />
         <ThemedInput type='password' label='Password' value={credentials.password} onChangeText={text => setCredentials({ ...credentials, password: text })} />
