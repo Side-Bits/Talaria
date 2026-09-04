@@ -1,3 +1,11 @@
+export function getDefaultDate () {
+  return new Date().toISOString().slice(0, 10)
+}
+
+export function getDefaultTime () {
+  return new Date().toISOString().slice(11, 16)
+}
+
 export function formatTravelDates (start: string, end: string) {
   const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', timeZone: 'UTC' }
 

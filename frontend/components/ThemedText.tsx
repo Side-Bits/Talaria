@@ -2,7 +2,7 @@ import { StyleSheet, Text, TextProps } from 'react-native';
 import { Colors } from '@/constants/Colors';
 
 type Props = TextProps & {
-  type?: 'default' | 'bold' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'small';
+  type?: 'default' | 'bold' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'small' | 'center';
 };
 
 export function ThemedText({ type = 'default', style, ...rest }: Props) {
@@ -14,6 +14,7 @@ export function ThemedText({ type = 'default', style, ...rest }: Props) {
         type === 'title' ? styles.title : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
+        type === 'center' ? styles.center : undefined,
         type === 'link' ? styles.link : undefined,
         type === 'small' ? styles.small : undefined,
         style,
@@ -47,6 +48,10 @@ const styles = StyleSheet.create({
     color: Colors.light.primary,
     fontSize: 14,
     cursor: 'pointer'
+  },
+  center: {
+    fontSize: 12,
+    textAlign: 'center'
   },
   small: {
     fontSize: 11
