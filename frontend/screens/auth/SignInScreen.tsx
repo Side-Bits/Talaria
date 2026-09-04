@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { FormInput } from "@/components/FormInput";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCheckbox } from "@/components/ThemedCheckbox";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, StyleSheet, Image } from "react-native";
 import { ApiError } from "@/services/api";
 import { loginSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,6 +57,12 @@ export function SignInScreen() {
           paddingHorizontal: 16,
         }}
       >
+        <ThemedView type="center" style={{ maxHeight: 100 }}>
+          <Image
+            source={require("../../assets/images/favicon.png")}
+            style={{ width: 100, height: 100 }}
+          />
+        </ThemedView>
         <ThemedText type="title" style={{ marginBottom: 16 }}>
           Welcome back!
         </ThemedText>

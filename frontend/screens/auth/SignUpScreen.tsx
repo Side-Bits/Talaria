@@ -3,7 +3,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ThemedButton } from "@/components/ThemedButton";
 import { router } from "expo-router";
 import { ThemedCheckbox } from "@/components/ThemedCheckbox";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, StyleSheet, Image } from "react-native";
 import { useSession } from "@/contexts/authContext";
 import { FormInput } from "@/components/FormInput";
 import { signUpSchema } from "@/schemas/auth";
@@ -51,6 +51,12 @@ export function SignUpScreen() {
   return (
     <ThemedView type="center" style={styles.screen}>
       <ThemedView type="column" style={styles.form}>
+        <ThemedView type="center" style={{ maxHeight: 100 }}>
+          <Image
+            source={require("../../assets/images/favicon.png")}
+            style={{ width: 100, height: 100 }}
+          />
+        </ThemedView>
         <ThemedText type="title" style={styles.title}>
           Create Account
         </ThemedText>

@@ -17,7 +17,7 @@ export const DEFAULT_ACTIVITY = {
 	name: '',
 	description: '',
 	location: '',
-	start_date: today.getFullYear() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0') + '',
-	end_date: today.getFullYear() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0') + '',
+	start_date: today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0') + 'T' + String(today.getHours()).padStart(2, '0') + ':' + String(today.getMinutes()).padStart(2, '0') + ':00Z',
+	end_date: today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0') + 'T' + String((today.getHours()) % 24).padStart(2, '0') + ':' + String(today.getMinutes()).padStart(2, '0')  + ':00Z',
 	price: 0,
 }

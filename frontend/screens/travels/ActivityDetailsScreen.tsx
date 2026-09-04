@@ -6,8 +6,9 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
+import { ThemedDate } from '@/components/ThemedDate';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { inputMode } from '@/scripts/InputScripts';
 import { createActivity, getTravelActivity } from '@/services/api/activity';
 
@@ -26,7 +27,8 @@ export function ActivityDetailsScreen() {
     }
 
     try {
-      await createActivity(travelId, activity)
+      await createActivity (travelId, activity)
+      router.back();
     } catch {
       Alert.alert('Error', 'Invalid credentials');
     }
@@ -53,9 +55,9 @@ export function ActivityDetailsScreen() {
           <ThemedView type='left' style={{ width: '100%' }}>
             <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
             <ThemedView type='between' style={{ width: '100%' }}>
-              <View><ThemedInput type='date' label='Start date' value={activity.start_date} onChangeText={text => setActivity({ ...activity, start_date: text })} /></View>
-              <View><ThemedText>a</ThemedText></View>
-              <View><ThemedInput type='date' label='End date' value={activity.end_date} onChangeText={text => setActivity({ ...activity, end_date: text })} /></View>
+              <View><ThemedDate label='Start date' date={false} value={activity.start_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, start_date: text })}/></View>
+              <View style={{ width: 40 }}><ThemedText type='center'>a</ThemedText></View>
+              <View><ThemedDate label='End date' date={false} value={activity.end_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, end_date: text })}/></View>
             </ThemedView>
             <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, location: text })} />
             <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
