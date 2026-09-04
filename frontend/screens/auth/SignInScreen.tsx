@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { FormInput } from "@/components/FormInput";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCheckbox } from "@/components/ThemedCheckbox";
-import { Alert } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { ApiError } from "@/services/api";
 import { loginSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -68,6 +68,7 @@ export function SignInScreen() {
           label="Email"
           leadingIcon={"mail-outline"}
           required
+          disabled={isSubmitting}
         />
         <FormInput
           control={control}
@@ -79,6 +80,7 @@ export function SignInScreen() {
           autoComplete="current-password"
           enterKeyHint="done"
           required
+          disabled={isSubmitting}
         />
         <ThemedView type="between" style={{ marginBottom: 16 }}>
           <ThemedCheckbox label="Remember me"></ThemedCheckbox>
@@ -92,7 +94,7 @@ export function SignInScreen() {
         <ThemedButton
           title="Sign in"
           onPress={handleSubmit(handleLogin)}
-          disabled={isSubmitting}
+          loading={isSubmitting}
         />
         {/* <ThemedView type='between' style={{ marginTop: 16, marginBottom: 16 }}>
           <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
@@ -100,16 +102,22 @@ export function SignInScreen() {
           <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} /> 
         </ThemedView>
         <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.onSurface }} onPress={() => console.log('Continue with Google')} /> */}
-        <ThemedText
-          type="default"
-          style={{ marginTop: 16 }}
-          onPress={() => {
-            router.replace("/(auth)/sign-up");
-          }}
-        >
-          Don’t have an account? Sing up
+        <ThemedText style={styles.authPrompt}>
+          Don&apos;t have an account?{" "}
+          <ThemedText
+            type="link"
+            onPress={() => router.replace("/(auth)/sign-up")}
+          >
+            Sign up
+          </ThemedText>
         </ThemedText>
       </ThemedView>
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  authPrompt: {
+    marginTop: 16,
+  },
+});

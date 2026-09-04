@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedButton } from "@/components/ThemedButton";
 import { router } from "expo-router";
 import { ThemedCheckbox } from "@/components/ThemedCheckbox";
-import { Alert } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { useSession } from "@/contexts/authContext";
 import { FormInput } from "@/components/FormInput";
 import { signUpSchema } from "@/schemas/auth";
@@ -51,17 +49,9 @@ export function SignUpScreen() {
   };
 
   return (
-    <ThemedView type="center">
-      <ThemedView
-        type="column"
-        style={{
-          justifyContent: "center",
-          maxWidth: 400,
-          width: "100%",
-          paddingHorizontal: 16,
-        }}
-      >
-        <ThemedText type="title" style={{ marginBottom: 16 }}>
+    <ThemedView type="center" style={styles.screen}>
+      <ThemedView type="column" style={styles.form}>
+        <ThemedText type="title" style={styles.title}>
           Create Account
         </ThemedText>
 
@@ -72,6 +62,7 @@ export function SignUpScreen() {
           name="username"
           required
           leadingIcon={"person-outline"}
+          disabled={isSubmitting}
         />
 
         <FormInput
@@ -82,6 +73,7 @@ export function SignUpScreen() {
           name="email"
           required
           leadingIcon={"mail-outline"}
+          disabled={isSubmitting}
         />
 
         <FormInput
@@ -92,6 +84,7 @@ export function SignUpScreen() {
           type="password"
           required
           leadingIcon={"key-outline"}
+          disabled={isSubmitting}
         />
 
         <FormInput
@@ -102,9 +95,10 @@ export function SignUpScreen() {
           type="password"
           required
           leadingIcon={"key-outline"}
+          disabled={isSubmitting}
         />
 
-        <ThemedView type="left" style={{ marginBottom: 16 }}>
+        <ThemedView type="left" style={styles.terms}>
           <ThemedCheckbox label="I agree with privacy and policy"></ThemedCheckbox>
         </ThemedView>
         <ThemedButton
@@ -118,16 +112,36 @@ export function SignUpScreen() {
           <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
         </ThemedView>
         <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.onSurface }} onPress={() => console.log('Continue with Google')} /> */}
-        <ThemedText
-          type="default"
-          style={{ marginTop: 16 }}
-          onPress={() => {
-            router.replace("/(auth)/sign-in");
-          }}
-        >
-          Already have an account? Log in
+        <ThemedText style={styles.authPrompt}>
+          Already have an account?{" "}
+          <ThemedText
+            type="link"
+            onPress={() => router.replace("/(auth)/sign-in")}
+          >
+            Sign in{" "}
+          </ThemedText>
         </ThemedText>
       </ThemedView>
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    paddingHorizontal: 16,
+  },
+  form: {
+    width: "100%",
+    maxWidth: 400,
+    justifyContent: "center",
+  },
+  title: {
+    marginBottom: 16,
+  },
+  terms: {
+    marginBottom: 16,
+  },
+  authPrompt: {
+    marginTop: 16,
+  },
+});
