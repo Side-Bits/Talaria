@@ -35,7 +35,7 @@ export function SignUpScreen() {
         <ThemedView type='center' style={{ maxHeight: 150}}>
           <Image
             source={require('../../assets/images/favicon.png')}
-            style={{ width: 150, height: 150 }}
+            style={{ width: 100, height: 100 }}
           />
         </ThemedView>
         <ThemedText type="title" style={{ marginBottom: 16 }}>Create Account</ThemedText>
