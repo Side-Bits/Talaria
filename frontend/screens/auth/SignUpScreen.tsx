@@ -32,7 +32,7 @@ export function SignUpScreen() {
   return (
     <ThemedView type='center'>
       <ThemedView type='column' style={{ justifyContent: 'center', maxWidth: 400, width: '100%', paddingHorizontal: 16 }}>
-        <ThemedView type='center' style={{ maxHeight: 150}}>
+        <ThemedView type='center' style={{ maxHeight: 100}}>
           <Image
             source={require('../../assets/images/favicon.png')}
             style={{ width: 100, height: 100 }}
