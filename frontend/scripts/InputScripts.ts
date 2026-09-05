@@ -9,8 +9,8 @@ export function inputMode (mode: string)
         if (mode == 'V') {
             input.disabled = true;
             input.style.border = 'transparent';
-            input.style.paddingLeft = '0';
-            input.style.paddingRight = '0';
+            input.style.paddingLeft = '8';
+            input.style.paddingRight = '8';
         }
         else if (mode == 'M') {
             input.disabled = false;

@@ -13,11 +13,9 @@ import { inputMode } from '@/scripts/InputScripts';
 import { createActivity, getTravelActivity } from '@/services/api/activity';
 
 export function ActivityDetailsScreen() {
-  const { height } = useWindowDimensions(); // TODO: generic parameter
   const { travel_id, activity_id, mode } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
   const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
-
   const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
 
   const handleActivity = async () => {
@@ -48,25 +46,22 @@ export function ActivityDetailsScreen() {
   }, [travelId, activityId, mode]);
 
   return (
-    <>
-      <ThemedView type='left'>
-        <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header code='003' label={mode === 'C' ? 'New activity' : activity.name} />
-          <ThemedView type='left' style={{ width: '100%' }}>
-            <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
-            <ThemedView type='between' style={{ width: '100%' }}>
-              <View><ThemedDate label='Start date' date={false} value={activity.start_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, start_date: text })}/></View>
-              <View style={{ width: 40 }}><ThemedText type='center'>a</ThemedText></View>
-              <View><ThemedDate label='End date' date={false} value={activity.end_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, end_date: text })}/></View>
-            </ThemedView>
-            <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, location: text })} />
-            <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
-            {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
-            {/*<Participants size={32} gap={4}/>*/}
-            <ThemedButton title='Add' id='buttonAdd' style={{ marginTop: 8 }} onPress={handleActivity} />
-          </ThemedView>
-        </ScrollView>
+    <ThemedView type='left'>
+      <Header code='003' label={mode === 'C' ? 'New activity' : activity.name} />
+      <ThemedView type='left' style={{ width: '100%' }}>
+        <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
+        <ThemedView type='between' style={{ width: '100%' }}>
+          <View><ThemedDate label='Start date' date={false} value={activity.start_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, start_date: text })}/></View>
+          <View style={{ width: 40 }}><ThemedText type='center'>a</ThemedText></View>
+          <View><ThemedDate label='End date' date={false} value={activity.end_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, end_date: text })}/></View>
+        </ThemedView>
+        <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, location: text })} />
+        <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
+        {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
+        {/*<Participants size={32} gap={4}/>*/}
+        <ThemedButton title='Add' id='buttonAdd' style={{ marginTop: 8 }} onPress={handleActivity} />
       </ThemedView>
-    </>
+      <View style={{ height: 115, width:'100%' }}/>
+    </ThemedView>
   );
 }

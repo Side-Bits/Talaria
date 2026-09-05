@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, useWindowDimensions, Pressable } from 'react-native';
+import { StyleSheet, ScrollView, useWindowDimensions, Pressable, View } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
@@ -11,10 +11,8 @@ import { getTravelActivities } from '@/services/api/activity';
 import { Activity } from '@/types/activity';
 
 export function ActivitiesScreen() {
-  const { height } = useWindowDimensions(); // TODO: generic parameter
   const { travel_id, name, mode } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
-
   const [activity, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
@@ -26,35 +24,31 @@ export function ActivitiesScreen() {
   }, [travelId]);
 
   return (
-    <>
-      <ThemedView type='left'>
-        <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header code="002" label={String(name)} />
-          {/* <ThemedText type="default" style={{ color: Colors.light.textMuted, marginBottom: 8 }}>Italy</ThemedText>
-          <Participants size={16} gap={2}/> */}
-          <ThemedView type='left' style={{ width: '100%' }}>
-            <ThemedView type='between' style={{ marginBottom: 8 }}>
-              <ThemedText type="subtitle">Activities</ThemedText>
-              {/* <Ionicons name="chevron-down-outline" size={20} color={Colors.light.textMuted} /> */}
+    <ThemedView type='left' style={{ marginBottom: 64 }}>
+      <Header code="002" label={String(name)} />
+      {/* <ThemedText type="default" style={{ color: Colors.light.textMuted, marginBottom: 8 }}>Italy</ThemedText>
+      <Participants size={16} gap={2}/> */}
+      <ThemedView type='left' style={{ width: '100%' }}>
+        <ThemedView type='between' style={{ marginBottom: 8 }}>
+          <ThemedText type="subtitle">Activities</ThemedText>
+          {/* <Ionicons name="chevron-down-outline" size={20} color={Colors.light.textMuted} /> */}
+        </ThemedView>
+        {activity.map((activity) => (
+          <Pressable key={activity.id} style={styles.container} onPress={() => router.push({
+            pathname: '/(app)/travels/[travel_id]/activities/[activity_id]',
+            params: { travel_id: travelId, activity_id: String(activity.id), mode: mode }
+          }
+          )}>
+            <ThemedView type='list'>
+              <ThemedText type="default" style={{ fontWeight: 500 }}>{activity.name}</ThemedText>
+              <ThemedText type="default" style={{ color: Colors.light.textMuted }}>{formatActivityDates(activity.start_date, activity.end_date)}</ThemedText>
+              {/* <Participants size={16} gap={2}/> */}
             </ThemedView>
-            {activity.map((activity) => (
-              <Pressable key={activity.id} style={styles.container} onPress={() => router.push({
-                pathname: '/(app)/travels/[travel_id]/activities/[activity_id]',
-                params: { travel_id: travelId, activity_id: String(activity.id), mode: mode }
-              }
-              )}>
-                <ThemedView type='list'>
-                  <ThemedText type="default" style={{ fontWeight: 500 }}>{activity.name}</ThemedText>
-                  <ThemedText type="default" style={{ color: Colors.light.textMuted }}>{formatActivityDates(activity.start_date, activity.end_date)}</ThemedText>
-                  {/* <Participants size={16} gap={2}/> */}
-                </ThemedView>
-              </Pressable>
-            ))}
-          </ThemedView>
-        </ScrollView>
+          </Pressable>
+        ))}
       </ThemedView>
-      <Footer />
-    </>
+      <View style={{ height: 115, width:'100%' }}/>
+    </ThemedView>
   );
 }
 
