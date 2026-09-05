@@ -20,9 +20,6 @@ export function Footer() {
   };
 
   const handleCreate = () => {
-
-    console.log('bbb ' + isActivityRoute);
-
     if (isActivityRoute) {
       if (!travelId) return;
 
