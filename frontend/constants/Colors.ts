@@ -10,12 +10,12 @@ export const Colors = {
     tertiary: '#0D9488',
 
     // Neutrals & Surfaces
-    background: '#F8FAFC',
+    background: '#F7F7F7',
     onBackground: '#0F172A',
     surface: '#FFFFFF',
     onSurface: '#0F172A',
     textMuted: '#64748B',
-    border: '#E2E8F0',
+    border: '#eeeff3',
     borderFocus: '#F6511E',
 
     // Status / Feedback

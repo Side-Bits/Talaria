@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, useWindowDimensions } from 'react-native';
+import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Footer } from '@/components/Footer';
@@ -10,10 +10,7 @@ import { getTravels } from '@/services/api/travel';
 import { Travel } from '@/types/travel';
 
 export function TravelsScreen() {
-  const { height } = useWindowDimensions(); // TODO: generic parameter
-
   const mode: string = 'V';
-
   const [data, setTravels] = useState<Record<string, Travel[]>>({});
 
   useEffect(() => {
@@ -26,29 +23,25 @@ export function TravelsScreen() {
   }, []);
 
   return (
-    <>
-      <ThemedView type='left'>
-        <ScrollView style={{ width: '100%', maxHeight: height }} contentContainerStyle={{ paddingBottom: 8 }} showsVerticalScrollIndicator={false} nestedScrollEnabled>
-          <Header code="001" label="My Trips" />
-          <ThemedView type='left' style={{ width: '100%' }}>
-            <ThemedView type='between' style={{ marginBottom: 8 }}>
-              <ThemedText type="subtitle">On going</ThemedText>
-              <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
-            </ThemedView>
-            {data.Going?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} mode={mode} />
-            ))}
-            <ThemedView type='between' style={{ marginBottom: 8, marginTop: 8 }}>
-              <ThemedText type="subtitle">Done</ThemedText>
-              <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
-            </ThemedView>
-            {data.Done?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} mode={mode} />
-            ))}
-          </ThemedView>
-        </ScrollView>
+    <ThemedView type='left'>
+      <Header code="001" label="My Trips" />
+      <ThemedView type='left' style={{ width: '100%' }}>
+        <ThemedView type='between' style={{ marginBottom: 8 }}>
+          <ThemedText type="subtitle">On going</ThemedText>
+          <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
+        </ThemedView>
+        {data.Going?.map(travel => (
+          <TravelCard key={travel.id} travel={travel} mode={mode} />
+        ))}
+        <ThemedView type='between' style={{ marginBottom: 8, marginTop: 8 }}>
+          <ThemedText type="subtitle">Done</ThemedText>
+          <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
+        </ThemedView>
+        {data.Done?.map(travel => (
+          <TravelCard key={travel.id} travel={travel} mode={mode} />
+        ))}
+        <View style={{ height: 115, width:'100%' }}/>
       </ThemedView>
-      <Footer />
-    </>
+    </ThemedView>
   );
 }

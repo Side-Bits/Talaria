@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, TextInput, StyleSheet, View, TextInputProps } from 'react-native';
 
 type Props = TextInputProps & {
-    type: 'text' | 'password' | 'email' | 'date';
+    type: 'text' | 'password' | 'email';
     label: string;
 };
 
