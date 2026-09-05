@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
-import { router, useLocalSearchParams, usePathname } from "expo-router";
+import { Pressable, StyleSheet, View } from "react-native";
+import { router, useGlobalSearchParams, usePathname } from "expo-router";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,11 +7,9 @@ import { Colors } from "@/constants/Colors";
 
 export function Footer() {
   const pathname = usePathname();
-  const { travel_id } = useLocalSearchParams();
+  const { travel_id } = useGlobalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
-  const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(
-    pathname,
-  );
+  const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
   const title = isActivityRoute ? "activity" : "trip";
 
   const handleHome = () => {
@@ -22,6 +20,9 @@ export function Footer() {
   };
 
   const handleCreate = () => {
+
+    console.log('bbb ' + isActivityRoute);
+
     if (isActivityRoute) {
       if (!travelId) return;
 
