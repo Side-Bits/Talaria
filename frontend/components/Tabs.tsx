@@ -9,7 +9,7 @@ type Tab = {
 };
 
 type Props = {
-  data: Record<string, Tab> | null;
+  data: Record<string, Tab>;
   scroll: boolean;
 };
 
@@ -17,7 +17,7 @@ export function Tabs({ data, scroll }: Props) {
   return (
     <View style={styles.tabs}>
       <ThemedView type="between" style={styles.container}>
-        {Object.entries(data ?? {}).map(([key, tab]) => (
+        {Object.entries(data).map(([key, tab]) => (
           <ThemedView type="center" key={key}>
             <ThemedText type="center" style={styles.text} onPress={tab.onPress}>
               {tab.label}
