@@ -27,7 +27,13 @@ export function TravelsScreen() {
       <Header code="001" label="My Trips" />
       {/* TODO: Create a component */}
       <ThemedView type='center' style={styles.style1}></ThemedView>
-      <Tabs />
+      <Tabs
+        data={{
+          planned: { label: "Planned", onPress: () => console.log('Planed') },
+          completed: { label: "Completed", onPress: () => console.log('Completed') },
+        }}
+        scroll={false}
+      />
       <ThemedView type='left' style={{ width: '100%' }}>
         <ThemedView type='between' style={{ marginVertical: 8 }}>
           <ThemedText type="subtitle">On going</ThemedText>

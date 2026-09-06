@@ -1,31 +1,30 @@
 import { StyleSheet, View } from "react-native";
-import { router } from "expo-router";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { Colors } from "@/constants/Colors";
 
-export function Tabs() {
-  const handleTab = () => {
-    router.replace({
-      pathname: "/(app)/travels",
-      params: { mode: "V" },
-    });
-  };
+type Tab = {
+  label: string;
+  onPress: () => void;
+};
 
+type Props = {
+  data: Record<string, Tab> | null;
+  scroll: boolean;
+};
+
+export function Tabs({ data, scroll }: Props) {
   return (
     <View style={styles.tabs}>
-        <ThemedView type="between" style={styles.container}>
-            <ThemedView type="center">
-                <ThemedText type="center" style={styles.text} onPress={handleTab}>
-                Planed
-                </ThemedText>
-            </ThemedView>
-            <ThemedView type="center">
-                <ThemedText type="center" style={styles.text} onPress={handleTab}>
-                Completed
-                </ThemedText>
-            </ThemedView>
-        </ThemedView>
+      <ThemedView type="between" style={styles.container}>
+        {Object.entries(data ?? {}).map(([key, tab]) => (
+          <ThemedView type="center" key={key}>
+            <ThemedText type="center" style={styles.text} onPress={tab.onPress}>
+              {tab.label}
+            </ThemedText>
+          </ThemedView>
+        ))}
+      </ThemedView>
     </View>
   );
 }
@@ -41,11 +40,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   container: {
-    gap: 4
+    gap: 4,
   },
   text: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     backgroundColor: Colors.light.onSurface,
     color: Colors.light.onPrimary,
     paddingVertical: 8,
