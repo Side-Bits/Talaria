@@ -16,8 +16,8 @@ export function Footer() {
 
   type FooterTab = "home" | "create" | "profile" | null;
   const getRouteTab = (): FooterTab => {
-    if (isActivityRoute) return null;
     if (currentMode === "C") return "create";
+    if (isActivityRoute) return null;
     if (pathname === "/id-profile") return "profile";
     return "home";
   };
