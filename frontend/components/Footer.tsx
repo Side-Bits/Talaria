@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { router, useGlobalSearchParams, usePathname } from "expo-router";
 import { ThemedText } from "./ThemedText";
@@ -7,12 +8,32 @@ import { Colors } from "@/constants/Colors";
 
 export function Footer() {
   const pathname = usePathname();
-  const { travel_id } = useGlobalSearchParams();
+  const { travel_id, mode } = useGlobalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+  const currentMode = Array.isArray(mode) ? mode[0] : mode;
   const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
   const title = isActivityRoute ? "activity" : "trip";
 
+  type FooterTab = "home" | "create" | "profile" | null;
+  const getRouteTab = (): FooterTab => {
+    if (isActivityRoute) return null;
+    if (currentMode === "C") return "create";
+    if (pathname === "/id-profile") return "profile";
+    return "home";
+  };
+  
+  const [activeTab, setActiveTab] = useState<FooterTab>(getRouteTab);
+
+  useEffect(() => {
+    setActiveTab(getRouteTab());
+  }, [pathname, currentMode]);
+
+  const isHomeActive = activeTab === "home";
+  const isCreateActive = activeTab === "create";
+  const isProfileActive = activeTab === "profile";
+
   const handleHome = () => {
+    setActiveTab("home");
     router.replace({
       pathname: "/(app)/travels",
       params: { mode: "V" },
@@ -23,6 +44,7 @@ export function Footer() {
     if (isActivityRoute) {
       if (!travelId) return;
 
+      setActiveTab("create");
       router.push({
         pathname: "/(app)/travels/[travel_id]/activities/[activity_id]",
         params: {
@@ -32,6 +54,7 @@ export function Footer() {
         },
       });
     } else {
+      setActiveTab("create");
       router.push({
         pathname: "/(app)/travels/[travel_id]",
         params: {
@@ -43,6 +66,7 @@ export function Footer() {
   };
 
   const handleProfile = () => {
+    setActiveTab("profile");
     router.replace({
       pathname: "/(app)/id-profile",
       params: { mode: "V" },
@@ -52,34 +76,46 @@ export function Footer() {
   return (
     <View style={styles.footer}>
       <ThemedView type="between" style={styles.container}>
-        <Pressable onPress={handleHome} style={styles.box}>
+        <Pressable
+          onPress={handleHome}
+          style={[styles.box, isHomeActive ? styles.active : '']}
+        >
           <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="home-outline"
               size={20}
-              color={Colors.light.surface}
             />
-            <ThemedText type="small" style={{ color: Colors.light.surface }}>Home</ThemedText>
+            <ThemedText type="small">
+              Home
+            </ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={handleCreate} style={styles.box}>
+        <Pressable
+          onPress={handleCreate}
+          style={[styles.box, isCreateActive ? styles.active : '']}
+        >
           <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="add-outline"
               size={25}
-              color={Colors.light.surface}
             />
-            <ThemedText type="small" style={{ color: Colors.light.surface }}>New {title}</ThemedText>
+            <ThemedText type="small">
+              New {title}
+            </ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={handleProfile} style={styles.box}>
+        <Pressable
+          onPress={handleProfile}
+          style={[styles.box, isProfileActive ? styles.active : '']}
+        >
           <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="person-outline"
               size={20}
-              color={Colors.light.surface}
             />
-            <ThemedText type="small" style={{ color: Colors.light.surface }}>Profile</ThemedText>
+            <ThemedText type="small">
+              Profile
+            </ThemedText>
           </ThemedView>
         </Pressable>
       </ThemedView>
@@ -111,9 +147,12 @@ const styles = StyleSheet.create({
   },
   box: {
     flex: 1,
-    backgroundColor: Colors.light.onSurface,
     borderRadius: 12,
     paddingVertical: 2,
+  },
+  active: {
+    backgroundColor: Colors.light.background,
+    color: Colors.light.onBackground,
   },
   item: {
     flexDirection: "row",

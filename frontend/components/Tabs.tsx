@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
@@ -14,12 +15,21 @@ type Props = {
 };
 
 export function Tabs({ data, scroll }: Props) {
+  const [activeTab, setActiveTab] = useState(Object.keys(data)[0]);
+
   return (
     <View style={styles.tabs}>
       <ThemedView type="between" style={styles.container}>
         {Object.entries(data).map(([key, tab]) => (
           <ThemedView type="center" key={key}>
-            <ThemedText type="center" style={styles.text} onPress={tab.onPress}>
+            <ThemedText
+              type="center"
+              style={[styles.text, activeTab === key ? styles.active : '']}
+              onPress={() => {
+                setActiveTab(key);
+                tab.onPress();
+              }}
+            >
               {tab.label}
             </ThemedText>
           </ThemedView>
@@ -45,10 +55,12 @@ const styles = StyleSheet.create({
   text: {
     width: "100%",
     height: "100%",
-    backgroundColor: Colors.light.onSurface,
-    color: Colors.light.onPrimary,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
+  },
+  active: {
+    backgroundColor: Colors.light.background,
+    color: Colors.light.onBackground,
   },
 });
