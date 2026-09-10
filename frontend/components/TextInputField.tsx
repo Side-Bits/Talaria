@@ -23,8 +23,7 @@ export type FormInputType = "text" | "email" | "password";
 export type FormInputLabelMode = "static" | "floating" | "placeholder";
 export type FormInputIconName = React.ComponentProps<typeof Ionicons>["name"];
 export type FormInputIconProps = { color: string; size: number };
-export type FormInputIcon =
-  FormInputIconName | ReactElement | ComponentType<FormInputIconProps>;
+export type FormInputIcon = FormInputIconName | ReactElement | ComponentType<FormInputIconProps>;
 
 export type FormInputAction = {
   icon: FormInputIcon;

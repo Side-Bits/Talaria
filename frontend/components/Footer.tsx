@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
-import { router, useLocalSearchParams, usePathname } from "expo-router";
+import { Pressable, StyleSheet, View } from "react-native";
+import { router, useGlobalSearchParams, usePathname } from "expo-router";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,11 +7,9 @@ import { Colors } from "@/constants/Colors";
 
 export function Footer() {
   const pathname = usePathname();
-  const { travel_id } = useLocalSearchParams();
+  const { travel_id } = useGlobalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
-  const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(
-    pathname,
-  );
+  const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
   const title = isActivityRoute ? "activity" : "trip";
 
   const handleHome = () => {
@@ -52,36 +50,36 @@ export function Footer() {
   };
 
   return (
-    <View style={styles.container}>
-      <ThemedView type="between" style={styles.footer}>
-        <Pressable onPress={handleHome}>
-          <ThemedView type="middle" style={styles.box}>
+    <View style={styles.footer}>
+      <ThemedView type="between" style={styles.container}>
+        <Pressable onPress={handleHome} style={styles.box}>
+          <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="home-outline"
               size={20}
-              color={Colors.light.onSurface}
+              color={Colors.light.surface}
             />
-            <ThemedText type="small">Home</ThemedText>
+            <ThemedText type="small" style={{ color: Colors.light.surface }}>Home</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={handleCreate}>
-          <ThemedView type="middle" style={styles.box}>
+        <Pressable onPress={handleCreate} style={styles.box}>
+          <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="add-outline"
               size={25}
-              color={Colors.light.onSurface}
+              color={Colors.light.surface}
             />
-            <ThemedText type="small">New {title}</ThemedText>
+            <ThemedText type="small" style={{ color: Colors.light.surface }}>New {title}</ThemedText>
           </ThemedView>
         </Pressable>
-        <Pressable onPress={handleProfile}>
-          <ThemedView type="middle" style={styles.box}>
+        <Pressable onPress={handleProfile} style={styles.box}>
+          <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="person-outline"
               size={20}
-              color={Colors.light.onSurface}
+              color={Colors.light.surface}
             />
-            <ThemedText type="small">Profile</ThemedText>
+            <ThemedText type="small" style={{ color: Colors.light.surface }}>Profile</ThemedText>
           </ThemedView>
         </Pressable>
       </ThemedView>
@@ -90,26 +88,39 @@ export function Footer() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  footer: {
     position: "absolute",
     width: "100%",
-    maxWidth: 400,
+    maxWidth: 450,
     alignItems: "center",
     bottom: 0,
     paddingBottom: 16,
     paddingHorizontal: 16,
     backgroundColor: "transparent",
   },
-  footer: {
-    maxWidth: 400,
-    paddingHorizontal: 32,
-    paddingVertical: 8,
-    borderRadius: 22,
+  container: {
+    width: "100%",
+    maxWidth: 450,
+    padding: 4,
+    gap: 4,
+    borderRadius: 12,
+    alignItems: "stretch",
     backgroundColor: Colors.light.surface,
     borderWidth: 1,
     borderColor: Colors.light.border,
   },
   box: {
-    padding: 4,
+    flex: 1,
+    backgroundColor: Colors.light.onSurface,
+    borderRadius: 12,
+    paddingVertical: 2,
+  },
+  item: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 4
   },
 });
