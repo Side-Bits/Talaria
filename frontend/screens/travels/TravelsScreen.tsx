@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   style1: {
     width: '100%',
     minHeight: 140,
-    backgroundColor: Colors.light.onSurface,
+    backgroundColor: '#CCC',
     borderRadius: 8,
     marginBottom: 8,
   }

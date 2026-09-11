@@ -7,7 +7,6 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { formatTravelDates } from "@/scripts/DataScripts";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import { Participants } from "./Participants";
 
 type TravelCardProps = {
   travel: Travel;
@@ -44,7 +43,7 @@ export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
       <ThemedView type="row" style={styles.iconContainer}>
         <Ionicons
           name="chevron-forward-outline"
-          size={25}
+          size={18}
           color={Colors.light.textMuted}
         />
       </ThemedView>
