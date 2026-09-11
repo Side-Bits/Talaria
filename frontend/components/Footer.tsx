@@ -8,8 +8,11 @@ import { Colors } from "@/constants/Colors";
 
 export function Footer() {
   const pathname = usePathname();
-  const { travel_id, mode } = useGlobalSearchParams();
+  const { travel_id, travel_name, name, mode } = useGlobalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+  const routeTravelName = Array.isArray(travel_name) ? travel_name[0] : travel_name;
+  const routeName = Array.isArray(name) ? name[0] : name;
+  const travelName = routeTravelName || routeName || "Trip";
   const currentMode = Array.isArray(mode) ? mode[0] : mode;
   const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
   const isInsideTrip = Boolean(travelId && travelId !== "new");
@@ -47,7 +50,11 @@ export function Footer() {
     setActiveTab("trip");
     router.replace({
       pathname: "/(app)/travels/[travel_id]/activities",
-      params: { travel_id: travelId, mode: "V" },
+      params: {
+        travel_id: travelId,
+        name: travelName,
+        mode: "V"
+      },
     });
   };
 
