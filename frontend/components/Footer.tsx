@@ -12,12 +12,13 @@ export function Footer() {
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
   const currentMode = Array.isArray(mode) ? mode[0] : mode;
   const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
+  const isInsideTrip = Boolean(travelId && travelId !== "new");
   const title = isActivityRoute ? "activity" : "trip";
 
-  type FooterTab = "home" | "create" | "profile" | null;
+  type FooterTab = "home" | "trip" | "create" | "profile" | null;
   const getRouteTab = (): FooterTab => {
-    if (isActivityRoute) return null;
     if (currentMode === "C") return "create";
+    if (isInsideTrip) return "trip";
     if (pathname === "/id-profile") return "profile";
     return "home";
   };
@@ -29,6 +30,7 @@ export function Footer() {
   }, [pathname, currentMode]);
 
   const isHomeActive = activeTab === "home";
+  const isTripActive = activeTab === "trip";
   const isCreateActive = activeTab === "create";
   const isProfileActive = activeTab === "profile";
 
@@ -40,10 +42,18 @@ export function Footer() {
     });
   };
 
+  const handleTrip = () => {
+    if (!travelId) return;
+    setActiveTab("trip");
+    router.replace({
+      pathname: "/(app)/travels/[travel_id]/activities",
+      params: { travel_id: travelId, mode: "V" },
+    });
+  };
+
   const handleCreate = () => {
     if (isActivityRoute) {
       if (!travelId) return;
-
       setActiveTab("create");
       router.push({
         pathname: "/(app)/travels/[travel_id]/activities/[activity_id]",
@@ -85,11 +95,23 @@ export function Footer() {
               name="home-outline"
               size={20}
             />
-            <ThemedText type="small">
-              Home
-            </ThemedText>
+            {isHomeActive && <ThemedText type="small">Home</ThemedText>}
           </ThemedView>
         </Pressable>
+        {isInsideTrip && (
+          <Pressable
+            onPress={handleTrip}
+            style={[styles.box, isTripActive ? styles.active : ""]}
+          >
+            <ThemedView type="center" style={styles.item}>
+              <Ionicons
+                name="navigate-outline"
+                size={25}
+              />
+              {isTripActive && <ThemedText type="small">Trip</ThemedText>}
+            </ThemedView>
+          </Pressable>
+        )}
         <Pressable
           onPress={handleCreate}
           style={[styles.box, isCreateActive ? styles.active : '']}
@@ -99,9 +121,7 @@ export function Footer() {
               name="add-outline"
               size={25}
             />
-            <ThemedText type="small">
-              New {title}
-            </ThemedText>
+            {isCreateActive && <ThemedText type="small">New {title}</ThemedText>}
           </ThemedView>
         </Pressable>
         <Pressable
@@ -113,9 +133,7 @@ export function Footer() {
               name="person-outline"
               size={20}
             />
-            <ThemedText type="small">
-              Profile
-            </ThemedText>
+            {isProfileActive && <ThemedText type="small">Profile</ThemedText>}
           </ThemedView>
         </Pressable>
       </ThemedView>
@@ -152,13 +170,12 @@ const styles = StyleSheet.create({
   },
   active: {
     backgroundColor: Colors.light.background,
-    color: Colors.light.onBackground,
   },
   item: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 8,
+    gap: 4,
     paddingVertical: 8,
     paddingHorizontal: 4
   },

@@ -34,7 +34,7 @@ export function ProfileScreen() {
 
 const styles = StyleSheet.create({
   signout_button: {
-    backgroundColor: Colors.light.error,
+    backgroundColor: 'red',
     alignItems: 'center',
   }
 });

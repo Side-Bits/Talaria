@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { View, ScrollView, useWindowDimensions, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedInput } from '@/components/ThemedInput';
@@ -11,6 +11,7 @@ import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
 import { router, useLocalSearchParams } from 'expo-router';
 import { inputMode } from '@/scripts/InputScripts';
 import { createActivity, getTravelActivity } from '@/services/api/activity';
+import { Categories } from '@/components/Categories';
 
 export function ActivityDetailsScreen() {
   const { travel_id, activity_id, mode } = useLocalSearchParams();
@@ -49,6 +50,7 @@ export function ActivityDetailsScreen() {
     <ThemedView type='left'>
       <Header code='003' label={mode === 'C' ? 'New activity' : activity.name} />
       <ThemedView type='left' style={{ width: '100%' }}>
+        <Categories />
         <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
         <ThemedView type='between' style={{ width: '100%' }}>
           <View><ThemedDate label='Start date' date={false} value={activity.start_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, start_date: text })}/></View>
@@ -65,3 +67,7 @@ export function ActivityDetailsScreen() {
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+
+})
