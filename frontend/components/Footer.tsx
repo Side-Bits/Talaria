@@ -8,8 +8,11 @@ import { Colors } from "@/constants/Colors";
 
 export function Footer() {
   const pathname = usePathname();
-  const { travel_id, mode } = useGlobalSearchParams();
+  const { travel_id, travel_name, name, mode } = useGlobalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+  const routeTravelName = Array.isArray(travel_name) ? travel_name[0] : travel_name;
+  const routeName = Array.isArray(name) ? name[0] : name;
+  const travelName = routeTravelName || routeName || "Trip";
   const currentMode = Array.isArray(mode) ? mode[0] : mode;
   const isActivityRoute = /^\/travels\/[^/]+\/activities(?:\/|$)/.test(pathname);
   const isInsideTrip = Boolean(travelId && travelId !== "new");
@@ -47,7 +50,11 @@ export function Footer() {
     setActiveTab("trip");
     router.replace({
       pathname: "/(app)/travels/[travel_id]/activities",
-      params: { travel_id: travelId, mode: "V" },
+      params: {
+        travel_id: travelId,
+        name: travelName,
+        mode: "V"
+      },
     });
   };
 
@@ -88,52 +95,64 @@ export function Footer() {
       <ThemedView type="between" style={styles.container}>
         <Pressable
           onPress={handleHome}
-          style={[styles.box, isHomeActive ? styles.active : '']}
+          style={[
+            styles.box,
+            isHomeActive ? styles.active : styles.inactive,
+          ]}
         >
           <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="home-outline"
               size={20}
+              color={isHomeActive ? Colors.light.surface : Colors.light.textMuted}
             />
-            {isHomeActive && <ThemedText type="small">Home</ThemedText>}
           </ThemedView>
         </Pressable>
         {isInsideTrip && (
           <Pressable
             onPress={handleTrip}
-            style={[styles.box, isTripActive ? styles.active : ""]}
+            style={[
+              styles.box,
+              isTripActive ? styles.active : styles.inactive,
+            ]}
           >
             <ThemedView type="center" style={styles.item}>
               <Ionicons
                 name="navigate-outline"
                 size={25}
+                color={isTripActive ? Colors.light.surface : Colors.light.textMuted}
               />
-              {isTripActive && <ThemedText type="small">Trip</ThemedText>}
             </ThemedView>
           </Pressable>
         )}
         <Pressable
           onPress={handleCreate}
-          style={[styles.box, isCreateActive ? styles.active : '']}
+          style={[
+            styles.box,
+            isCreateActive ? styles.active : styles.inactive,
+          ]}
         >
           <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="add-outline"
               size={25}
+              color={isCreateActive ? Colors.light.surface : Colors.light.textMuted}
             />
-            {isCreateActive && <ThemedText type="small">New {title}</ThemedText>}
           </ThemedView>
         </Pressable>
         <Pressable
           onPress={handleProfile}
-          style={[styles.box, isProfileActive ? styles.active : '']}
+          style={[
+            styles.box,
+            isProfileActive ? styles.active : styles.inactive,
+          ]}
         >
           <ThemedView type="center" style={styles.item}>
             <Ionicons
               name="person-outline"
               size={20}
+              color={isProfileActive ? Colors.light.surface : Colors.light.textMuted}
             />
-            {isProfileActive && <ThemedText type="small">Profile</ThemedText>}
           </ThemedView>
         </Pressable>
       </ThemedView>
@@ -155,28 +174,29 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     maxWidth: 450,
-    padding: 4,
-    gap: 4,
-    borderRadius: 12,
+    padding: 6,
+    gap: 6,
+    borderRadius: 8,
     alignItems: "stretch",
-    backgroundColor: Colors.light.surface,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
+    backgroundColor: "#F5F5F7",
   },
   box: {
     flex: 1,
-    borderRadius: 12,
-    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  inactive: {
+    backgroundColor: 'transparent',
   },
   active: {
-    backgroundColor: Colors.light.background,
+    backgroundColor: Colors.light.onBackground,
   },
   item: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 4,
-    paddingVertical: 8,
-    paddingHorizontal: 4
+    gap: 6,
+    height: "100%",
+    paddingVertical: 10,
+    paddingHorizontal: 6,
   },
 });

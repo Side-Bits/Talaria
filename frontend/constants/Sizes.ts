@@ -1,7 +1,6 @@
 export const Text = {
-  h1: 26,
-  h2: 22,
-  h3: 16,
+  title: 26,
+  subtitle: 22,
   dafault: 10,
   small: 8
 };

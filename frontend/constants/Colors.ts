@@ -1,7 +1,7 @@
 export const Colors = {
   light: {
     // Brand
-    primary: '#ff7747',
+    primary: '#81AC81',
     onPrimary: '#FFFFFF',
     primaryContainer: '#FFEADF',
     onPrimaryContainer: '#8A2500',
@@ -10,12 +10,12 @@ export const Colors = {
     tertiary: '#0D9488',
 
     // Neutrals & Surfaces
-    background: '#F7F7F7',
-    onBackground: '#0F172A',
+    background: '#FFF',
+    onBackground: '#2F2F2F',
     surface: '#FFFFFF',
-    onSurface: '#0F172A',
-    textMuted: '#64748B',
-    border: '#eeeff3',
+    onSurface: '#2F2F2F',
+    textMuted: '#97969D',
+    border: '#f5f5f7',
     borderFocus: '#F6511E',
 
     // Status / Feedback
