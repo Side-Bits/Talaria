@@ -42,12 +42,10 @@ export function Tabs({ data, scroll }: Props) {
 const styles = StyleSheet.create({
   tabs: {
     width: "100%",
-    padding: 4,
+    padding: 6,
     borderRadius: 8,
-    backgroundColor: Colors.light.surface,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    marginVertical: 8,
+    backgroundColor: "#F5F5F7",
+    marginBottom: 16,
   },
   container: {
     gap: 4,
@@ -55,12 +53,12 @@ const styles = StyleSheet.create({
   text: {
     width: "100%",
     height: "100%",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 6,
+    padding: 8,
+    borderRadius: 8,
+    color: "#97969D"
   },
   active: {
-    backgroundColor: Colors.light.background,
-    color: Colors.light.onBackground,
+    backgroundColor: Colors.light.onBackground,
+    color: Colors.light.surface,
   },
 });

@@ -1,12 +1,10 @@
 import { Pressable, StyleSheet } from "react-native";
-import { ThemedView } from "./ThemedView";
-import { ThemedText } from "./ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 import { Travel } from "@/types/travel";
 import { useRouter } from "expo-router";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { formatTravelDates } from "@/scripts/DataScripts";
-import { Colors } from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
 
 type TravelCardProps = {
   travel: Travel;
@@ -17,7 +15,6 @@ type TravelCardProps = {
 export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
   const router = useRouter();
   const colors = useThemeColors();
-  const dateRange = formatTravelDates(travel.start_date, travel.end_date);
 
   const handlePress = onPress ?? (() =>
     router.push({
@@ -31,21 +28,21 @@ export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
   );
 
   return (
-    <Pressable style={styles.container} onPress={handlePress}>
-      <ThemedView type="list" style={styles.content}>
-        <ThemedText type="default" style={styles.name} numberOfLines={1} ellipsizeMode="tail">
+    <Pressable
+      style={styles.container}
+      onPress={handlePress}>
+      <ThemedView type="list">
+        <ThemedText
+          type="default"
+          style={styles.name}
+        >
           {travel.name}
         </ThemedText>
-        <ThemedText type="default" style={{ color: colors.textMuted }}>
-          {dateRange}
+        <ThemedText
+          type="default"
+        >
+          {formatTravelDates(travel.start_date, travel.end_date)}
         </ThemedText>
-      </ThemedView>
-      <ThemedView type="row" style={styles.iconContainer}>
-        <Ionicons
-          name="chevron-forward-outline"
-          size={18}
-          color={Colors.light.textMuted}
-        />
       </ThemedView>
     </Pressable>
   );
@@ -59,20 +56,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
     borderRadius: 8,
-    borderWidth: 1,
     marginBottom: 8,
-    backgroundColor: Colors.light.surface,
-    borderColor: Colors.light.border,
+    backgroundColor: "#FBFBFB",
   },
   name: {
-    fontWeight: "500",
-  },
-  content: {
-    minWidth: 0,
-    flexShrink: 1,
-  },
-  iconContainer: {
-    flexShrink: 0,
-    marginLeft: 8,
+    fontSize: 16,
+    marginBottom: 4
   },
 });

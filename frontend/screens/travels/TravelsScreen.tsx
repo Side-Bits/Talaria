@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+
 import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
-import { TravelCard } from '@/components/travel_card';
-import { Colors } from '@/constants/Colors';
 import { Header } from '@/components/Header';
 import { getTravels } from '@/services/api/travel';
 import { Travel } from '@/types/travel';
 import { Tabs } from '@/components/Tabs';
+import { HeroTravel } from '@/screens/travels/components/HeroTravel';
+import { TravelCard } from './components/TravelCard';
 
 export function TravelsScreen() {
   const mode: string = 'V';
   const [data, setTravels] = useState<Record<string, Travel[]>>({});
+  const [planned, setPlanned] = useState(1);
 
   useEffect(() => {
     getTravels()
@@ -24,43 +25,31 @@ export function TravelsScreen() {
 
   return (
     <ThemedView type='left'>
-      <Header code="001" label="My Trips" />
-      {/* TODO: Create a component */}
-      <ThemedView type='center' style={styles.style1}></ThemedView>
+      <Header code="001" label="My Trips"/>
+      <HeroTravel/>
       <Tabs
         data={{
-          planned: { label: "Planned", onPress: () => console.log('Planed') },
-          completed: { label: "Completed", onPress: () => console.log('Completed') },
+          planned: { label: "Planned", onPress: () => setPlanned(1) },
+          completed: { label: "Completed", onPress: () => setPlanned(0) },
         }}
         scroll={false}
       />
       <ThemedView type='left' style={{ width: '100%' }}>
-        <ThemedView type='between' style={{ marginVertical: 8 }}>
-          <ThemedText type="subtitle">On going</ThemedText>
-          <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
-        </ThemedView>
-        {data.Going?.map(travel => (
-          <TravelCard key={travel.id} travel={travel} mode={mode} />
-        ))}
-        <ThemedView type='between' style={{ marginVertical: 8 }}>
-          <ThemedText type="subtitle">Done</ThemedText>
-          <ThemedText type="small" style={{ color: Colors.light.textMuted }} onPress={() => console.log('View more')}>View more</ThemedText>
-        </ThemedView>
-        {data.Done?.map(travel => (
-          <TravelCard key={travel.id} travel={travel} mode={mode} />
-        ))}
+        {planned === 1 ? (
+          <>
+            {data.Going?.map(travel => (
+              <TravelCard key={travel.id} travel={travel} mode={mode} />
+            ))}
+          </>
+        ) : (
+          <>
+            {data.Done?.map(travel => (
+              <TravelCard key={travel.id} travel={travel} mode={mode} />
+            ))}
+          </>
+        )}
         <View style={{ height: 115, width:'100%' }}/>
       </ThemedView>
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  style1: {
-    width: '100%',
-    minHeight: 140,
-    backgroundColor: '#CCC',
-    borderRadius: 8,
-    marginBottom: 8,
-  }
-});
