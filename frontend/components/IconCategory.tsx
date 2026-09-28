@@ -10,7 +10,7 @@ export function IconCategory({ size = 25 }: Props) {
   return (
     <View style={[styles.container, { width: size, height: size }]}>
       <Ionicons
-        name="arrow-forward"
+        name="chevron-forward-outline"
         size={size * 0.60}
         color={Colors.light.onBackground}
         style={styles.icon}
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F0F3F9',
+    backgroundColor: '#f7f7f7',
     borderRadius: 50,
   },
   icon: {

@@ -1,7 +1,6 @@
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 
-import { useThemeColors } from "@/hooks/useThemeColors";
 import { Colors } from "@/constants/Colors";
 import { Activity } from "@/types/activity";
 import { ThemedView } from "@/components/ThemedView";

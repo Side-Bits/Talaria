@@ -9,9 +9,11 @@ import { Activity } from "@/types/activity";
 import { Tabs } from "@/components/Tabs";
 import { HeroActivity } from "./components/HeroActivity";
 import { ActivityCard } from "./components/ActivityCard";
+import { Participants } from "@/components/Participants";
+import { Colors } from "@/constants/Colors";
 
 export function ActivitiesScreen() {
-  const { travel_id, name, mode } = useLocalSearchParams();
+  const { travel_id, name, mode, date } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
   const [activity, setActivities] = useState<Activity[]>([]);
 
@@ -29,6 +31,11 @@ export function ActivitiesScreen() {
     <ThemedView type="left" style={{ marginBottom: 64 }}>
       <Header code="002" label={String(name)}/>
       <HeroActivity />
+      <ThemedView type='between' style={{ marginBottom: 8 }}>
+        <ThemedText>{date}</ThemedText>
+        <Participants size={25} />
+      </ThemedView>
+      <ThemedText style={styles.description}>[Description]</ThemedText>
       <ThemedText type="default" style={{ marginBottom: 8 }}>Activities</ThemedText>
       <Tabs
         data={{
@@ -49,5 +56,8 @@ export function ActivitiesScreen() {
 }
 
 const styles = StyleSheet.create({
-
+  description: {
+    color: Colors.light.textMuted,
+    marginBottom: 8
+  }
 });

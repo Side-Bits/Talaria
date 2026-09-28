@@ -8,6 +8,8 @@ import { Travel } from '@/types/travel';
 import { Tabs } from '@/components/Tabs';
 import { HeroTravel } from '@/screens/travels/components/HeroTravel';
 import { TravelCard } from './components/TravelCard';
+import { ThemedText } from '@/components/ThemedText';
+import { formatTravelDates } from '@/scripts/DataScripts';
 
 export function TravelsScreen() {
   const mode: string = 'V';
@@ -38,13 +40,13 @@ export function TravelsScreen() {
         {planned === 1 ? (
           <>
             {data.Going?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} mode={mode} />
+              <TravelCard travel={travel} mode={mode} />
             ))}
           </>
         ) : (
           <>
             {data.Done?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} mode={mode} />
+              <TravelCard travel={travel} mode={mode} />
             ))}
           </>
         )}
