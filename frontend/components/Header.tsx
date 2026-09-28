@@ -29,7 +29,7 @@ export function Header({ code, label }: Props) {
           size={20}
           style={styles.icon}
           color={Colors.light.onSurface}
-          onPress={() => console.log("menu-outline")}
+          /*onPress={() => console.log("menu-outline")}*/
         />
       ) : (
         <View />

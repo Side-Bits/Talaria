@@ -3,7 +3,6 @@ import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { Travel } from "@/types/travel";
 import { useRouter } from "expo-router";
-import { useThemeColors } from "@/hooks/useThemeColors";
 import { formatTravelDates } from "@/scripts/DataScripts";
 
 type TravelCardProps = {
@@ -14,7 +13,7 @@ type TravelCardProps = {
 
 export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
   const router = useRouter();
-  const colors = useThemeColors();
+  const date = formatTravelDates(travel.start_date, travel.end_date);
 
   const handlePress = onPress ?? (() =>
     router.push({
@@ -23,6 +22,7 @@ export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
         travel_id: String(travel.id),
         name: String(travel.name),
         mode: String(mode),
+        date: String(date)
       },
     })
   );
@@ -41,7 +41,7 @@ export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
         <ThemedText
           type="default"
         >
-          {formatTravelDates(travel.start_date, travel.end_date)}
+          {date}
         </ThemedText>
       </ThemedView>
     </Pressable>

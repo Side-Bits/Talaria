@@ -196,7 +196,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 6,
     height: "100%",
-    paddingVertical: 10,
-    paddingHorizontal: 6,
+    padding: 8,
   },
 });
