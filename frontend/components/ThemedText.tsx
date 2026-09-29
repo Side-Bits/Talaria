@@ -12,7 +12,8 @@ type Props = TextProps & {
     | "small"
     | "center"
     | "left"
-    | "right";
+    | "right"
+    | "underlined";
 };
 
 export function ThemedText({ type = "default", style, ...rest }: Props) {
@@ -29,6 +30,7 @@ export function ThemedText({ type = "default", style, ...rest }: Props) {
         type === "small" ? styles.small : undefined,
         type === "left" ? styles.left : undefined,
         type === "right" ? styles.right : undefined,
+        type === "underlined" ? styles.underlined : undefined,
         style,
       ]}
       {...rest}
@@ -66,14 +68,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   left: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: "left",
   },
   right: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: "right",
   },
   small: {
-    fontSize: 11,
+    fontSize: 12,
+  },
+  underlined: {
+    fontSize: 14,
+    marginBottom: 8,
+    borderRadius: 4
   },
 });

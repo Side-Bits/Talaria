@@ -22,7 +22,8 @@ export function TravelCard({ travel, onPress, mode }: TravelCardProps) {
         travel_id: String(travel.id),
         name: String(travel.name),
         mode: String(mode),
-        date: String(date)
+        date: String(date),
+        description: String(travel.description),
       },
     })
   );

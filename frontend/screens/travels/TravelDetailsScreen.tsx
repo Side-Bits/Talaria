@@ -33,6 +33,7 @@ export function TravelDetailsScreen() {
           <View style={{ width: 40 }}><ThemedText type='center'>a</ThemedText></View>
           <View><ThemedDate label='End date' date={true} value={travel.end_date} mode={String(mode)} onChangeText={text => setTravel({ ...travel, end_date: text })} /></View>
         </ThemedView>
+        <ThemedInput type='textarea' label='Description' value={travel.description} onChangeText={text => setTravel({ ...travel, description: text })} />
         <ThemedButton title='Add' style={{ marginTop: 8 }} onPress={handleTravel} />
       </ThemedView>
       <View style={{ height: 115, width:'100%' }}/>

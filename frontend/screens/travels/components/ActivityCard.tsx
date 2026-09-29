@@ -35,7 +35,7 @@ export function ActivityCard({ activity, mode }: ActivityCardProps) {
       <ThemedView type="row">
         <View style={ styles.box1 }>
           <View style={styles.line} />
-          <IconCategory size={45}/>
+          <IconCategory size={40}/>
           <View style={styles.line} />
         </View>
         <ThemedView type="list" style={ styles.box2 }>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   box2: {
     flex: 1,
     borderWidth: 1,
-    borderColor: Colors.light.border,
+    borderColor: '#FBFBFB',
     borderRadius: 8,
     padding: 8,
   },
@@ -78,6 +78,6 @@ const styles = StyleSheet.create({
     width: 1,
     height: 10,
     borderLeftWidth: 1.5,
-    borderLeftColor: Colors.light.border,
+    borderLeftColor: '#FBFBFB',
   }
 });

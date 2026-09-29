@@ -58,7 +58,7 @@ export function ActivityDetailsScreen() {
           <View><ThemedDate label='End date' date={false} value={activity.end_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, end_date: text })}/></View>
         </ThemedView>
         <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, location: text })} />
-        <ThemedInput type='text' label='Notes' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
+        <ThemedInput type='textarea' label='Description' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
         <ThemedButton title='Add' id='buttonAdd' style={{ marginTop: 8 }} onPress={handleActivity} />
       </ThemedView>
       <View style={{ height: 115, width:'100%' }}/>
