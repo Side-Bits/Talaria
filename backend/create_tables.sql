@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS travels (
     name        VARCHAR(64) NOT NULL,
     start_date  DATE NOT NULL,
     end_date    DATE NOT NULL,
+    description TEXT,
     id_status   BIGINT REFERENCES statuses(id_status) ON DELETE SET NULL,
     CONSTRAINT chk_travel_dates CHECK (end_date >= start_date)
 );
@@ -90,7 +91,7 @@ VALUES
     ('Cancelled'),
     ('Finished');
 
-INSERT INTO users (
+/*INSERT INTO users (
     id_role,
     username,
     email,
@@ -118,9 +119,9 @@ VALUES (
     'Pérez',
     'García',
     'venecia.jpg'
-);
+);*/
 
-INSERT INTO travels (name, start_date, end_date, id_status) VALUES
+/*INSERT INTO travels (name, start_date, end_date, id_status) VALUES
 ('Viaje a Venecia','2026-05-01','2026-05-04',1),
 ('Viaje a Roma','2026-06-01','2026-06-05',1),
 ('Viaje a París','2026-07-10','2026-07-14',1),
@@ -140,9 +141,9 @@ INSERT INTO travels (name, start_date, end_date, id_status) VALUES
 ('Viaje a Estambul','2027-09-01','2027-09-05',1),
 ('Viaje a Budapest','2027-10-01','2027-10-04',1),
 ('Viaje a Cracovia','2027-11-01','2027-11-04',1),
-('Viaje a Estocolmo','2027-12-01','2027-12-04',1);
+('Viaje a Estocolmo','2027-12-01','2027-12-04',1);*/
 
-INSERT INTO clients_travels
+/*INSERT INTO clients_travels
 SELECT
     2,
     id_travel
@@ -177,4 +178,4 @@ INSERT INTO activities (
 (2,'Compras','Souvenirs','Venecia','2026-05-04 10:00','2026-05-04 12:00',0,1),
 (2,'Paseo final','Último recorrido','Venecia','2026-05-04 12:30','2026-05-04 13:30',0,1),
 (2,'Check-out','Salida del hotel','Venecia','2026-05-04 14:00','2026-05-04 15:00',0,1),
-(2,'Salida','Viaje de regreso','Aeropuerto','2026-05-04 17:00','2026-05-04 19:00',0,1);
+(2,'Salida','Viaje de regreso','Aeropuerto','2026-05-04 17:00','2026-05-04 19:00',0,1);*/

@@ -13,7 +13,7 @@ import { Participants } from "@/components/Participants";
 import { Colors } from "@/constants/Colors";
 
 export function ActivitiesScreen() {
-  const { travel_id, name, mode, date } = useLocalSearchParams();
+  const { travel_id, name, mode, date, description } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
   const [activity, setActivities] = useState<Activity[]>([]);
 
@@ -35,8 +35,8 @@ export function ActivitiesScreen() {
         <ThemedText>{date}</ThemedText>
         <Participants size={25} />
       </ThemedView>
-      <ThemedText style={styles.description}>[Description]</ThemedText>
-      <ThemedText type="default" style={{ marginBottom: 8 }}>Activities</ThemedText>
+      <ThemedText style={styles.description}>{description}</ThemedText>
+      <ThemedText type="underlined">Activities</ThemedText>
       <Tabs
         data={{
           all: { label: "All", onPress: () => console.log('All') },

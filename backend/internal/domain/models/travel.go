@@ -5,9 +5,10 @@ import (
 )
 
 type Travel struct {
-	ID        int64     `json:"id"`
-	Name      string    `json:"name"`
-	StartDate time.Time `json:"start_date"`
-	EndDate   time.Time `json:"end_date"`
-	Finished  bool      `json:"finished"`
+	ID        	int64     	`json:"id"`
+	Name      	string    	`json:"name"`
+	StartDate 	time.Time 	`json:"start_date"`
+	EndDate   	time.Time 	`json:"end_date"`
+	Finished  	bool      	`json:"finished"`
+	Description string   	`json:"description"`
 }

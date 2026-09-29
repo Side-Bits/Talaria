@@ -24,9 +24,9 @@ func (s *TravelService) GetTravelByID(ctx context.Context, userID int64, travelI
 	return s.store.Repos().Travels.GetTravelByID(ctx, userID, travelID)
 }
 
-func (s *TravelService) CreateTravel(ctx context.Context, userID int64, name string, start_date string, end_date string) error {
+func (s *TravelService) CreateTravel(ctx context.Context, userID int64, name string, start_date string, end_date string, description string) error {
 	return s.store.InTx(ctx, func(repos Repos) error {
-		id_travel, err := repos.Travels.CreateTravel(ctx, name, start_date, end_date)
+		id_travel, err := repos.Travels.CreateTravel(ctx, name, start_date, end_date, description)
 		if err != nil {
 			return err
 		}
