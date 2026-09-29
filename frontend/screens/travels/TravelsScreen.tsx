@@ -8,6 +8,8 @@ import { Travel } from '@/types/travel';
 import { Tabs } from '@/components/Tabs';
 import { HeroTravel } from '@/screens/travels/components/HeroTravel';
 import { TravelCard } from './components/TravelCard';
+import { ThemedText } from '@/components/ThemedText';
+import { formatTravelDates } from '@/scripts/DataScripts';
 
 export function TravelsScreen() {
   const mode: string = 'V';
