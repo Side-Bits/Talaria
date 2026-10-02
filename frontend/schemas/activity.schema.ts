@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { dateSchema } from "./shared";
+import { dateSchema } from "./shared.schema";
 import type { Activity } from "@/types/activity";
 
 export const activitySchema = z

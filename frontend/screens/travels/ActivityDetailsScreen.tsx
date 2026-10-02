@@ -13,7 +13,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { inputMode } from "@/scripts/InputScripts";
 import { createActivity, getTravelActivity } from "@/services/api/activity";
 import { useForm } from "react-hook-form";
-import { activitySchema } from "@/schemas/activity";
+import { activitySchema } from "@/schemas/activity.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -124,13 +124,20 @@ export function ActivityDetailsScreen() {
                 <FormInput
                     control={control}
                     trigger={trigger}
-                    name="description"
-                    type="text"
-                    label="Notes"
-                    required
+                    name='description'
+                    type='text'
+                    label='Description'
+                    multiline
+                    numberOfLines={4}
+                    textAlignVertical='top'
+                    controlStyle={{
+                        alignItems: 'flex-start',
+                        minHeight: 96,
+                        paddingVertical: 8,
+                    }}
+                    inputStyle={{ minHeight: 80, paddingTop: 4 }}
                     disabled={isSubmitting}
                 />
-                <ThemedInput type='textarea' label='Description' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
                 {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
                 {/*<Participants size={32} gap={4}/>*/}
                 <ThemedButton

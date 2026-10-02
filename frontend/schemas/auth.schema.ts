@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emailSchema } from "./shared";
+import { emailSchema } from "./shared.schema";
 
 export const loginSchema = z.object({
     identifier: emailSchema,

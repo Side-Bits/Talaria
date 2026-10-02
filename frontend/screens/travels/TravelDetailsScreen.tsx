@@ -8,7 +8,7 @@ import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
 import { DEFAULT_TRAVEL, Travel } from '@/types/travel';
 import { createTravel } from '@/services/api/travel';
-import { travelSchema } from '@/schemas/travel';
+import { travelSchema } from '@/schemas/travel.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -73,7 +73,23 @@ export function TravelDetailsScreen() {
                         />
                     </View>
                 </ThemedView>
-                <ThemedInput type='textarea' label='Description' value={travel.description} onChangeText={text => setTravel({ ...travel, description: text })} />
+                <FormInput
+                    control={control}
+                    trigger={trigger}
+                    name='description'
+                    type='text'
+                    label='Description'
+                    multiline
+                    numberOfLines={4}
+                    textAlignVertical='top'
+                    controlStyle={{
+                        alignItems: 'flex-start',
+                        minHeight: 96,
+                        paddingVertical: 8,
+                    }}
+                    inputStyle={{ minHeight: 80, paddingTop: 4 }}
+                    disabled={isSubmitting}
+                />
                 <ThemedButton
                     title='Add'
                     style={{ marginTop: 8 }}
@@ -81,13 +97,8 @@ export function TravelDetailsScreen() {
                     disabled={isSubmitting}
                     loading={isSubmitting}
                 />
-                {/* <ThemedView type='left'>
-          <Text style={{ marginBottom: 4, fontSize: 12, color: Colors.light.onSurface }}>Participants</Text>
-          <Participants size={40} gap={4} />
-        </ThemedView> */}
             </ThemedView>
             <View style={{ height: 115, width: '100%' }} />
         </ThemedView>
     );
->>>>>>> 07ff980 (feat: add validated auth and travel forms)
 }

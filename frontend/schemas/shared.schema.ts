@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+/** Shared validation rules used by feature schemas. */
 export const emailSchema = z.pipe(
     z.string().trim().min(1, { error: "Email is required" }),
     z.email({ error: "Enter a valid email" }),
