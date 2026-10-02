@@ -1,88 +1,206 @@
-import { Colors } from '@/constants/Colors';
-import React, { useEffect, useState } from 'react';
-import { Text, TextInput, StyleSheet, View, TextInputProps } from 'react-native';
-import { ThemedView } from './ThemedView';
+import { forwardRef, useEffect, useState } from "react";
+import { StyleSheet, TextInput } from "react-native";
 
-type Props = TextInputProps & {
-    label: string;
-    date: boolean;
-    mode: string;
-    value: string;
-    onChangeText: (value: string) => void;
-};
+import {
+    TextInputField,
+    type TextInputFieldProps,
+} from "@/components/TextInputField";
+import { Colors } from "@/constants/Colors";
 
-export function ThemedDate ({ label, date, mode, value, onChangeText, onBlur, ...rest }: Props) {
-    const [datePart, setDatePart] = useState(date ? value : (value?.split('T')[0] || ''));
-    const [timePart, setTimePart] = useState(date ? '' : (value?.split('T')[1]?.slice(0, 5) || ''));
+const DATE_PLACEHOLDER = "DD/MM/YYYY";
+const ISO_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/; // YYYY-MM-DD
 
-    // It is used to prevent it from providing the default information
-    useEffect(() => {
-        setDatePart(date ? value : (value?.split('T')[0] || ''));
-        setTimePart(date ? '' : (value?.split('T')[1]?.slice(0, 5) || ''));
-    }, [date, value]);
+/** Indica si un año es bisiesto */
+function isLeapYear(year: number) {
+    return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+}
 
-    const handleDate = (newDate: string) => {
-        if (date) {
-            // YYYY-MM-DD
-            onChangeText(newDate);
-        } else {
-            setDatePart(newDate);
-        }
-    };
+/** Devuelve el número de días del mes o cero si el mes no existe. */
+function daysInMonth(month: number, year: number) {
+    const days = [
+        31,
+        isLeapYear(year) ? 29 : 28,
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31,
+    ];
+    return days[month - 1] ?? 0;
+}
 
-    const handleTime = (newTime: string) => {
-        setTimePart(newTime);
-    };
-
-    const handleDateBlur = (event: Parameters<NonNullable<Props['onBlur']>>[0]) => {
-        onChangeText(`${datePart}T${timePart || '00:00'}:00Z`);
-        onBlur?.(event);
-    };
-
-    const handleTimeBlur = (event: Parameters<NonNullable<Props['onBlur']>>[0]) => {
-        onChangeText(`${datePart}T${timePart || '00:00'}:00Z`);
-        onBlur?.(event);
-    };
-
+/** Comprueba que la fecha sea valida */
+function isValidDate(day: number, month: number, year: number) {
     return (
-        <View style={styles.view}>
-            <Text style={styles.label}>{label}</Text>
-            {
-                date ? (
-                    <TextInput style={styles.input} value={datePart} onChangeText={handleDate} maxLength={10}
-                        {...rest}
-                    />
-                ) : (
-                    <ThemedView type='between'>
-                        <TextInput style={[ styles.input, { flex: 1, maxWidth: 90, marginRight: 2 } ]} value={datePart} onChangeText={handleDate} onBlur={handleDateBlur} maxLength={10}
-                            {...rest}
-                        />
-                        <TextInput style={[ styles.input, { maxWidth: 50, marginLeft: 2 } ]} value={timePart} onChangeText={handleTime} onBlur={handleTimeBlur} maxLength={5}
-                            {...rest}
-                        />
-                    </ThemedView>
-                )
-            }
-        </View>
+        year >= 1 && year <= 9999 && day >= 1 && day <= daysInMonth(month, year)
     );
 }
 
-const styles = StyleSheet.create({
-    view: {
-        width: '100%',
-        marginBottom: 8,
+/**
+ * Elimina caracteres no numéricos y añade los separadores (DD/MM/AAAA) mientras escribe
+ */
+function formatTypedDate(value: string) {
+    const digits = value.replace(/\D/g, "").slice(0, 8);
+    const day = digits.slice(0, 2);
+    const month = digits.slice(2, 4);
+    const year = digits.slice(4, 8);
+
+    return [day, month, year].filter(Boolean).join("/");
+}
+
+/**
+ * Convierte una fecha valida de `DD/MM/AAAA` a `AAAA-MM-DD`.
+ * Devuelve `null` cuando la fecha está incompleta
+ */
+function displayToIso(value: string) {
+    const [dayText, monthText, yearText] = value.split("/");
+
+    if (
+        dayText?.length !== 2 ||
+        monthText?.length !== 2 ||
+        yearText?.length !== 4
+    ) {
+        return null;
+    }
+
+    const day = Number(dayText);
+    const month = Number(monthText);
+    const year = Number(yearText);
+
+    if (!isValidDate(day, month, year)) {
+        return null;
+    }
+
+    return `${yearText}-${monthText}-${dayText}`;
+}
+
+/**
+ * Convierte una fecha ISO válida al formato visible
+ */
+function isoToDisplay(value: string) {
+    const match = ISO_DATE_PATTERN.exec(value);
+
+    if (!match) {
+        return value;
+    }
+
+    const [, yearText, monthText, dayText] = match;
+    const day = Number(dayText);
+    const month = Number(monthText);
+    const year = Number(yearText);
+
+    return isValidDate(day, month, year)
+        ? `${dayText}/${monthText}/${yearText}`
+        : value;
+}
+
+/** Props */
+export type ThemedDateProps = Omit<
+    TextInputFieldProps,
+    | "inputMode"
+    | "keyboardType"
+    | "maxLength"
+    | "onChangeText"
+    | "type"
+    | "value"
+> & {
+    /** Fecha ISO (`AAAA-MM-DD`) o valor visible todavía incompleto */
+    value?: string;
+    /**
+     * Fecha ISO cuando el valor es válido. Mientras la edición esté
+     * incompleta, recibe el texto en formato `DD/MM/AAAA`.
+     */
+    onChangeText: (value: string) => void;
+};
+
+/**
+ * Campo controlado para introducir fechas exclusivamente mediante el teclado.
+ *
+ * Presenta la fecha como `DD/MM/AAAA`, añade las barras automáticamente y
+ * valida tanto el número de días de cada mes como los años bisiestos. Cuando
+ * la fecha es válida, `onChangeText` devuelve el formato ISO `AAAA-MM-DD` para
+ * el backend.
+ *
+ * @example
+ * ```tsx
+ * <ThemedDate
+ *   label="Fecha de inicio"
+ *   value={startDate}
+ *   onChangeText={setStartDate}
+ *   required
+ * />
+ * ```
+ */
+export const ThemedDate = forwardRef<TextInput, ThemedDateProps>(
+    function ThemedDate(
+        {
+            controlStyle,
+            helperText = DATE_PLACEHOLDER,
+            inputStyle,
+            label,
+            onChangeText,
+            placeholder = DATE_PLACEHOLDER,
+            value = "",
+            ...inputProps
+        },
+        ref,
+    ) {
+        const [displayValue, setDisplayValue] = useState(() =>
+            isoToDisplay(value),
+        );
+
+        useEffect(() => {
+            setDisplayValue(isoToDisplay(value));
+        }, [value]);
+
+        const handleChange = (text: string) => {
+            const isoMatch = ISO_DATE_PATTERN.exec(text);
+            const nextDisplay = isoMatch
+                ? isoToDisplay(text)
+                : formatTypedDate(text);
+            const isoValue = displayToIso(nextDisplay);
+
+            setDisplayValue(nextDisplay);
+            onChangeText(isoValue ?? nextDisplay);
+        };
+
+        return (
+            <TextInputField
+                {...inputProps}
+                leadingIcon={"calendar-outline"}
+                autoComplete="off"
+                clearable={false}
+                controlStyle={[styles.control, controlStyle]}
+                helperText={helperText}
+                inputMode="numeric"
+                inputStyle={[styles.input, inputStyle]}
+                keyboardType="number-pad"
+                label={label}
+                maxLength={10}
+                onChangeText={handleChange}
+                placeholder={placeholder}
+                ref={ref}
+                type="text"
+                value={displayValue}
+            />
+        );
     },
-    label: {
-        marginBottom: 4,
-        fontSize: 12,
-        color: Colors.light.textMuted,
+);
+
+const styles = StyleSheet.create({
+    control: {
+        backgroundColor: Colors.light.surface,
+        minHeight: 44,
+        paddingHorizontal: 4,
     },
     input: {
-        borderWidth: 1,
-        borderColor: Colors.light.border,
-        backgroundColor: Colors.light.onPrimary,
-        borderRadius: 8,
-        padding: 8,
-        fontSize: 12,
+        fontSize: 14,
+        paddingHorizontal: 2,
+        paddingVertical: 6,
     },
-})
+});

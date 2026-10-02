@@ -1,71 +1,148 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import { View, StyleSheet, Alert } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedInput } from '@/components/ThemedInput';
-import { Header } from '@/components/Header';
-import { ThemedButton } from '@/components/ThemedButton';
-import { ThemedDate } from '@/components/ThemedDate';
-import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
-import { router, useLocalSearchParams } from 'expo-router';
-import { inputMode } from '@/scripts/InputScripts';
-import { createActivity, getTravelActivity } from '@/services/api/activity';
-import { Categories } from '@/components/Categories';
+import { View, Alert } from "react-native";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
+import { Header } from "@/components/Header";
+import { ThemedButton } from "@/components/ThemedButton";
+import { Categories } from "@/components/Categories";
+import { FormDate } from "@/components/FormDate";
+import { FormInput } from "@/components/FormInput";
+import { Activity, DEFAULT_ACTIVITY } from "@/types/activity";
+import { router, useLocalSearchParams } from "expo-router";
+import { inputMode } from "@/scripts/InputScripts";
+import { createActivity, getTravelActivity } from "@/services/api/activity";
+import { useForm } from "react-hook-form";
+import { activitySchema } from "@/schemas/activity";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 export function ActivityDetailsScreen() {
-  const { travel_id, activity_id, mode } = useLocalSearchParams();
-  const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
-  const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
-  const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
+    const { travel_id, activity_id, mode } = useLocalSearchParams();
+    const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+    const activityId = Array.isArray(activity_id)
+        ? activity_id[0]
+        : activity_id;
 
-  const handleActivity = async () => {
-    if (!travelId) {
-      Alert.alert('Error', 'Missing travel ID');
-      return;
-    }
+    const {
+        control,
+        handleSubmit,
+        reset,
+        trigger,
+        watch,
+        formState: { isSubmitting },
+    } = useForm<z.input<typeof activitySchema>>({
+        resolver: zodResolver(activitySchema),
+        mode: "onSubmit",
+        reValidateMode: "onChange",
+        shouldFocusError: true,
+        defaultValues: DEFAULT_ACTIVITY,
+    });
 
-    try {
-      await createActivity (travelId, activity)
-      router.back();
-    } catch {
-      Alert.alert('Error', 'Invalid credentials');
-    }
-  };
+    const activityName = watch("name");
 
-  useEffect(() => {
-    if (!travelId || !activityId) return;
+    const handleActivity = async (activity: Activity) => {
+        if (!travelId) {
+            Alert.alert("Error", "Missing travel ID");
+            return;
+        }
 
-    inputMode(String(mode))
+        try {
+            await createActivity(travelId, activity);
+            router.back();
+        } catch {
+            Alert.alert("Error", "Invalid credentials");
+        }
+    };
 
-    getTravelActivity(travelId, activityId)
-      .then(data => setActivity(data))
-      .catch(e => {
-        console.error(e);
-        Alert.alert('Error', 'Failed to fetch activity');
-      });
-  }, [travelId, activityId, mode]);
+    useEffect(() => {
+        if (!travelId || !activityId) return;
 
-  return (
-    <ThemedView type='left'>
-      <Header code='003' label={mode === 'C' ? 'New activity' : activity.name} />
-      <ThemedView type='left' style={{ width: '100%' }}>
-        <Categories />
-        <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
-        <ThemedView type='between' style={{ width: '100%' }}>
-          <View><ThemedDate label='Start date' date={false} value={activity.start_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, start_date: text })}/></View>
-          <View style={{ width: 40 }}><ThemedText type='center'>a</ThemedText></View>
-          <View><ThemedDate label='End date' date={false} value={activity.end_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, end_date: text })}/></View>
+        inputMode(String(mode));
+
+        if (String(mode) === "C") return;
+
+        getTravelActivity(travelId, activityId)
+            .then((data) => reset(data))
+            .catch((error) => {
+                console.error(error);
+                Alert.alert("Error", "Failed to fetch activity");
+            });
+    }, [travelId, activityId, mode, reset]);
+
+    return (
+        <ThemedView type="left">
+            <Header
+                code="003"
+                label={mode === "C" ? "New activity" : activityName}
+            />
+            <ThemedView type="left" style={{ width: "100%" }}>
+                <Categories />
+                <FormInput
+                    control={control}
+                    trigger={trigger}
+                    name="name"
+                    type="text"
+                    label="Activity name"
+                    required
+                    disabled={isSubmitting}
+                />
+                <ThemedView type="between" style={{ width: "100%" }}>
+                    <View>
+                        <FormDate
+                            control={control}
+                            trigger={trigger}
+                            name="start_date"
+                            label="Start date"
+                            required
+                            disabled={isSubmitting}
+                        />
+                    </View>
+                    <View style={{ width: 40 }}>
+                        <ThemedText type="center">a</ThemedText>
+                    </View>
+                    <View>
+                        <FormDate
+                            control={control}
+                            trigger={trigger}
+                            name="end_date"
+                            label="End date"
+                            required
+                            disabled={isSubmitting}
+                        />
+                    </View>
+                </ThemedView>
+                <FormInput
+                    control={control}
+                    trigger={trigger}
+                    name="location"
+                    type="text"
+                    label="Location"
+                    required
+                    disabled={isSubmitting}
+                />
+                <FormInput
+                    control={control}
+                    trigger={trigger}
+                    name="description"
+                    type="text"
+                    label="Notes"
+                    required
+                    disabled={isSubmitting}
+                />
+                <ThemedInput type='textarea' label='Description' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
+                {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
+                {/*<Participants size={32} gap={4}/>*/}
+                <ThemedButton
+                    title="Add"
+                    id="buttonAdd"
+                    style={{ marginTop: 8 }}
+                    onPress={handleSubmit(handleActivity)}
+                    disabled={isSubmitting}
+                    loading={isSubmitting}
+                />
+            </ThemedView>
+            <View style={{ height: 115, width: "100%" }} />
         </ThemedView>
-        <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, location: text })} />
-        <ThemedInput type='textarea' label='Description' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
-        <ThemedButton title='Add' id='buttonAdd' style={{ marginTop: 8 }} onPress={handleActivity} />
-      </ThemedView>
-      <View style={{ height: 115, width:'100%' }}/>
-    </ThemedView>
-  );
+    );
 }
-
-const styles = StyleSheet.create({
-
-})
