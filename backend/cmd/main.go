@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"talaria/internal/api/handlers"
@@ -25,10 +26,16 @@ import (
 // @name Authorization
 // @description Paste the session token returned by /login or /register. The "Bearer <token>" form is also accepted.
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Printf("starting Talaria API on port %s; initializing database", port)
 	r := gin.Default() // Includes logger and recovery middleware
 
 	dbpool := database.InitDB()
 	defer dbpool.Close()
+	log.Print("database connection established")
 
 	if gin.Mode() == gin.DebugMode {
 		fmt.Println("🚧 Gin running in DEBUG mode - CORS is OPEN")
@@ -66,13 +73,9 @@ func main() {
 	router := routes.NewRouter(authHandler, userHandler, travelHandler, activityHandler, authService)
 	router.SetupRoutes(r)
 
-	// Vercel provides PORT for container deployments. Keep 8080 as the local default.
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	log.Printf("listening on 0.0.0.0:%s", port)
 	if err := r.Run(":" + port); err != nil {
-		fmt.Printf("server stopped: %v\n", err)
+		log.Fatalf("server stopped: %v", err)
 	}
 }
 
