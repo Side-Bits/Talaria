@@ -14,9 +14,10 @@ type Props = TextProps & {
     | "left"
     | "right"
     | "underlined";
+  muted?: boolean
 };
 
-export function ThemedText({ type = "default", style, ...rest }: Props) {
+export function ThemedText({ type = "default", muted, style, ...rest }: Props) {
   return (
     <Text
       style={[
@@ -31,7 +32,8 @@ export function ThemedText({ type = "default", style, ...rest }: Props) {
         type === "left" ? styles.left : undefined,
         type === "right" ? styles.right : undefined,
         type === "underlined" ? styles.underlined : undefined,
-        style,
+        muted === true ? styles.muted : undefined,
+        style
       ]}
       {...rest}
     />
@@ -83,4 +85,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 4
   },
+  muted: {
+    color: Colors.light.textMuted,
+  }
 });

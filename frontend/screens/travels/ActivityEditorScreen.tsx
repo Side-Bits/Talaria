@@ -9,18 +9,28 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedDate } from '@/components/ThemedDate';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Colors } from "@/constants/Colors";
 import { createActivity, getTravelActivity } from '@/services/api/activity';
 import { Categories } from '@/components/Categories';
-import { IconCategory } from '@/components/IconCategory';
-import { Participants } from '@/components/Participants';
 
-export function ActivityDetailsScreen() {
+export function ActivityEditorScreen() {
   const { travel_id, activity_id, mode } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
   const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
-
   const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
+
+  const handleActivity = async () => {
+    if (!travelId) {
+      Alert.alert('Error', 'Missing travel ID');
+      return;
+    }
+
+    try {
+      await createActivity (travelId, activity)
+      router.back();
+    } catch {
+      Alert.alert('Error', 'Invalid credentials');
+    }
+  };
 
   useEffect(() => {
     if (!travelId || !activityId) return;
@@ -35,27 +45,18 @@ export function ActivityDetailsScreen() {
 
   return (
     <ThemedView type='left'>
-      <Header code='003' label={activity.name} />
+      <Header code='003' label={mode === 'C' ? 'New activity' : activity.name} />
       <ThemedView type='left' style={{ width: '100%' }}>
-        <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
-          <IconCategory size={80} />
+        <Categories />
+        <ThemedInput type='text' label='Activity name' value={activity.name} onChangeText={text => setActivity({ ...activity, name: text })} />
+        <ThemedView type='between' style={{ width: '100%' }}>
+          <View><ThemedDate label='Start date' date={false} value={activity.start_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, start_date: text })}/></View>
+          <View style={{ width: 40 }}><ThemedText type='center'>a</ThemedText></View>
+          <View><ThemedDate label='End date' date={false} value={activity.end_date} mode={String(mode)} onChangeText={text => setActivity({ ...activity, end_date: text })}/></View>
         </ThemedView>
-        <ThemedText style={styles.description}>{activity.description}</ThemedText>
-        <ThemedText type="underlined">Information</ThemedText>
-        <ThemedView type='list' margin={8} style={styles.container}>
-          <ThemedView type='between' margin={8}>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Location</ThemedText>
-            <ThemedText type='small'>{activity.location}</ThemedText>
-          </ThemedView>
-          <ThemedView type='between'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Total price</ThemedText>
-            <ThemedText type='small'>{activity.price}</ThemedText>
-          </ThemedView>
-        </ThemedView>
-        <ThemedText type="underlined">People</ThemedText>
-        <Participants size={40} />
-        <ThemedText type="underlined">Others</ThemedText>
-        <ThemedText type="underlined">Documents</ThemedText>
+        <ThemedInput type='text' label='Location' value={activity.location} onChangeText={text => setActivity({ ...activity, location: text })} />
+        <ThemedInput type='textarea' label='Description' value={activity.description} onChangeText={text => setActivity({ ...activity, description: text })} />
+        <ThemedButton title='Add' id='buttonAdd' style={{ marginTop: 8 }} onPress={handleActivity} />
       </ThemedView>
       <View style={{ height: 115, width:'100%' }}/>
     </ThemedView>
@@ -63,13 +64,5 @@ export function ActivityDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  description: {
-    color: Colors.light.textMuted,
-    marginBottom: 16
-  }, container: {
-    width: '100%',
-    padding: 8,
-    backgroundColor: '#FBFBFB',
-    borderRadius: 4
-  }
+
 })

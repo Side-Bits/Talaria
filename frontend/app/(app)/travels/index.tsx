@@ -1,5 +1,5 @@
-import { TravelsScreen } from '@/screens/travels/TravelsScreen';
+import { TravelDetailsScreen } from '@/screens/travels/TravelDetailsScreen';
 
 export default function TabTravels() {
-  return <TravelsScreen />;
+  return <TravelDetailsScreen />;
 }

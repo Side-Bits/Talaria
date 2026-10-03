@@ -12,7 +12,7 @@ import { ActivityCard } from "./components/ActivityCard";
 import { Participants } from "@/components/Participants";
 import { Colors } from "@/constants/Colors";
 
-export function ActivitiesScreen() {
+export function ActivitiesDetailsScreen() {
   const { travel_id, name, mode, date, description } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
   const [activity, setActivities] = useState<Activity[]>([]);

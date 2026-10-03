@@ -19,6 +19,7 @@ export function Footer() {
   const title = isActivityRoute ? "activity" : "trip";
 
   type FooterTab = "home" | "trip" | "create" | "profile" | null;
+
   const getRouteTab = (): FooterTab => {
     if (currentMode === "C") return "create";
     if (isInsideTrip) return "trip";
@@ -41,7 +42,9 @@ export function Footer() {
     setActiveTab("home");
     router.replace({
       pathname: "/(app)/travels",
-      params: { mode: "V" },
+      params: {
+        mode: "V"
+      },
     });
   };
 

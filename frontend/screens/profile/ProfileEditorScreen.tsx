@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-
+import { router } from 'expo-router';
 import { StyleSheet } from 'react-native';
+
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useSession } from '@/contexts/authContext';
 
-export function ProfileScreen() {
+export function ProfileEditorScreen() {
   const session = useSession();
   const user = session.user;
 
@@ -21,14 +21,14 @@ export function ProfileScreen() {
         <ThemedInput type='text' label='Second surname' value={''} />
         <ThemedInput type='email' label='Email' value={user?.email} />
       </ThemedView>
-      <ThemedButton title='Log Out' buttonStyle={styles.signout_button} onPress={session.signOut} />
+      <ThemedButton title='Return' buttonStyle={styles.signout_button} />
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   signout_button: {
-    backgroundColor: '#FF8F8F',
+    backgroundColor: '#CCC',
     alignItems: 'center',
   }
 });

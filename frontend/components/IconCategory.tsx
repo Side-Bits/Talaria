@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     textAlign: 'center',
-    color: Colors.light.onBackground,
+    color: '#d3d3d3',
   },
 });

@@ -52,14 +52,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 36,
   },
   disabled: {
     opacity: 0.6,
   },
   text: {
     color: "white",
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 14
   },
 });
