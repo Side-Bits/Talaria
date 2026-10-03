@@ -9,7 +9,6 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedDate } from '@/components/ThemedDate';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
 import { router, useLocalSearchParams } from 'expo-router';
-import { inputMode } from '@/scripts/InputScripts';
 import { createActivity, getTravelActivity } from '@/services/api/activity';
 import { Categories } from '@/components/Categories';
 
@@ -35,8 +34,6 @@ export function ActivityDetailsScreen() {
 
   useEffect(() => {
     if (!travelId || !activityId) return;
-
-    inputMode(String(mode))
 
     getTravelActivity(travelId, activityId)
       .then(data => setActivity(data))
