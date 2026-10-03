@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { router, useGlobalSearchParams, usePathname } from "expo-router";
-import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -19,13 +18,14 @@ export function Footer() {
   const title = isActivityRoute ? "activity" : "trip";
 
   type FooterTab = "home" | "trip" | "create" | "profile" | null;
+
   const getRouteTab = (): FooterTab => {
     if (currentMode === "C") return "create";
     if (isInsideTrip) return "trip";
     if (pathname === "/id-profile") return "profile";
     return "home";
   };
-  
+
   const [activeTab, setActiveTab] = useState<FooterTab>(getRouteTab);
 
   useEffect(() => {
@@ -41,7 +41,9 @@ export function Footer() {
     setActiveTab("home");
     router.replace({
       pathname: "/(app)/travels",
-      params: { mode: "V" },
+      params: {
+        mode: "V"
+      },
     });
   };
 

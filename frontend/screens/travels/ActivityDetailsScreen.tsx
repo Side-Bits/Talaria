@@ -1,155 +1,71 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { View, Alert } from "react-native";
-import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
-import { Header } from "@/components/Header";
-import { ThemedButton } from "@/components/ThemedButton";
-import { Categories } from "@/components/Categories";
-import { FormDate } from "@/components/FormDate";
-import { FormInput } from "@/components/FormInput";
-import { Activity, DEFAULT_ACTIVITY } from "@/types/activity";
-import { router, useLocalSearchParams } from "expo-router";
-import { inputMode } from "@/scripts/InputScripts";
-import { createActivity, getTravelActivity } from "@/services/api/activity";
-import { useForm } from "react-hook-form";
-import { activitySchema } from "@/schemas/activity.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { View, StyleSheet, Alert } from 'react-native';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { Header } from '@/components/Header';
+import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
+import { useLocalSearchParams } from 'expo-router';
+import { Colors } from "@/constants/Colors";
+import { IconCategory } from '@/components/IconCategory';
+import { Participants } from '@/components/Participants';
+import { getTravelActivity } from "@/services/api/activity";
 
 export function ActivityDetailsScreen() {
     const { travel_id, activity_id, mode } = useLocalSearchParams();
     const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
-    const activityId = Array.isArray(activity_id)
-        ? activity_id[0]
-        : activity_id;
+    const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
 
-    const {
-        control,
-        handleSubmit,
-        reset,
-        trigger,
-        watch,
-        formState: { isSubmitting },
-    } = useForm<z.input<typeof activitySchema>>({
-        resolver: zodResolver(activitySchema),
-        mode: "onSubmit",
-        reValidateMode: "onChange",
-        shouldFocusError: true,
-        defaultValues: DEFAULT_ACTIVITY,
-    });
-
-    const activityName = watch("name");
-
-    const handleActivity = async (activity: Activity) => {
-        if (!travelId) {
-            Alert.alert("Error", "Missing travel ID");
-            return;
-        }
-
-        try {
-            await createActivity(travelId, activity);
-            router.back();
-        } catch {
-            Alert.alert("Error", "Invalid credentials");
-        }
-    };
+    const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
 
     useEffect(() => {
         if (!travelId || !activityId) return;
 
-        inputMode(String(mode));
-
-        if (String(mode) === "C") return;
-
         getTravelActivity(travelId, activityId)
-            .then((data) => reset(data))
-            .catch((error) => {
-                console.error(error);
-                Alert.alert("Error", "Failed to fetch activity");
+            .then(data => setActivity(data))
+            .catch(e => {
+                console.error(e);
+                Alert.alert('Error', 'Failed to fetch activity');
             });
-    }, [travelId, activityId, mode, reset]);
+    }, [travelId, activityId, mode]);
 
     return (
-        <ThemedView type="left">
-            <Header
-                code="003"
-                label={mode === "C" ? "New activity" : activityName}
-            />
-            <ThemedView type="left" style={{ width: "100%" }}>
-                <Categories />
-                <FormInput
-                    control={control}
-                    trigger={trigger}
-                    name="name"
-                    type="text"
-                    label="Activity name"
-                    required
-                    disabled={isSubmitting}
-                />
-                <ThemedView type="between" style={{ width: "100%" }}>
-                    <View>
-                        <FormDate
-                            control={control}
-                            trigger={trigger}
-                            name="start_date"
-                            label="Start date"
-                            required
-                            disabled={isSubmitting}
-                        />
-                    </View>
-                    <View style={{ width: 40 }}>
-                        <ThemedText type="center">a</ThemedText>
-                    </View>
-                    <View>
-                        <FormDate
-                            control={control}
-                            trigger={trigger}
-                            name="end_date"
-                            label="End date"
-                            required
-                            disabled={isSubmitting}
-                        />
-                    </View>
+        <ThemedView type='left'>
+            <Header code='003' label={activity.name} />
+            <ThemedView type='left' style={{ width: '100%' }}>
+                <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
+                    <IconCategory size={80} />
                 </ThemedView>
-                <FormInput
-                    control={control}
-                    trigger={trigger}
-                    name="location"
-                    type="text"
-                    label="Location"
-                    required
-                    disabled={isSubmitting}
-                />
-                <FormInput
-                    control={control}
-                    trigger={trigger}
-                    name='description'
-                    type='text'
-                    label='Description'
-                    multiline
-                    numberOfLines={4}
-                    textAlignVertical='top'
-                    controlStyle={{
-                        alignItems: 'flex-start',
-                        minHeight: 96,
-                        paddingVertical: 8,
-                    }}
-                    inputStyle={{ minHeight: 80, paddingTop: 4 }}
-                    disabled={isSubmitting}
-                />
-                {/*<ThemedInput type='text' label='Price' value={activity.price} onChangeText={text => setActivity({ ...activity, name: text })} />*/}
-                {/*<Participants size={32} gap={4}/>*/}
-                <ThemedButton
-                    title="Add"
-                    id="buttonAdd"
-                    style={{ marginTop: 8 }}
-                    onPress={handleSubmit(handleActivity)}
-                    disabled={isSubmitting}
-                    loading={isSubmitting}
-                />
+                <ThemedText style={styles.description}>{activity.description}</ThemedText>
+                <ThemedText type="underlined">Information</ThemedText>
+                <ThemedView type='list' margin={8} style={styles.container}>
+                    <ThemedView type='between' margin={8}>
+                        <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Location</ThemedText>
+                        <ThemedText type='small'>{activity.location}</ThemedText>
+                    </ThemedView>
+                    <ThemedView type='between'>
+                        <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Total price</ThemedText>
+                        <ThemedText type='small'>{activity.price}</ThemedText>
+                    </ThemedView>
+                </ThemedView>
+                <ThemedText type="underlined">People</ThemedText>
+                <Participants size={40} />
+                <ThemedText type="underlined">Others</ThemedText>
+                <ThemedText type="underlined">Documents</ThemedText>
             </ThemedView>
-            <View style={{ height: 115, width: "100%" }} />
+            <View style={{ height: 115, width: '100%' }} />
         </ThemedView>
     );
 }
+
+const styles = StyleSheet.create({
+    description: {
+        color: Colors.light.textMuted,
+        marginBottom: 16
+    }, container: {
+        width: '100%',
+        padding: 8,
+        backgroundColor: '#FBFBFB',
+        borderRadius: 4
+    }
+})

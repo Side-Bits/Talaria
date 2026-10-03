@@ -1,5 +1,5 @@
-import { ProfileScreen } from '@/screens/profile/ProfileScreen';
+import { ProfileDetailsScreen } from '@/screens/profile/ProfileDetailsScreen';
 
 export default function TabProfile () {
-  return <ProfileScreen />;
+  return <ProfileDetailsScreen />;
 }
