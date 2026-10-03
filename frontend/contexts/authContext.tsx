@@ -30,8 +30,9 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-	const [[isLoading, session], setSession] = useStorageState('session');
-	const [[, userData], setUserData] = useStorageState('user');
+	const [[isLoadingSession, session], setSession] = useStorageState('session');
+	const [[isLoadingUser, userData], setUserData] = useStorageState('user');
+	const isLoading = isLoadingSession || isLoadingUser;
 
 	const signIn = async (credentials: LoginCredentials): Promise<void> => {
 		try {
