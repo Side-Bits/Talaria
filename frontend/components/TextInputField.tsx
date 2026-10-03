@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -90,15 +91,17 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
     {
       containerStyle,
       controlStyle,
-      clearable = true,
+      clearable = false,
       disabled = false,
       error,
+      helperText,
       inputStyle,
       label,
       labelMode = "static",
       leadingAction,
       leadingIcon,
       placeholder,
+      placeholderTextColor,
       required,
       trailingAction,
       trailingIcon,
@@ -124,7 +127,7 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
       ? colors.error
       : focused
         ? colors.primary
-        : colors.border;
+        : Colors.light.border;
     const accentColor = hasError
       ? colors.error
       : focused
@@ -169,6 +172,7 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
         <TextInput
           {...inputProps}
           placeholder={placeholder}
+          placeholderTextColor={placeholderTextColor ?? colors.textMuted}
           secureTextEntry={isPassword && !passwordVisible}
           onFocus={(event) => {
             setFocused(true);
@@ -181,7 +185,11 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
           value={value}
           ref={ref}
           onChangeText={onChangeText}
-          style={[styles.input, { color: colors.onSurface }, inputStyle]}
+          style={[
+            styles.input,
+            { color: Colors.light.onSurface },
+            inputStyle,
+          ]}
         />
 
         {trailingAction ? (
@@ -215,9 +223,13 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
         )}
       </View>
 
-      {error && (
-        <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
-      )}
+      {error ? (
+        <Text style={[styles.feedback, { color: colors.error }]}>{error}</Text>
+      ) : helperText ? (
+        <Text style={[styles.feedback, { color: colors.textMuted }]}>
+          {helperText}
+        </Text>
+      ) : null}
     </View>
     );
   },
@@ -253,7 +265,7 @@ const styles = StyleSheet.create({
     outlineStyle: "solid",
     outlineWidth: 0,
   },
-  error: {
+  feedback: {
     marginTop: 4,
     fontSize: 12,
     lineHeight: 16,

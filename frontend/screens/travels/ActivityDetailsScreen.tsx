@@ -1,75 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 
 import { View, StyleSheet, Alert } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedInput } from '@/components/ThemedInput';
 import { Header } from '@/components/Header';
-import { ThemedButton } from '@/components/ThemedButton';
-import { ThemedDate } from '@/components/ThemedDate';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Colors } from "@/constants/Colors";
-import { createActivity, getTravelActivity } from '@/services/api/activity';
-import { Categories } from '@/components/Categories';
 import { IconCategory } from '@/components/IconCategory';
 import { Participants } from '@/components/Participants';
+import { getTravelActivity } from "@/services/api/activity";
 
 export function ActivityDetailsScreen() {
-  const { travel_id, activity_id, mode } = useLocalSearchParams();
-  const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
-  const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
+    const { travel_id, activity_id, mode } = useLocalSearchParams();
+    const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+    const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
 
-  const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
+    const [activity, setActivity] = useState<Activity>(DEFAULT_ACTIVITY);
 
-  useEffect(() => {
-    if (!travelId || !activityId) return;
+    useEffect(() => {
+        if (!travelId || !activityId) return;
 
-    getTravelActivity(travelId, activityId)
-      .then(data => setActivity(data))
-      .catch(e => {
-        console.error(e);
-        Alert.alert('Error', 'Failed to fetch activity');
-      });
-  }, [travelId, activityId, mode]);
+        getTravelActivity(travelId, activityId)
+            .then(data => setActivity(data))
+            .catch(e => {
+                console.error(e);
+                Alert.alert('Error', 'Failed to fetch activity');
+            });
+    }, [travelId, activityId, mode]);
 
-  return (
-    <ThemedView type='left'>
-      <Header code='003' label={activity.name} />
-      <ThemedView type='left' style={{ width: '100%' }}>
-        <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
-          <IconCategory size={80} />
+    return (
+        <ThemedView type='left'>
+            <Header code='003' label={activity.name} />
+            <ThemedView type='left' style={{ width: '100%' }}>
+                <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
+                    <IconCategory size={80} />
+                </ThemedView>
+                <ThemedText style={styles.description}>{activity.description}</ThemedText>
+                <ThemedText type="underlined">Information</ThemedText>
+                <ThemedView type='list' margin={8} style={styles.container}>
+                    <ThemedView type='between' margin={8}>
+                        <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Location</ThemedText>
+                        <ThemedText type='small'>{activity.location}</ThemedText>
+                    </ThemedView>
+                    <ThemedView type='between'>
+                        <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Total price</ThemedText>
+                        <ThemedText type='small'>{activity.price}</ThemedText>
+                    </ThemedView>
+                </ThemedView>
+                <ThemedText type="underlined">People</ThemedText>
+                <Participants size={40} />
+                <ThemedText type="underlined">Others</ThemedText>
+                <ThemedText type="underlined">Documents</ThemedText>
+            </ThemedView>
+            <View style={{ height: 115, width: '100%' }} />
         </ThemedView>
-        <ThemedText style={styles.description}>{activity.description}</ThemedText>
-        <ThemedText type="underlined">Information</ThemedText>
-        <ThemedView type='list' margin={8} style={styles.container}>
-          <ThemedView type='between' margin={8}>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Location</ThemedText>
-            <ThemedText type='small'>{activity.location}</ThemedText>
-          </ThemedView>
-          <ThemedView type='between'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Total price</ThemedText>
-            <ThemedText type='small'>{activity.price}</ThemedText>
-          </ThemedView>
-        </ThemedView>
-        <ThemedText type="underlined">People</ThemedText>
-        <Participants size={40} />
-        <ThemedText type="underlined">Others</ThemedText>
-        <ThemedText type="underlined">Documents</ThemedText>
-      </ThemedView>
-      <View style={{ height: 115, width:'100%' }}/>
-    </ThemedView>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
-  description: {
-    color: Colors.light.textMuted,
-    marginBottom: 16
-  }, container: {
-    width: '100%',
-    padding: 8,
-    backgroundColor: '#FBFBFB',
-    borderRadius: 4
-  }
+    description: {
+        color: Colors.light.textMuted,
+        marginBottom: 16
+    }, container: {
+        width: '100%',
+        padding: 8,
+        backgroundColor: '#FBFBFB',
+        borderRadius: 4
+    }
 })

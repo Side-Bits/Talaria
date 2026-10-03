@@ -39,13 +39,13 @@ export function TravelDetailsScreen() {
         {planned === 1 ? (
           <>
             {data.Going?.map(travel => (
-              <TravelCard travel={travel} mode={mode} />
+              <TravelCard key={travel.id} travel={travel} mode={mode} />
             ))}
           </>
         ) : planned === 0 ? (
           <>
             {data.Done?.map(travel => (
-              <TravelCard travel={travel} mode={mode} />
+              <TravelCard key={travel.id} travel={travel} mode={mode} />
             ))}
           </>
         ) : (

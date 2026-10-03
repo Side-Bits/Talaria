@@ -6,7 +6,7 @@ import { ThemedCheckbox } from "@/components/ThemedCheckbox";
 import { Alert, StyleSheet, Image } from "react-native";
 import { useSession } from "@/contexts/authContext";
 import { FormInput } from "@/components/FormInput";
-import { signUpSchema } from "@/schemas/auth";
+import { signUpSchema } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

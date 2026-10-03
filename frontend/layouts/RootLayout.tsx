@@ -3,7 +3,6 @@ import { SessionProvider, useSession } from '@/contexts/authContext';
 import { SplashScreenController } from '@/components/Splash';
 
 export function RootLayout() {
-  // While is loading, show the splash screen
   return (
     <SessionProvider>
       <SplashScreenController />
@@ -13,7 +12,12 @@ export function RootLayout() {
 }
 
 function RootNavigator() {
-  const { session } = useSession();
+  const { session, isLoading } = useSession();
+
+  // Do nothing while is loading to keep the splash screen visible.
+  if (isLoading) {
+    return null;
+  }
 
   const DEV_BYPASS_AUTH = false  // TODO: remove before commit
   const isAuthenticated = DEV_BYPASS_AUTH || !!session
