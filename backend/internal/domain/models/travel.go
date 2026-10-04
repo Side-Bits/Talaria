@@ -11,4 +11,5 @@ type Travel struct {
 	EndDate   	time.Time 	`json:"end_date"`
 	Finished  	bool      	`json:"finished"`
 	Description string   	`json:"description"`
+	Image       string   	`json:"image"`
 }

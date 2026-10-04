@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     alignItems: "center",
     bottom: 0,
-    paddingBottom: 16,
+    paddingBottom: 32,
     paddingHorizontal: 16,
     backgroundColor: "transparent",
   },

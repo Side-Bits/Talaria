@@ -26,7 +26,7 @@ export function TravelDetailsScreen() {
   return (
     <ThemedView type='left'>
       <Header code="001" label="My Trips"/>
-      <HeroTravel/>
+      <HeroTravel />
       <Tabs
         data={{
           planned: { label: "Planned", onPress: () => setPlanned(1) },

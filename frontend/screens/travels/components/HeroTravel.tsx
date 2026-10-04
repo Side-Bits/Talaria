@@ -1,16 +1,32 @@
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '../../../components/ThemedView';
-import { StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 
-type Props = & {
-
+type Props = {
+  image?: string;
 };
 
-export function HeroTravel({  }: Props ) {
+export const travelImages: Record<string, any> = {
+  "roma.jpg": require("../../../assets/images/temporal/roma.jpg"),
+  "tailandia.jpg": require("../../../assets/images/temporal/tailandia.jpg"),
+  "pedraforca.jpg": require("../../../assets/images/temporal/pedraforca.jpg"),
+};
+
+export function HeroTravel({ image }: Props) {
+  const imageSource = image ? travelImages[image] : undefined;
+
   return (
     <ThemedView type='left' style={styles.conteiner}>
-      <View style={styles.banner}></View>
+      {imageSource ? (
+        <ImageBackground
+          source={imageSource}
+          style={styles.banner}
+          resizeMode="cover"
+        ></ImageBackground>
+      ) : (
+        <View style={styles.banner}></View>
+      )}
       <ThemedView type='list' style={styles.box}>
         <ThemedText style={styles.name}>[name]</ThemedText>
          <ThemedText style={styles.date}>[date]</ThemedText>
@@ -35,7 +51,7 @@ const styles = StyleSheet.create({
   },
   box: {
     padding: 8,
-    maxHeight: 60
+    maxHeight: 70
   },
   name: {
     fontSize: 16,
