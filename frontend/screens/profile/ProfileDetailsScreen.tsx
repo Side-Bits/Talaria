@@ -11,13 +11,14 @@ import { Colors } from '@/constants/Colors';
 export function ProfileDetailsScreen() {
   const session = useSession();
   const user = session.user;
+  const letter = user?.username ? user.username.charAt(0).toUpperCase() : ' ';
 
   return (
     <ThemedView type='left'>
       <Header code='005' label='Profile' />
       <ThemedView type='list' style={{ width: '100%' }}>
         <ThemedView type='left' margin={32} style={{ alignItems: 'center' }}>
-          <IconProfile size={80} />
+          <IconProfile size={80} letter={letter} />
           <ThemedText type='center' style={{ marginTop: 4 }}>@{user?.username}</ThemedText>
         </ThemedView>
         <ThemedView type='between' margin={16} style={{ gap: 8, borderRadius: 8 }}>
