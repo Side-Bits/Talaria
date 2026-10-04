@@ -41,7 +41,7 @@ export function TravelEditorScreen() {
 
     return (
         <ThemedView type='left'>
-            <Header code='004' label={mode === 'C' ? 'New trip' : travel.name} />
+            <Header code='004' label={'New trip'} />
             <ThemedView type='left' style={{ width: '100%' }}>
                 <Pressable style={styles.hero}>
                     <ThemedView type='center'>
