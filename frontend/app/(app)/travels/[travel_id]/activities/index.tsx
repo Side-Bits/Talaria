@@ -1,5 +1,10 @@
 import { ActivitiesDetailsScreen } from '@/screens/travels/ActivitiesDetailsScreen';
+import { AppScreen } from '@/components/AppScreen';
 
 export default function TabActivities() {
-  return <ActivitiesDetailsScreen />;
+  return (
+    <AppScreen>
+      <ActivitiesDetailsScreen />
+    </AppScreen>
+  );
 }

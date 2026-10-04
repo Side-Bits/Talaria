@@ -1,37 +1,30 @@
 import { Footer } from "@/components/Footer";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
-import { Stack } from "expo-router";
-import { ScrollView, useWindowDimensions } from "react-native";
+import { Slot } from "expo-router";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function AppLayout() {
-  const { height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
 
   return (
     <ThemedView
       type="middle"
-      style={{ position: "relative", backgroundColor: Colors.light.background }}
+      style={{
+        flex: 1,
+        paddingTop: insets.top,
+        backgroundColor: Colors.light.background,
+      }}
     >
-      <ScrollView
-        style={{ maxWidth: 500, width: "100%", height: height, paddingHorizontal: 16 }}
-        contentContainerStyle={{ paddingBottom: 8 }}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled
-      >
+      <View style={{ flex: 1, width: "100%", maxWidth: 500 }}>
         <AppNavigator />
-      </ScrollView>
+      </View>
       <Footer />
     </ThemedView>
   );
 }
 
 function AppNavigator() {
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: { backgroundColor: Colors.light.background },
-      }}
-    />
-  );
+  return <Slot />;
 }
