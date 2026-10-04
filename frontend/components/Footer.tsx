@@ -178,13 +178,13 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     padding: 6,
     gap: 6,
-    borderRadius: 8,
+    borderRadius: 24,
     alignItems: "stretch",
     backgroundColor: "#F5F5F7",
   },
   box: {
     flex: 1,
-    borderRadius: 8,
+    borderRadius: 18,
   },
   inactive: {
     backgroundColor: 'transparent',
