@@ -82,7 +82,7 @@ export function ActivityEditorScreen() {
                     disabled={isSubmitting}
                 />
                 <ThemedView type="between" style={{ width: "100%" }}>
-                    <View>
+                    <View style={{ flex: 1 }}>
                         <FormDate
                             control={control}
                             trigger={trigger}
@@ -92,10 +92,8 @@ export function ActivityEditorScreen() {
                             disabled={isSubmitting}
                         />
                     </View>
-                    <View style={{ width: 40 }}>
-                        <ThemedText type="center">a</ThemedText>
-                    </View>
-                    <View>
+                    <ThemedText type="center" style={{ marginHorizontal: 12, marginBottom: 8 }}>a</ThemedText>
+                    <View style={{ flex: 1 }}>
                         <FormDate
                             control={control}
                             trigger={trigger}

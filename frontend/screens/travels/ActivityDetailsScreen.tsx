@@ -48,10 +48,22 @@ export function ActivityDetailsScreen() {
                         <ThemedText type='small'>{activity.price}</ThemedText>
                     </ThemedView>
                 </ThemedView>
-                <ThemedText type="underlined">People</ThemedText>
-                <Participants size={40} />
-                <ThemedText type="underlined">Others</ThemedText>
-                <ThemedText type="underlined">Documents</ThemedText>
+                <View style={{ width: '100%', marginBottom: 12, }}>
+                    <ThemedText type="underlined">People</ThemedText>
+                    <Participants
+                        size={40}
+                        data={{
+                            1: { id_client: 1, username: 'miquel', background: '#0d0d0d' },
+                            2: { id_client: 2, username: 'gerard', background: '#f78383' },
+                        }}
+                    />
+                </View>
+                <View style={{ width: '100%', marginBottom: 12, }}>
+                    <ThemedText type="underlined">Others</ThemedText>
+                </View>
+                <View style={{ width: '100%', marginBottom: 12, }}>
+                    <ThemedText type="underlined">Documents</ThemedText>
+                </View>
             </ThemedView>
             <View style={{ height: 115, width: '100%' }} />
         </ThemedView>

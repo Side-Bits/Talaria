@@ -144,7 +144,7 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
               ? colors.primary
               : colors.textMuted,
         },
-        required && styles.requiredLabel,
+        /*required && styles.requiredLabel,*/
       ]}
     >
       {label}
@@ -245,9 +245,9 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginBottom: 6,
   },
-  requiredLabel: {
+  /*requiredLabel: {
     fontWeight: "700",
-  },
+  },*/
   inputContainer: {
     minHeight: 48,
     borderWidth: 1,
