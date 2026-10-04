@@ -1,29 +1,39 @@
 import { View } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
+import { IconProfile } from './IconProfile';
 
-type Props = & {
-  size: number;
+type Participant = {
+  id_client: number;
+  username: string;
+  background?: string;
 };
 
-export function Participants({ size }: Props ) {
+type Props = {
+  size: number;
+  data: Record<string, Participant>;
+};
+
+export function Participants({ size, data = {} }: Props) {
+  const participants = Object.values(data);
+
   return (
     <ThemedView type='row'>
-      {Array.from({ length: 3 }).map((_, i) => (
+      {participants.map((participant, i) => (
         <View
+          key={participant.id_client}
           style={{
-            width: size,
-            height: size,
-            backgroundColor: '#000',
             borderRadius: 50,
-            borderWidth: 1.5,
-            borderColor: '#FFF',
             alignItems: 'center',
             justifyContent: 'center',
             marginLeft: i === 0 ? 0 : -size * 0.25,
           }}
         >
-          <ThemedText style={{ color: '#FFF', fontSize: size * 0.5 }}>M</ThemedText>
+          <IconProfile
+            size={size}
+            letter={participant.username.charAt(0).toUpperCase()}
+            background={participant.background}
+          />
         </View>
       ))}
     </ThemedView>

@@ -68,7 +68,7 @@ export function TravelEditorScreen() {
                             disabled={isSubmitting}
                         />
                     </View>
-                    <View style={{ width: 40 }}><ThemedText type='center'>a</ThemedText></View>
+                    <ThemedText type="center" style={{ marginHorizontal: 12, marginBottom: 8 }}>a</ThemedText>
                     <View style={{ flex: 1 }}>
                         <FormDate
                             control={control}
@@ -97,11 +97,19 @@ export function TravelEditorScreen() {
                     inputStyle={{ minHeight: 80, paddingTop: 4 }}
                     disabled={isSubmitting}
                 />
-                <ThemedText type="small" muted={true} style={{ marginBottom: 4 }}>People</ThemedText>
-                <Participants size={40} />
+                <View style={{ width: '100%', marginBottom: 12, }}>
+                    <ThemedText type="small" muted={true} style={{ marginBottom: 6, width: '100%' }}>People</ThemedText>
+                    <Participants
+                        size={40} 
+                        data={{
+                            1: { id_client: 1, username: 'miquel', background: '#0d0d0d' },
+                            2: { id_client: 2, username: 'gerard', background: '#f78383' },
+                        }}    
+                    />
+                </View>
                 <ThemedButton
                     title='Add'
-                    style={{ marginTop: 8 }}
+                    buttonStyle={{ marginTop: 12 }}
                     onPress={handleSubmit(handleTravel)}
                     disabled={isSubmitting}
                     loading={isSubmitting}

@@ -33,7 +33,13 @@ export function ActivitiesDetailsScreen() {
       <HeroActivity />
       <ThemedView type='between' style={{ marginBottom: 8 }}>
         <ThemedText>{date}</ThemedText>
-        <Participants size={25} />
+        <Participants
+          size={25}
+          data={{
+            1: { id_client: 1, username: 'miquel', background: '#0d0d0d' },
+            2: { id_client: 2, username: 'gerard', background: '#f78383' },
+          }}
+        />
       </ThemedView>
       <ThemedText style={styles.description}>{description}</ThemedText>
       <ThemedText type="underlined">Activities</ThemedText>
