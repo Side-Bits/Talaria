@@ -13,8 +13,9 @@ import { Participants } from "@/components/Participants";
 import { Colors } from "@/constants/Colors";
 
 export function ActivitiesDetailsScreen() {
-  const { travel_id, name, mode, date, description } = useLocalSearchParams();
+  const { travel_id, name, mode, date, description, image } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+  const travelImage = Array.isArray(image) ? image[0] : image;
   const [activity, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export function ActivitiesDetailsScreen() {
   return (
     <ThemedView type="left" style={{ marginBottom: 64 }}>
       <Header code="002" label={String(name)}/>
-      <HeroActivity />
+      <HeroActivity image={travelImage} />
       <ThemedView type='between' style={{ marginBottom: 8 }}>
         <ThemedText>{date}</ThemedText>
         <Participants

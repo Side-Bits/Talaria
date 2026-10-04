@@ -18,6 +18,7 @@ type CreateTravelRequest struct {
 	StartDate 	string `json:"start_date" binding:"required" example:"2026-07-01"`
 	EndDate   	string `json:"end_date" binding:"required" example:"2026-07-10"`
 	Description string `json:"description" example:"This summer, I am going to travel with my family to the beach."`
+	Image		string `json:"image" example:"iVBORw0KGgoAAAANSUhEUgAAAZAAAADICAIAAABJdyC1..."`
 }
 
 type TravelGroupResponse map[string][]models.Travel
@@ -126,7 +127,7 @@ func (h *TravelHandler) CreateTravel(c *gin.Context) {
 	end_date := req.EndDate
 	description:= req.Description
 
-	err := h.travelService.CreateTravel(c.Request.Context(), userID, name, start_date, end_date, description)
+	err := h.travelService.CreateTravel(c.Request.Context(), userID, name, start_date, end_date, description, req.Image)
 	if err != nil {
 		respondInternalError(c, "failed to create travel", err)
 		return

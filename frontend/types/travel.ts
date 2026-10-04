@@ -6,6 +6,7 @@ export interface Travel {
 	start_date: string;
 	end_date: string;
 	description?: string;
+	image?: string;
 }
 
 export const DEFAULT_TRAVEL = {
@@ -14,4 +15,5 @@ export const DEFAULT_TRAVEL = {
 	start_date: today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') + "-" + String(today.getDate()).padStart(2, '0') + '',
 	end_date: today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') + "-" + String(today.getDate()).padStart(2, '0') + '',
 	description: '',
+	image: '',
 }

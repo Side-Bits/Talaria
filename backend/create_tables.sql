@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS travels (
     start_date  DATE NOT NULL,
     end_date    DATE NOT NULL,
     description TEXT,
+    image TEXT,
     id_status   BIGINT REFERENCES statuses(id_status) ON DELETE SET NULL,
     CONSTRAINT chk_travel_dates CHECK (end_date >= start_date)
 );

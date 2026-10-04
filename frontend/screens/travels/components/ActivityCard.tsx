@@ -22,7 +22,6 @@ export function ActivityCard({ activity, mode }: ActivityCardProps) {
       params: {
         travel_id: activity.id_travel,
         activity_id: String(activity.id),
-        mode: mode,
       },
     })
   );
