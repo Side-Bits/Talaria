@@ -13,7 +13,7 @@ type Props = & {
 export function Header({ code, label }: Props) {
   return (
     <ThemedView type='between' style={styles.header}>
-      {(code == "002" || code == "003" || code == "004" || code == "005") && (
+      {code == "002" || code == "003" || code == "004" || code == "005" ? (
         <Pressable
         onPress={() => router.back()} >
           <Ionicons
@@ -22,8 +22,10 @@ export function Header({ code, label }: Props) {
             style={styles.icon}
             color={Colors.light.textMuted} />
         </Pressable>
+      ) : (
+        <View style={{ width: 33, height: 32 }} />
       )}
-      <ThemedText type="title">{label}</ThemedText>
+      <ThemedText type="title" style={{ width: '100%', textAlign: 'center' }}>{label}</ThemedText>
       {code === "001" || code === "002" || code === "003" || code == "005" ? (
         <Ionicons
           name="menu-outline"
@@ -33,7 +35,7 @@ export function Header({ code, label }: Props) {
           /*onPress={() => console.log("menu-outline")}*/
         />
       ) : (
-        <View />
+        <View style={{ width: 33, height: 32 }} />
       )}
     </ThemedView>
   );
