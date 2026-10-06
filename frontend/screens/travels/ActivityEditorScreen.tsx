@@ -16,7 +16,7 @@ import { z } from "zod";
 import { useEffect } from "react";
 
 export function ActivityEditorScreen() {
-    const { travel_id, activity_id, mode } = useLocalSearchParams();
+    const { travel_id, activity_id } = useLocalSearchParams();
     const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
     const activityId = Array.isArray(activity_id)
         ? activity_id[0]
@@ -62,7 +62,7 @@ export function ActivityEditorScreen() {
                 console.error(error);
                 Alert.alert("Error", "Failed to fetch activity");
             });
-    }, [travelId, activityId, mode, reset]);
+    }, [travelId, activityId, reset]);
 
     return (
         <ThemedView type="left">

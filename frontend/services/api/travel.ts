@@ -2,12 +2,15 @@ import { Travel } from "@/types/travel"
 import { api } from "../api"
 
 const ENDPOINTS = {
-	getTravels: 'api/travels'
-
+	getTravels: 'api/travels',
 }
 
 export function getTravels() {
 	return api.get<{ G?: Travel[]; D?: Travel[] }>(ENDPOINTS.getTravels)
+}
+
+export function getTravel(travel_id: string) {
+    return api.get<Travel>(`${ENDPOINTS.getTravels}/${travel_id}`)
 }
 
 export function createTravel(travel: Travel) {

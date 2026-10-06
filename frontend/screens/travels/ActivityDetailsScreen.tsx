@@ -12,7 +12,7 @@ import { Participants } from '@/components/Participants';
 import { getTravelActivity } from "@/services/api/activity";
 
 export function ActivityDetailsScreen() {
-    const { travel_id, activity_id, mode } = useLocalSearchParams();
+    const { travel_id, activity_id } = useLocalSearchParams();
     const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
     const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
 
@@ -27,7 +27,7 @@ export function ActivityDetailsScreen() {
                 console.error(e);
                 Alert.alert('Error', 'Failed to fetch activity');
             });
-    }, [travelId, activityId, mode]);
+    }, [travelId, activityId]);
 
     return (
         <ThemedView type='left'>

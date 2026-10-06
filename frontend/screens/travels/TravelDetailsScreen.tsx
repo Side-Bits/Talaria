@@ -10,7 +10,6 @@ import { HeroTravel } from '@/screens/travels/components/HeroTravel';
 import { TravelCard } from './components/TravelCard';
 
 export function TravelDetailsScreen() {
-  const mode: string = 'V';
   const [data, setTravels] = useState<Record<string, Travel[]>>({});
   const [planned, setPlanned] = useState(1);
 
@@ -39,13 +38,13 @@ export function TravelDetailsScreen() {
         {planned === 1 ? (
           <>
             {data.Going?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} mode={mode} />
+              <TravelCard key={travel.id} travel={travel} />
             ))}
           </>
         ) : planned === 0 ? (
           <>
             {data.Done?.map(travel => (
-              <TravelCard key={travel.id} travel={travel} mode={mode} />
+              <TravelCard key={travel.id} travel={travel} />
             ))}
           </>
         ) : (
