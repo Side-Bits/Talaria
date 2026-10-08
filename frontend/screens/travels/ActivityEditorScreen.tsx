@@ -87,6 +87,7 @@ export function ActivityEditorScreen() {
                             control={control}
                             trigger={trigger}
                             name="start_date"
+                            mode="datetime"
                             label="Start date"
                             required
                             disabled={isSubmitting}
@@ -98,6 +99,7 @@ export function ActivityEditorScreen() {
                             control={control}
                             trigger={trigger}
                             name="end_date"
+                            mode="datetime"
                             label="End date"
                             required
                             disabled={isSubmitting}
