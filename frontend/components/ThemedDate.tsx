@@ -8,7 +8,12 @@ import {
 import { Colors } from "@/constants/Colors";
 
 const DATE_PLACEHOLDER = "DD/MM/YYYY";
+const DATETIME_PLACEHOLDER = "DD/MM/YYYY HH:mm";
 const ISO_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/; // YYYY-MM-DD
+const ISO_DATETIME_PATTERN =
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?Z$/;
+
+export type ThemedDateMode = "date" | "datetime";
 
 /** Indica si un año es bisiesto */
 function isLeapYear(year: number) {
@@ -53,6 +58,24 @@ function formatTypedDate(value: string) {
     return [day, month, year].filter(Boolean).join("/");
 }
 
+function formatTypedDateTime(value: string) {
+    const digits = value.replace(/\D/g, "").slice(0, 12);
+    const dateDigits = digits.slice(0, 8);
+    const timeDigits = digits.slice(8, 12);
+    const date = [
+        dateDigits.slice(0, 2),
+        dateDigits.slice(2, 4),
+        dateDigits.slice(4, 8),
+    ]
+        .filter(Boolean)
+        .join("/");
+    const time = [timeDigits.slice(0, 2), timeDigits.slice(2, 4)]
+        .filter(Boolean)
+        .join(":");
+
+    return [date, time].filter(Boolean).join(" ");
+}
+
 /**
  * Convierte una fecha valida de `DD/MM/AAAA` a `AAAA-MM-DD`.
  * Devuelve `null` cuando la fecha está incompleta
@@ -79,10 +102,47 @@ function displayToIso(value: string) {
     return `${yearText}-${monthText}-${dayText}`;
 }
 
+function displayToIsoDateTime(value: string) {
+    const [dateText, timeText] = value.split(" ");
+    const date = displayToIso(dateText ?? "");
+    const [hourText, minuteText] = (timeText ?? "").split(":");
+
+    if (
+        !date ||
+        hourText?.length !== 2 ||
+        minuteText?.length !== 2 ||
+        Number(hourText) > 23 ||
+        Number(minuteText) > 59
+    ) {
+        return null;
+    }
+
+    return `${date}T${hourText}:${minuteText}:00Z`;
+}
+
 /**
  * Convierte una fecha ISO válida al formato visible
  */
-function isoToDisplay(value: string) {
+function isoToDisplay(value: string, mode: ThemedDateMode) {
+    if (mode === "datetime") {
+        const match = ISO_DATETIME_PATTERN.exec(value);
+
+        if (!match) {
+            return value;
+        }
+
+        const [, yearText, monthText, dayText, hourText, minuteText] = match;
+        const day = Number(dayText);
+        const month = Number(monthText);
+        const year = Number(yearText);
+        const hour = Number(hourText);
+        const minute = Number(minuteText);
+
+        return isValidDate(day, month, year) && hour <= 23 && minute <= 59
+            ? `${dayText}/${monthText}/${yearText} ${hourText}:${minuteText}`
+            : value;
+    }
+
     const match = ISO_DATE_PATTERN.exec(value);
 
     if (!match) {
@@ -109,6 +169,8 @@ export type ThemedDateProps = Omit<
     | "type"
     | "value"
 > & {
+    /** Fecha simple o fecha y hora en formato UTC, según el modo seleccionado. */
+    mode?: ThemedDateMode;
     /** Fecha ISO (`AAAA-MM-DD`) o valor visible todavía incompleto */
     value?: string;
     /**
@@ -140,30 +202,36 @@ export const ThemedDate = forwardRef<TextInput, ThemedDateProps>(
     function ThemedDate(
         {
             controlStyle,
-            helperText = DATE_PLACEHOLDER,
+            helperText,
             inputStyle,
             label,
+            mode = "date",
             onChangeText,
-            placeholder = DATE_PLACEHOLDER,
+            placeholder,
             value = "",
             ...inputProps
         },
         ref,
     ) {
         const [displayValue, setDisplayValue] = useState(() =>
-            isoToDisplay(value),
+            isoToDisplay(value, mode),
         );
 
         useEffect(() => {
-            setDisplayValue(isoToDisplay(value));
-        }, [value]);
+            setDisplayValue(isoToDisplay(value, mode));
+        }, [mode, value]);
 
         const handleChange = (text: string) => {
             const isoMatch = ISO_DATE_PATTERN.exec(text);
             const nextDisplay = isoMatch
-                ? isoToDisplay(text)
-                : formatTypedDate(text);
-            const isoValue = displayToIso(nextDisplay);
+                ? isoToDisplay(text, mode)
+                : mode === "datetime"
+                  ? formatTypedDateTime(text)
+                  : formatTypedDate(text);
+            const isoValue =
+                mode === "datetime"
+                    ? displayToIsoDateTime(nextDisplay)
+                    : displayToIso(nextDisplay);
 
             setDisplayValue(nextDisplay);
             onChangeText(isoValue ?? nextDisplay);
@@ -176,14 +244,14 @@ export const ThemedDate = forwardRef<TextInput, ThemedDateProps>(
                 autoComplete="off"
                 clearable={false}
                 controlStyle={[styles.control, controlStyle]}
-                helperText={helperText}
+                helperText={helperText ?? (mode === "datetime" ? DATETIME_PLACEHOLDER : DATE_PLACEHOLDER)}
                 inputMode="numeric"
                 inputStyle={[styles.input, inputStyle]}
                 keyboardType="number-pad"
                 label={label}
-                maxLength={10}
+                maxLength={mode === "datetime" ? 16 : 10}
                 onChangeText={handleChange}
-                placeholder={placeholder}
+                placeholder={placeholder ?? (mode === "datetime" ? DATETIME_PLACEHOLDER : DATE_PLACEHOLDER)}
                 ref={ref}
                 type="text"
                 value={displayValue}

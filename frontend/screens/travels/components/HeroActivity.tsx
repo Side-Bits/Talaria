@@ -22,7 +22,7 @@ export function HeroActivity({ image }: Props) {
           source={imageSource}
           style={styles.banner}
           resizeMode="cover"
-        ></ImageBackground>
+        />
       ) : (
         <View style={styles.banner}></View>
       )}
@@ -38,11 +38,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: Colors.light.border
+    borderColor: Colors.light.border,
+    backgroundColor: '#FCFCFC'
   },
   banner: {
     width: '100%',
     height: 138,
-    backgroundColor: '#e6f5f4',
+    backgroundColor: '#fCfCfC',
   },
 });

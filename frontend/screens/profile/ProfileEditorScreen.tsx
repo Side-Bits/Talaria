@@ -13,7 +13,11 @@ export function ProfileEditorScreen() {
 
   return (
     <ThemedView type='left'>
-      <Header code='005' label='Profile' />
+      <Header
+        button_back={true}
+        button_menu={false}
+        label='Profile'
+      />
       <ThemedView type='left' style={{ width: '100%' }}>
         <ThemedInput type='text' label='Username' value={user?.username} />
         <ThemedInput type='text' label='Name' value={''} />

@@ -47,7 +47,7 @@ export function Footer() {
 function FooterButton({
     destination,
     isActive,
-}: {
+} : {
     destination: FooterDestination;
     isActive: boolean;
 }) {

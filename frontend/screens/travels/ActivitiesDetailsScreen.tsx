@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Header } from "@/components/Header";
 import { getTravelActivities } from "@/services/api/activity";
 import { Activity } from "@/types/activity";
@@ -27,30 +27,52 @@ export function ActivitiesDetailsScreen() {
             .catch((e) => console.error("Failed to fetch activities", e));
     }, [travelId]);
 
+    const handlePressCreateActivity = () => {
+        router.push({
+            pathname: "/(app)/travels/[travel_id]/activities/create",
+            params: { travel_id: travelId },
+        });
+    };
+
     return (
         <ThemedView type="left" style={{ marginBottom: 64 }}>
-            <Header code="002" label={String(name)} />
+            <Header
+                button_back={true}
+                button_menu={true}
+                label={String(name)}
+            />
             <HeroActivity image={travelImage} />
             <ThemedView type='between' style={{ marginBottom: 8 }}>
                 <ThemedText>{date}</ThemedText>
                 <Participants
+                    editable={false}
                     size={25}
-                    data={{
-                        1: { id_client: 1, username: 'miquel', background: '#0d0d0d' },
-                        2: { id_client: 2, username: 'gerard', background: '#f78383' },
-                    }}
+                    data={{}}
                 />
             </ThemedView>
             <ThemedText style={styles.description}>{description}</ThemedText>
-            <ThemedText type="underlined">Activities</ThemedText>
-            <Tabs
-                data={{
-                    all: { label: "All", onPress: () => console.log('All') },
-                    d1: { label: "Day 1", onPress: () => console.log('Day 1') },
-                    d2: { label: "Day 2", onPress: () => console.log('Day 2') }
-                }}
-                scroll={true}
-            />
+            {activity.length ? (
+                <>
+                    <ThemedText type="underlined">Activities</ThemedText>
+                    <Tabs
+                        data={{
+                            all: { label: "All", onPress: () => console.log('All') },
+                            d1: { label: "Day 1", onPress: () => console.log('Day 1') },
+                            d2: { label: "Day 2", onPress: () => console.log('Day 2') }
+                        }}
+                        scroll={true}
+                    />
+                </>
+            ) : (
+                <Pressable
+                    style={styles.create}
+                    onPress={handlePressCreateActivity}
+                >
+                    <ThemedView type='center'>
+                        <ThemedText type='default' style={{ color: Colors.light.textMuted }}>Create an activity</ThemedText>
+                    </ThemedView>
+                </Pressable>
+            )}
             <ThemedView type="left" style={{ width: "100%" }}>
                 {activity.map((activity) => (
                     <ActivityCard key={activity.id} activity={activity} />
@@ -64,6 +86,16 @@ export function ActivitiesDetailsScreen() {
 const styles = StyleSheet.create({
     description: {
         color: Colors.light.textMuted,
-        marginBottom: 8
+        marginBottom: 16
+    },
+    create: {
+        width: '100%',
+        minHeight: 45,
+        borderRadius: 8,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: Colors.light.border,
+        backgroundColor: '#fcfcfc',
+        borderStyle: 'dashed',
     }
 });

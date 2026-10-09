@@ -1,5 +1,10 @@
+import { AppScreen } from '@/components/AppScreen';
 import { ActivityEditorScreen } from '@/screens/travels/ActivityEditorScreen';
 
 export default function CreateActivity() {
-    return <ActivityEditorScreen />;
+    return (
+        <AppScreen>
+            <ActivityEditorScreen />
+        </AppScreen> 
+    );
 }

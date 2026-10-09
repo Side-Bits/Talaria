@@ -15,22 +15,26 @@ export function ProfileDetailsScreen() {
 
   return (
     <ThemedView type='left'>
-      <Header code='005' label='Profile' />
+      <Header
+        button_back={true}
+        button_menu={true}
+        label='Profile'
+      />
       <ThemedView type='list' style={{ width: '100%' }}>
         <ThemedView type='left' margin={32} style={{ alignItems: 'center' }}>
           <IconProfile size={80} letter={letter} />
           <ThemedText type='center' style={{ marginTop: 4 }}>@{user?.username}</ThemedText>
         </ThemedView>
-        <ThemedView type='between' margin={16} style={{ gap: 8, borderRadius: 8 }}>
-          <ThemedView type='column' style={ styles.container }>
+        <ThemedView type='between' margin={32} style={{ gap: 8, borderRadius: 8 }}>
+          <ThemedView type='column'>
             <ThemedText type='small'  style={{ color: Colors.light.textMuted }}>Trips</ThemedText>
             <ThemedText type='title'>0</ThemedText>
           </ThemedView>
-          <ThemedView type='column' style={ styles.container }>
+          <ThemedView type='column'>
             <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Countries</ThemedText>
             <ThemedText type='title'>0</ThemedText>
           </ThemedView>
-          <ThemedView type='column' style={ styles.container }>
+          <ThemedView type='column'>
             <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Since</ThemedText>
             <ThemedText type='title'>0</ThemedText>
           </ThemedView>
@@ -81,7 +85,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     padding: 8,
-    backgroundColor: '#FBFBFB',
+    backgroundColor: '#FCFCFC',
     borderRadius: 4
   }
 });

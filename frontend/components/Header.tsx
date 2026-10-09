@@ -6,14 +6,19 @@ import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 
 type Props = & {
-  code: string;
+  button_back: boolean;
+  button_menu: boolean;
   label: string;
 };
 
-export function Header({ code, label }: Props) {
+export function Header({
+    button_back,
+    button_menu,
+    label
+  }: Props) {
   return (
     <ThemedView type='between' style={styles.header}>
-      {code == "002" || code == "003" || code == "004" || code == "005" ? (
+      {button_back ? (
         <Pressable
         onPress={() => router.back()} >
           <Ionicons
@@ -26,7 +31,7 @@ export function Header({ code, label }: Props) {
         <View style={{ width: 33, height: 32 }} />
       )}
       <ThemedText type="title" style={{ width: '100%', textAlign: 'center' }}>{label}</ThemedText>
-      {code === "001" || code === "002" || code === "003" || code == "005" ? (
+      {button_menu ? (
         <Ionicons
           name="menu-outline"
           size={20}

@@ -59,7 +59,11 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
 
     return (
         <ThemedView type='left'>
-            <Header code='004' label={!travel_id ? 'New trip' : travel?.name ?? ""} />
+            <Header
+                button_back={true}
+                button_menu={false}
+                label={!travel_id ? 'Create trip' : travel?.name ?? ""}
+            />
             <ThemedView type='left' style={{ width: '100%' }}>
                 <Pressable style={styles.hero}>
                     <ThemedView type='center'>
@@ -118,11 +122,9 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
                 <View style={{ width: '100%', marginBottom: 12, }}>
                     <ThemedText type="small" muted={true} style={{ marginBottom: 6, width: '100%' }}>People</ThemedText>
                     <Participants
+                        editable={true}
                         size={40}
-                        data={{
-                            1: { id_client: 1, username: 'miquel', background: '#0d0d0d' },
-                            2: { id_client: 2, username: 'gerard', background: '#f78383' },
-                        }}
+                        data={{}}
                     />
                 </View>
                 <ThemedButton
@@ -146,6 +148,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         borderWidth: 1,
         borderColor: Colors.light.border,
+        backgroundColor: '#fcfcfc',
         borderStyle: 'dashed',
     }
 });
