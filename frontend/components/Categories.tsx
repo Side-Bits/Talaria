@@ -10,7 +10,7 @@ export function Categories() {
 
   return (
     <ThemedView type='left' style={styles.container}>
-        <ThemedText type='left' style={styles.label}>Categories</ThemedText>
+        <ThemedText type="small" muted={true} style={{ marginBottom: 6, width: '100%' }}>Categories</ThemedText>
         <ThemedView type='row' style={styles.icons}>
           {Array.from({ length: 3 }, (_, index) => (
             <IconCategory size={40} />
@@ -29,9 +29,5 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     gap: 6,
-  },
-  label: {
-    marginBottom: 4,
-    color: Colors.light.textMuted,
   }
 });

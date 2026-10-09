@@ -24,7 +24,11 @@ export function TravelDetailsScreen() {
 
   return (
     <ThemedView type='left'>
-      <Header code="001" label="My Trips"/>
+      <Header
+        button_back={false}
+        button_menu={true}
+        label="My Trips"
+      />
       <HeroTravel />
       <Tabs
         data={{

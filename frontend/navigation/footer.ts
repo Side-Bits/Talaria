@@ -28,26 +28,23 @@ function firstParam(value: SearchParam): string | undefined {
 export function resolveFooterNavigation(
     segments: readonly string[],
     params: FooterParams,
-): { activeTab: FooterTab | null; destinations: FooterDestination[] } {
+) : { activeTab: FooterTab | null; destinations: FooterDestination[] } {
     // Ignorar grupos como (app)
     const route = segments
         .filter((segment) => !segment.startsWith("("))
         .join("/");
     const travelId = firstParam(params.travel_id);
-    // Admitimos ambos nombres de parámetro y usamos Trip si no hay un nombre disponible.
-    const travelName = firstParam(params.travel_name) || firstParam(params.name) || "Trip";
-    const isTripRoute = /^travels\/\[travel_id\](?:\/|$)/.test(route);
-    const isInsideTrip = Boolean(isTripRoute && travelId);
+
+    const isInsideTrip = Boolean(travelId);
     const isHome = route === "travels";
     const isProfile = route === "id-profile";
-    const isTripOverview = isInsideTrip && route === "travels/[travel_id]/activities";
     const isCreateTrip = route === "travels/create";
     const isCreateActivity = isInsideTrip && route === "travels/[travel_id]/activities/create";
-    const isCreate = isCreateTrip || isCreateActivity;
 
-    const activeTab: FooterTab | null = isCreate
+    const activeTab: FooterTab | null = 
+        isCreateTrip || isCreateActivity
         ? "create"
-        : isInsideTrip
+        : travelId
             ? "trip"
             : isProfile
                 ? "profile"
@@ -63,24 +60,6 @@ export function resolveFooterNavigation(
             method: "replace",
             isCurrentScreen: isHome,
         },
-    ];
-
-    // El botón Trip solo aparece dentro de un viaje
-    if (isInsideTrip && travelId) {
-        destinations.push({
-            id: "trip",
-            label: "Trip",
-            href: {
-                pathname: "/(app)/travels/[travel_id]/activities",
-                params: { travel_id: travelId, name: travelName },
-            },
-            method: "replace",
-            isCurrentScreen: isTripOverview,
-        });
-    }
-
-    // El botón + crea una actividad dentro de un viaje y un viaje en las demás pantallas.
-    destinations.push(
         {
             id: "create",
             label: isInsideTrip ? "Create activity" : "Create trip",
@@ -90,9 +69,11 @@ export function resolveFooterNavigation(
                         pathname: "/(app)/travels/[travel_id]/activities/create",
                         params: { travel_id: travelId },
                     }
-                    : { pathname: "/(app)/travels/create" },
+                    : {
+                        pathname: "/(app)/travels/create"
+                    },
             method: "push",
-            isCurrentScreen: isCreate,
+            isCurrentScreen: isInsideTrip && travelId ? isCreateTrip : isCreateActivity,
         },
         {
             id: "profile",
@@ -101,7 +82,7 @@ export function resolveFooterNavigation(
             method: "replace",
             isCurrentScreen: isProfile,
         },
-    );
+    ];
 
     return { activeTab, destinations };
 }

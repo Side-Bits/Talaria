@@ -31,7 +31,11 @@ export function ActivityDetailsScreen() {
 
     return (
         <ThemedView type='left'>
-            <Header code='003' label={activity.name} />
+            <Header 
+                button_back={true}
+                button_menu={true}
+                label={activity.name}
+            />
             <ThemedView type='left' style={{ width: '100%' }}>
                 <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
                     <IconCategory size={80} />
@@ -51,11 +55,9 @@ export function ActivityDetailsScreen() {
                 <View style={{ width: '100%', marginBottom: 12, }}>
                     <ThemedText type="underlined">People</ThemedText>
                     <Participants
+                        editable={true}
                         size={40}
-                        data={{
-                            1: { id_client: 1, username: 'miquel', background: '#0d0d0d' },
-                            2: { id_client: 2, username: 'gerard', background: '#f78383' },
-                        }}
+                        data={{}}
                     />
                 </View>
                 <View style={{ width: '100%', marginBottom: 12, }}>

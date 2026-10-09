@@ -14,6 +14,7 @@ import { activitySchema } from "@/schemas/activity.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect } from "react";
+import { Participants } from "@/components/Participants";
 
 export function ActivityEditorScreen() {
     const { travel_id, activity_id } = useLocalSearchParams();
@@ -67,8 +68,9 @@ export function ActivityEditorScreen() {
     return (
         <ThemedView type="left">
             <Header
-                code="003"
-                label={activityName}
+                button_back={true}
+                button_menu={false}
+                label={!activityId ? 'Create activity' : activityName ?? ""}
             />
             <ThemedView type="left" style={{ width: "100%" }}>
                 <Categories />
@@ -132,6 +134,14 @@ export function ActivityEditorScreen() {
                     inputStyle={{ minHeight: 80, paddingTop: 4 }}
                     disabled={isSubmitting}
                 />
+                <View style={{ width: '100%', marginBottom: 12, }}>
+                    <ThemedText type="small" muted={true} style={{ marginBottom: 6, width: '100%' }}>People</ThemedText>
+                    <Participants
+                        editable={true}
+                        size={40}
+                        data={{}}
+                    />
+                </View>
                 <ThemedButton
                     title="Add"
                     id="buttonAdd"
