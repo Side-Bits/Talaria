@@ -12,44 +12,54 @@ type Props = & {
 };
 
 export function Header({
-    button_back,
-    button_menu,
-    label
-  }: Props) {
+  button_back,
+  button_menu,
+  label
+}: Props) {
   return (
     <ThemedView type='between' style={styles.header}>
-      {button_back ? (
-        <Pressable
-        onPress={() => router.back()} >
+      <View style={styles.action}>
+        {button_back && (
+          <Pressable onPress={() => router.back()}>
+            <Ionicons
+              name="chevron-back-outline"
+              size={20}
+              style={styles.icon}
+              color={Colors.light.textMuted}
+            />
+          </Pressable>
+        )}
+      </View>
+      <ThemedText type="title" style={styles.title}>{label}</ThemedText>
+      <View style={styles.action}>
+        {button_menu && (
           <Ionicons
-            name="chevron-back-outline"
+            name="menu-outline"
             size={20}
             style={styles.icon}
-            color={Colors.light.textMuted} />
-        </Pressable>
-      ) : (
-        <View style={{ width: 33, height: 32 }} />
-      )}
-      <ThemedText type="title" style={{ width: '100%', textAlign: 'center' }}>{label}</ThemedText>
-      {button_menu ? (
-        <Ionicons
-          name="menu-outline"
-          size={20}
-          style={styles.icon}
-          color={Colors.light.onSurface}
-          /*onPress={() => console.log("menu-outline")}*/
-        />
-      ) : (
-        <View style={{ width: 33, height: 32 }} />
-      )}
+            color={Colors.light.onSurface}
+          />
+        )}
+      </View>
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
+    width: '100%',
     paddingVertical: 32,
     alignItems: 'center',
+  },
+  title: {
+    flex: 1,
+    textAlign: 'center'
+  },
+  action: {
+    width: 32,
+    minHeight: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   icon: {
     paddingVertical: 4,
