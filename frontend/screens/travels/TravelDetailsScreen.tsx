@@ -11,7 +11,7 @@ import { TravelCard } from './components/TravelCard';
 
 export function TravelDetailsScreen() {
   const [data, setTravels] = useState<Record<string, Travel[]>>({});
-  const [planned, setPlanned] = useState(1);
+  const [activeTab, setActiveTab] = useState('planned');
 
   useEffect(() => {
     getTravels()
@@ -32,20 +32,22 @@ export function TravelDetailsScreen() {
       <HeroTravel />
       <Tabs
         data={{
-          planned: { label: "Planned", onPress: () => setPlanned(1) },
-          undated: { label: "Undated", onPress: () => setPlanned(2) },
-          completed: { label: "Completed", onPress: () => setPlanned(0) }
+          planned: { label: "Planned" },
+          undated: { label: "Undated" },
+          completed: { label: "Completed" }
         }}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
         scroll={false}
       />
       <ThemedView type='left' style={{ width: '100%' }}>
-        {planned === 1 ? (
+        {activeTab === 'planned' ? (
           <>
             {data.Going?.map(travel => (
               <TravelCard key={travel.id} travel={travel} />
             ))}
           </>
-        ) : planned === 0 ? (
+        ) : activeTab === 'completed' ? (
           <>
             {data.Done?.map(travel => (
               <TravelCard key={travel.id} travel={travel} />
@@ -54,7 +56,7 @@ export function TravelDetailsScreen() {
         ) : (
           <></>
         )}
-        <View style={{ height: 115, width:'100%' }}/>
+        <View style={{ height: 115, width: '100%' }} />
       </ThemedView>
     </ThemedView>
   );
