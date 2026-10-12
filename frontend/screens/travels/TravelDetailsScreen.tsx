@@ -44,6 +44,8 @@ export function TravelDetailsScreen() {
           <ThemedButton
             title="Try again"
             onPress={retry}
+            variant='outline'
+            leadingIcon={props => <Ionicons name="refresh-outline" {...props} />}
             buttonStyle={styles.retryButton}
             textStyle={styles.retryText}
           />
@@ -164,10 +166,8 @@ const styles = StyleSheet.create({
     width: 'auto',
     minWidth: 144,
     marginTop: 4,
-    backgroundColor: Colors.light.error
   },
   retryText: {
-    color: Colors.light.onError,
     fontWeight: '600',
   },
 });
