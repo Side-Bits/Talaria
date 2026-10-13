@@ -5,10 +5,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"time"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
+	"time"
 )
 
 type TokenRepository struct {
@@ -23,10 +22,6 @@ func (r *TokenRepository) CreateDefault(ctx context.Context, tokenHash string, u
 	query := `
 	      INSERT INTO session_token (id_user, token_hash, created_at, expires_at)
 		    VALUES ($1, $2, $3, $4)
-	      ON CONFLICT (id_user) DO UPDATE SET
-            token_hash = EXCLUDED.token_hash,
-            created_at = EXCLUDED.created_at,
-            expires_at = EXCLUDED.expires_at;
     `
 	_, err := r.db.Exec(ctx, query,
 		userID,
@@ -76,4 +71,15 @@ func (r *TokenRepository) CleanupExpiredTokens(ctx context.Context) (int64, erro
 	}
 
 	return result.RowsAffected(), nil
+}
+
+// Removes all session tokens of a user
+func (r *TokenRepository) CloseAllSessions(ctx context.Context, userId int64) error {
+	query := `DELETE FROM session_token WHERE id_user = $1`
+	_, err := r.db.Exec(ctx, query, userId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

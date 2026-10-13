@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS session_token (
     id_user     BIGINT NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
     token_hash  VARCHAR(64) NOT NULL UNIQUE,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    expires_at  TIMESTAMPTZ NOT NULL,
+    expires_at  TIMESTAMPTZ NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS clients (
