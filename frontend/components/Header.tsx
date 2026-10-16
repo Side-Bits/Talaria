@@ -12,48 +12,42 @@ type Props = & {
 };
 
 export function Header({
-    button_back,
-    button_menu,
-    label
-  }: Props) {
+  button_back,
+  button_menu,
+  label
+}: Props) {
   return (
     <ThemedView type='between' style={styles.header}>
-      {button_back ? (
-        <Pressable onPress={() => router.back()} style={styles.side}>
-          <Ionicons
-            name="chevron-back-outline"
-            size={20}
-            style={styles.icon}
-          />
-        </Pressable>
-      ) : (
-        <View style={styles.side} />
-      )}
-      <ThemedText
-        type="title"
-        numberOfLines={1}
-        ellipsizeMode="tail"
-        style={styles.label}
-      >
-        {label}
-      </ThemedText>
-      {button_menu ? (
-        <Pressable style={styles.side}>
+      <View style={styles.action}>
+        {button_back && (
+          <Pressable onPress={() => router.back()}>
+            <Ionicons
+              name="chevron-back-outline"
+              size={20}
+              style={styles.icon}
+              color={Colors.light.textMuted}
+            />
+          </Pressable>
+        )}
+      </View>
+      <ThemedText type="title" style={styles.title}>{label}</ThemedText>
+      <View style={styles.action}>
+        {button_menu && (
           <Ionicons
             name="menu-outline"
             size={20}
             style={styles.icon}
+            color={Colors.light.onSurface}
           />
-        </Pressable>
-      ) : (
-        <View style={styles.side} />
-      )}
+        )}
+      </View>
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
+    width: '100%',
     paddingVertical: 32,
     alignItems: 'center',
   },
@@ -67,6 +61,16 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     textAlign: 'center',
+  },
+  title: {
+    flex: 1,
+    textAlign: 'center'
+  },
+  action: {
+    width: 32,
+    minHeight: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   icon: {
     paddingVertical: 4,

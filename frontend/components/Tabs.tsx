@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
@@ -6,17 +5,16 @@ import { Colors } from "@/constants/Colors";
 
 type Tab = {
   label: string;
-  onPress: () => void;
 };
 
 type Props = {
   data: Record<string, Tab>;
+  activeTab: string;
+  onTabChange: (key: string) => void;
   scroll: boolean;
 };
 
-export function Tabs({ data }: Props) {
-  const [activeTab, setActiveTab] = useState(Object.keys(data)[0]);
-
+export function Tabs({ data, activeTab, onTabChange }: Props) {
   return (
     <View style={styles.tabs}>
       <ThemedView type="between" style={styles.container}>
@@ -28,10 +26,7 @@ export function Tabs({ data }: Props) {
                 styles.text,
                 activeTab === key ? styles.active : undefined,
               ]}
-              onPress={() => {
-                setActiveTab(key);
-                tab.onPress();
-              }}
+              onPress={() => onTabChange(key)}
             >
               {tab.label}
             </ThemedText>
