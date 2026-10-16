@@ -56,7 +56,7 @@ export function TravelDetailsScreen() {
     if (activeTab === 'undated') {
       return (
         <View style={styles.feedback}>
-          <ThemedText muted>Undated trips aren’t available yet.</ThemedText>
+          <ThemedText textMuted={true}>Undated trips aren’t available yet.</ThemedText>
         </View>
       );
     }
@@ -66,7 +66,7 @@ export function TravelDetailsScreen() {
     if (trips.length === 0) {
       return (
         <View style={styles.feedback}>
-          <ThemedText muted>
+          <ThemedText textMuted={true}>
             {activeTab === 'planned' ? 'No planned trips yet.' : 'No completed trips yet.'}
           </ThemedText>
           <ThemedText
