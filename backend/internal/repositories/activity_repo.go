@@ -27,6 +27,7 @@ func (r *ActivityRepository) GetActivities(ctx context.Context, id_travel string
 			a.start_date,
 			a.end_date,
 			a.price
+			a.price,
 			DENSE_RANK() OVER (ORDER BY a.end_date ASC) AS day
 		FROM activities a
 		WHERE id_travel = $1
@@ -49,6 +50,7 @@ func (r *ActivityRepository) GetActivities(ctx context.Context, id_travel string
 			&activity.StartDate,
 			&activity.EndDate,
 			&activity.Price,
+			&activity.Day,
 		); err != nil {
 			return nil, err
 		}

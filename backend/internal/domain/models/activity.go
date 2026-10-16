@@ -13,5 +13,6 @@ type Activity struct {
 	StartDate   time.Time `json:"start_date"`
 	EndDate     time.Time `json:"end_date"`
 	Price       float64   `json:"price"`
+	Day         int64     `json:"day"`
 	Finished    bool      `json:"finished"`
 }
