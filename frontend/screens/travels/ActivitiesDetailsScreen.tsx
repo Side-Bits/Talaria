@@ -18,6 +18,8 @@ export function ActivitiesDetailsScreen() {
     const travelImage = Array.isArray(image) ? image[0] : image;
     const [activity, setActivities] = useState<Activity[]>([]);
 
+    const [day, setDay] = useState(0);
+
     useEffect(() => {
         if (!travelId) return;
         getTravelActivities(travelId)
@@ -56,9 +58,9 @@ export function ActivitiesDetailsScreen() {
                     <ThemedText type="underlined">Activities</ThemedText>
                     <Tabs
                         data={{
-                            all: { label: "All", onPress: () => console.log('All') },
-                            d1: { label: "Day 1", onPress: () => console.log('Day 1') },
-                            d2: { label: "Day 2", onPress: () => console.log('Day 2') }
+                            all: { label: "All", onPress: () => setDay(0) },
+                            d1: { label: "Day 1", onPress: () => setDay(1) },
+                            d2: { label: "Day 2", onPress: () => setDay(2) }
                         }}
                         scroll={true}
                     />
@@ -69,16 +71,16 @@ export function ActivitiesDetailsScreen() {
                     onPress={handlePressCreateActivity}
                 >
                     <ThemedView type='center'>
-                        <ThemedText type='default' style={{ color: Colors.light.textMuted }}>Create an activity</ThemedText>
+                        <ThemedText type='default' textMuted={true}>Create an activity</ThemedText>
                     </ThemedView>
                 </Pressable>
             )}
             <ThemedView type="left" style={{ width: "100%" }}>
-                {activity.map((activity) => (
-                    <ActivityCard key={activity.id} activity={activity} />
-                ))}
+                {activity.filter((item) => day === 0 || item.day === day)
+                    .map((item) => (<ActivityCard key={item.id} activity={item} />))
+                }
             </ThemedView>
-            <View style={{ height: 115, width: "100%" }} />
+            <View style={{ height: 103, width: "100%" }} />
         </ThemedView>
     );
 }
@@ -95,7 +97,6 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         borderWidth: 1,
         borderColor: Colors.light.border,
-        backgroundColor: '#fcfcfc',
-        borderStyle: 'dashed',
+        backgroundColor: '#FCFCFC'
     }
 });

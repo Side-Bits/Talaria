@@ -135,7 +135,7 @@ export function ActivityEditorScreen() {
                     disabled={isSubmitting}
                 />
                 <View style={{ width: '100%', marginBottom: 12, }}>
-                    <ThemedText type="small" muted={true} style={{ marginBottom: 6, width: '100%' }}>People</ThemedText>
+                    <ThemedText type="small" textMuted={true} style={{ marginBottom: 6, width: '100%' }}>People</ThemedText>
                     <Participants
                         editable={true}
                         size={40}
@@ -151,7 +151,7 @@ export function ActivityEditorScreen() {
                     loading={isSubmitting}
                 />
             </ThemedView>
-            <View style={{ height: 115, width: "100%" }} />
+            <View style={{ height: 103, width: "100%" }} />
         </ThemedView>
     );
 }

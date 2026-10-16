@@ -67,7 +67,7 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
             <ThemedView type='left' style={{ width: '100%' }}>
                 <Pressable style={styles.hero}>
                     <ThemedView type='center'>
-                        <ThemedText type='default' style={{ color: Colors.light.textMuted }}>Add front page</ThemedText>
+                        <ThemedText type='default' textMuted={true}>Add front page</ThemedText>
                     </ThemedView>
                 </Pressable>
                 <FormInput
@@ -120,7 +120,7 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
                     disabled={isSubmitting}
                 />
                 <View style={{ width: '100%', marginBottom: 12, }}>
-                    <ThemedText type="small" muted={true} style={{ marginBottom: 6, width: '100%' }}>People</ThemedText>
+                    <ThemedText type="small" textMuted={true} style={{ marginBottom: 6, width: '100%' }}>People</ThemedText>
                     <Participants
                         editable={true}
                         size={40}
@@ -135,7 +135,7 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
                     loading={isSubmitting}
                 />
             </ThemedView>
-            <View style={{ height: 115, width: '100%' }} />
+            <View style={{ height: 103, width: '100%' }} />
         </ThemedView>
     );
 }
@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         borderWidth: 1,
         borderColor: Colors.light.border,
-        backgroundColor: '#fcfcfc',
-        borderStyle: 'dashed',
+        backgroundColor: '#FCFCFC'
     }
 });

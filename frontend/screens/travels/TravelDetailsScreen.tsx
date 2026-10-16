@@ -54,7 +54,7 @@ export function TravelDetailsScreen() {
         ) : (
           <></>
         )}
-        <View style={{ height: 115, width:'100%' }}/>
+        <View style={{ height: 103, width:'100%' }}/>
       </ThemedView>
     </ThemedView>
   );

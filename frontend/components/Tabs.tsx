@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     maxHeight: 44,
     padding: 6,
     borderRadius: 16,
-    backgroundColor: "#F5F5F7",
+    backgroundColor: Colors.light.navigationBackground,
     marginBottom: 16,
   },
   container: {
@@ -61,11 +61,11 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 8,
     borderRadius: 12,
-    color: "#97969D",
+    color: Colors.light.navigationInactive,
     textAlignVertical: "center",
   },
   active: {
-    backgroundColor: Colors.light.onBackground,
-    color: Colors.light.surface,
+    backgroundColor: Colors.light.navigationActive,
+    color: Colors.light.onNavigationActive,
   },
 });

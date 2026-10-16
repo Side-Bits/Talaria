@@ -39,7 +39,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
                 <ThemedView type="list" style={styles.box2}>
                     <ThemedText
                         type="default"
-                        style={{ color: Colors.light.textMuted }}
+                        textMuted={true}
                     >
                         {formatActivityDates(activity.start_date, activity.end_date)}
                     </ThemedText>

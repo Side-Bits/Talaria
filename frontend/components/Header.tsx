@@ -19,28 +19,34 @@ export function Header({
   return (
     <ThemedView type='between' style={styles.header}>
       {button_back ? (
-        <Pressable
-        onPress={() => router.back()} >
+        <Pressable onPress={() => router.back()} style={styles.side}>
           <Ionicons
             name="chevron-back-outline"
             size={20}
             style={styles.icon}
-            color={Colors.light.textMuted} />
+          />
         </Pressable>
       ) : (
-        <View style={{ width: 33, height: 32 }} />
+        <View style={styles.side} />
       )}
-      <ThemedText type="title" style={{ width: '100%', textAlign: 'center' }}>{label}</ThemedText>
+      <ThemedText
+        type="title"
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={styles.label}
+      >
+        {label}
+      </ThemedText>
       {button_menu ? (
-        <Ionicons
-          name="menu-outline"
-          size={20}
-          style={styles.icon}
-          color={Colors.light.onSurface}
-          /*onPress={() => console.log("menu-outline")}*/
-        />
+        <Pressable style={styles.side}>
+          <Ionicons
+            name="menu-outline"
+            size={20}
+            style={styles.icon}
+          />
+        </Pressable>
       ) : (
-        <View style={{ width: 33, height: 32 }} />
+        <View style={styles.side} />
       )}
     </ThemedView>
   );
@@ -51,12 +57,24 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
     alignItems: 'center',
   },
+  side: {
+    width: 33,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  label: {
+    flex: 1,
+    minWidth: 0,
+    textAlign: 'center',
+  },
   icon: {
     paddingVertical: 4,
     paddingHorizontal: 5,
-    backgroundColor: Colors.light.onSecondary,
+    backgroundColor: 'transparent',
     borderRadius: 8,
     borderWidth: 1,
+    color: Colors.light.onBackground,
     borderColor: Colors.light.border,
   }
 });

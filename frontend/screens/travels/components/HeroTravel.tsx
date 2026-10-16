@@ -29,8 +29,8 @@ export function HeroTravel({ image }: Props) {
         <View style={styles.banner}></View>
       )}
       <ThemedView type='list' style={styles.box}>
-        <ThemedText style={styles.name}>[name]</ThemedText>
-        <ThemedText style={styles.date}>[date]</ThemedText>
+        <ThemedText textMuted={true}>[name]</ThemedText>
+        <ThemedText textMuted={true}>[date]</ThemedText>
       </ThemedView>
     </ThemedView>
   );
@@ -57,8 +57,5 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     marginBottom: 4
-  },
-  date: {
-    color: Colors.light.textMuted
   }
 });

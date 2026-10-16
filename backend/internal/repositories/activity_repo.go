@@ -19,12 +19,18 @@ func (r *ActivityRepository) GetActivities(ctx context.Context, id_travel string
 	var activities []models.Activity
 
 	rows, err := r.db.Query(ctx, `
-		SELECT activities.id_activity, activities.id_travel, activities.name,
-			activities.description, activities.location, activities.start_date,
-			activities.end_date, activities.price
-		FROM activities
-		WHERE activities.id_travel = $1
-		ORDER BY activities.start_date ASC
+		SELECT a.id_activity,
+			a.id_travel,
+			a.name,
+			a.description,
+			a.location,
+			a.start_date,
+			a.end_date,
+			a.price
+			DENSE_RANK() OVER (ORDER BY a.end_date ASC) AS day
+		FROM activities a
+		WHERE id_travel = $1
+		ORDER BY end_date ASC
 	`, id_travel)
 	if err != nil {
 		return nil, err
@@ -98,7 +104,7 @@ func (r *ActivityRepository) GetActivity(ctx context.Context, userID int64, trav
 			a.price,
 			NOW() > a.end_date AS finished
 		FROM activities a
-		INNER JOIN clients_activities ca ON ca.id_activity = a.id_activity
+			INNER JOIN clients_activities ca ON ca.id_activity = a.id_activity
 		WHERE ca.id_user = $1 AND a.id_travel = $2 AND a.id_activity = $3
 	`
 

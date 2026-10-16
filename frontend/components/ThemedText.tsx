@@ -14,10 +14,10 @@ type Props = TextProps & {
     | "left"
     | "right"
     | "underlined";
-  muted?: boolean
+  textMuted?: boolean
 };
 
-export function ThemedText({ type = "default", muted, style, ...rest }: Props) {
+export function ThemedText({ type = "default", textMuted, style, ...rest }: Props) {
   return (
     <Text
       style={[
@@ -32,7 +32,7 @@ export function ThemedText({ type = "default", muted, style, ...rest }: Props) {
         type === "left" ? styles.left : undefined,
         type === "right" ? styles.right : undefined,
         type === "underlined" ? styles.underlined : undefined,
-        muted === true ? styles.muted : undefined,
+        textMuted === true ? styles.textMuted : undefined,
         style
       ]}
       {...rest}
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   link: {
-    color: Colors.light.primary,
+    color: Colors.light.tertiary,
     fontSize: 14,
     cursor: "pointer",
   },
@@ -83,9 +83,10 @@ const styles = StyleSheet.create({
   underlined: {
     fontSize: 14,
     marginBottom: 8,
-    borderRadius: 4
+    borderRadius: 4,
+    color: Colors.light.secondary
   },
-  muted: {
+  textMuted: {
     color: Colors.light.textMuted,
   }
 });

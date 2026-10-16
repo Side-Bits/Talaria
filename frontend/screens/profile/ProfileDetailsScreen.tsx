@@ -27,47 +27,47 @@ export function ProfileDetailsScreen() {
         </ThemedView>
         <ThemedView type='between' margin={32} style={{ gap: 8, borderRadius: 8 }}>
           <ThemedView type='column'>
-            <ThemedText type='small'  style={{ color: Colors.light.textMuted }}>Trips</ThemedText>
             <ThemedText type='title'>0</ThemedText>
+            <ThemedText type='small' textMuted={true}>Trips</ThemedText>
           </ThemedView>
           <ThemedView type='column'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Countries</ThemedText>
             <ThemedText type='title'>0</ThemedText>
+            <ThemedText type='small' textMuted={true}>Countries</ThemedText>
           </ThemedView>
           <ThemedView type='column'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Since</ThemedText>
             <ThemedText type='title'>0</ThemedText>
+            <ThemedText type='small' textMuted={true}>Since</ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedView type='list' margin={8} style={styles.container}>
           <ThemedView type='between' margin={8}>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Name</ThemedText>
+            <ThemedText type='small' textMuted={true}>Name</ThemedText>
             <ThemedText type='small'></ThemedText>
           </ThemedView>
           <ThemedView type='between' margin={8}>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Lasnames</ThemedText>
+            <ThemedText type='small' textMuted={true}>Lasnames</ThemedText>
             <ThemedText type='small'></ThemedText>
           </ThemedView>
           <ThemedView type='between'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Email</ThemedText>
+            <ThemedText type='small' textMuted={true}>Email</ThemedText>
             <ThemedText type='small'>{user?.email}</ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedView type='list' margin={8} style={styles.container}>
           <ThemedView type='between'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Birthdate</ThemedText>
+            <ThemedText type='small' textMuted={true}>Birthdate</ThemedText>
             <ThemedText type='small'></ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedView type='list' margin={8} style={styles.container}>
           <ThemedView type='between'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Language</ThemedText>
+            <ThemedText type='small' textMuted={true}>Language</ThemedText>
             <ThemedText type='small'>Español (ESP)</ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedView type='list' margin={16} style={styles.container}>
           <ThemedView type='between'>
-            <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Currency</ThemedText>
+            <ThemedText type='small' textMuted={true}>Currency</ThemedText>
             <ThemedText type='small'>Euro (EUR)</ThemedText>
           </ThemedView>
         </ThemedView>

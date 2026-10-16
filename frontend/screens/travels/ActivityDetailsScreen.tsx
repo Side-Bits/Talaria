@@ -6,7 +6,6 @@ import { ThemedText } from '@/components/ThemedText';
 import { Header } from '@/components/Header';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
 import { useLocalSearchParams } from 'expo-router';
-import { Colors } from "@/constants/Colors";
 import { IconCategory } from '@/components/IconCategory';
 import { Participants } from '@/components/Participants';
 import { getTravelActivity } from "@/services/api/activity";
@@ -40,15 +39,15 @@ export function ActivityDetailsScreen() {
                 <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
                     <IconCategory size={80} />
                 </ThemedView>
-                <ThemedText style={styles.description}>{activity.description}</ThemedText>
+                <ThemedText style={styles.description} textMuted={true}>{activity.description}</ThemedText>
                 <ThemedText type="underlined">Information</ThemedText>
                 <ThemedView type='list' margin={8} style={styles.container}>
                     <ThemedView type='between' margin={8}>
-                        <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Location</ThemedText>
+                        <ThemedText type='small' textMuted={true}>Location</ThemedText>
                         <ThemedText type='small'>{activity.location}</ThemedText>
                     </ThemedView>
                     <ThemedView type='between'>
-                        <ThemedText type='small' style={{ color: Colors.light.textMuted }}>Total price</ThemedText>
+                        <ThemedText type='small' textMuted={true}>Total price</ThemedText>
                         <ThemedText type='small'>{activity.price}</ThemedText>
                     </ThemedView>
                 </ThemedView>
@@ -67,14 +66,13 @@ export function ActivityDetailsScreen() {
                     <ThemedText type="underlined">Documents</ThemedText>
                 </View>
             </ThemedView>
-            <View style={{ height: 115, width: '100%' }} />
+            <View style={{ height: 103, width: '100%' }} />
         </ThemedView>
     );
 }
 
 const styles = StyleSheet.create({
     description: {
-        color: Colors.light.textMuted,
         marginBottom: 16
     }, container: {
         width: '100%',
