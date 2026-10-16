@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { SplashScreen } from 'expo-router';
 import { useSession } from '@/contexts/authContext';
+import { Colors } from '@/constants/Colors';
 
 // Show the splash screen until the session has been restored.
 SplashScreen.preventAutoHideAsync().catch(() => { });
@@ -20,7 +21,7 @@ export function SplashScreenController() {
   return (
     <View style={styles.container}>
       <Image
-        source={require('@/assets/images/favicon.png')}
+        source={require('@/assets/images/favicon3.png')}
         style={styles.image}
         resizeMode="contain"
         accessibilityLabel="Talaria"
@@ -34,11 +35,11 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.light.background,
     zIndex: 1000,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
   },
 });

@@ -2,6 +2,7 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { IconProfile } from './IconProfile';
 import { useSession } from '@/contexts/authContext';
+import { Colors } from '@/constants/Colors';
 
 type Participant = {
   id_client: number;
@@ -44,7 +45,7 @@ export function Participants({ editable, size, data = {} }: Props) {
           <IconProfile
             size={size}
             letter={'+'}
-            background='#FFF'
+            background={Colors.light.background}
           />
         </Pressable>
       )}

@@ -64,13 +64,13 @@ function FooterButton({
             accessibilityRole="button"
             accessibilityLabel={destination.label}
             accessibilityState={{ selected: isActive }}
-            style={[styles.box, isActive ? styles.active : styles.inactive]}
+            style={[styles.box, isActive ? styles.active : undefined]}
         >
             <ThemedView type="center" style={styles.item}>
                 <Ionicons
                     name={icon.name}
                     size={icon.size}
-                    color={isActive ? Colors.light.surface : Colors.light.textMuted}
+                    color={isActive ? Colors.light.onNavigationActive : Colors.light.navigationInactive}
                 />
             </ThemedView>
         </Pressable>
@@ -95,17 +95,14 @@ const styles = StyleSheet.create({
         gap: 6,
         borderRadius: 24,
         alignItems: "stretch",
-        backgroundColor: "#F5F5F7",
+        backgroundColor: Colors.light.navigationBackground,
     },
     box: {
         flex: 1,
         borderRadius: 18,
     },
-    inactive: {
-        backgroundColor: "transparent",
-    },
     active: {
-        backgroundColor: Colors.light.onBackground,
+        backgroundColor: Colors.light.navigationActive,
     },
     item: {
         flexDirection: "row",

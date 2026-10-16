@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { Colors } from "@/constants/Colors";
 import { IconCategory } from "./IconCategory";
 
 export function Categories() {
@@ -10,7 +9,7 @@ export function Categories() {
 
   return (
     <ThemedView type='left' style={styles.container}>
-        <ThemedText type="small" muted={true} style={{ marginBottom: 6, width: '100%' }}>Categories</ThemedText>
+        <ThemedText type="small" textMuted={true} style={{ marginBottom: 6, width: '100%' }}>Categories</ThemedText>
         <ThemedView type='row' style={styles.icons}>
           {Array.from({ length: 3 }, (_, index) => (
             <IconCategory size={40} />

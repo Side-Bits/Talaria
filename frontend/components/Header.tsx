@@ -51,6 +51,17 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
     alignItems: 'center',
   },
+  side: {
+    width: 33,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  label: {
+    flex: 1,
+    minWidth: 0,
+    textAlign: 'center',
+  },
   title: {
     flex: 1,
     textAlign: 'center'
@@ -64,9 +75,10 @@ const styles = StyleSheet.create({
   icon: {
     paddingVertical: 4,
     paddingHorizontal: 5,
-    backgroundColor: Colors.light.onSecondary,
+    backgroundColor: 'transparent',
     borderRadius: 8,
     borderWidth: 1,
+    color: Colors.light.onBackground,
     borderColor: Colors.light.border,
   }
 });
