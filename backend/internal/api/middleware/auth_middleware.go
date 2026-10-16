@@ -22,6 +22,7 @@ func AuthMiddleware(validator TokenValidator) gin.HandlerFunc {
 		token, err := extractBearerToken(c)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"code":  "TOKEN_MISSING",
 				"error": "missing or invalid authorization header",
 			})
 			return
@@ -32,6 +33,7 @@ func AuthMiddleware(validator TokenValidator) gin.HandlerFunc {
 		if err != nil {
 			// Don't expose internal errors to the client
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"code":  "TOKEN_INVALID",
 				"error": "invalid or expired token",
 			})
 			return
@@ -80,7 +82,7 @@ func GetUserID(c *gin.Context) (int64, error) {
 func GetUserIDOrAbort(c *gin.Context) (int64, bool) {
 	userID, err := GetUserID(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": "TOKEN_EXPIRED", "error": "User not authenticated"})
 		return 0, false
 	}
 

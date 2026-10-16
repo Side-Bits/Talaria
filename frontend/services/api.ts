@@ -1,5 +1,15 @@
 import { getStorageItemAsync } from '@/hooks/useStorageState';
 
+const unauthorizedListeners = new Set<() => void>();
+
+/** Notifica al proveedor de autenticacion sin gestionar el estado de sesion. */
+export function onUnauthorized(listener: () => void): () => void {
+	unauthorizedListeners.add(listener);
+	return () => {
+		unauthorizedListeners.delete(listener);
+	};
+}
+
 /**
  * Opciones adicionales para personalizar una peticion HTTP.
  * `requiresAuth` controla si se debe adjuntar el token de sesion.
@@ -58,6 +68,12 @@ export async function apiRequest<T>(
 
 	// Manejar errores HTTP
 	if (!response.ok) {
+		if (response.status === 401 && requiresAuth) {
+			for (const listener of unauthorizedListeners) {
+				listener();
+			}
+		}
+
 		const errorData = await response.json().catch(() => ({}));
 		throw new ApiError(
 			response.status,
