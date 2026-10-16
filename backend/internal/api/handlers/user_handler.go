@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-
 	"talaria/internal/api/middleware"
 	"talaria/internal/domain/models"
 	"talaria/internal/services"
@@ -46,4 +45,27 @@ func (h *UserHandler) GetUserByToken(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
+}
+
+// LogoutAll godoc
+// @Summary Closes all sessions of an user
+// @Description Removes all token sessoins of an user closing all the open sessions
+// @Tags users
+// @Security BearerAuth
+// @Success 204
+// @Failure 500 {object} ErrorResponse
+// @Router /api/logoutall [get]
+func (h *UserHandler) LogoutAll(c *gin.Context) {
+	userId, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
+		return
+	}
+
+	err := h.userService.CloseAllSessions(c, userId)
+	if err != nil {
+		respondInternalError(c, "Failed to close all sessions", err)
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 }

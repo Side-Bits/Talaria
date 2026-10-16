@@ -1,7 +1,7 @@
-import { use, createContext, type PropsWithChildren } from 'react';
+import { use, useCallback, useEffect, createContext, type PropsWithChildren } from 'react';
 import { useStorageState } from '@/hooks/useStorageState';
 import { User, LoginCredentials, RegisterCredentials } from '@/types/user';
-import { api } from '@/services/api';
+import { api, onUnauthorized } from '@/services/api';
 
 interface AuthContextType {
 	signIn: (credentials: LoginCredentials) => Promise<void>;
@@ -34,6 +34,13 @@ export function SessionProvider({ children }: PropsWithChildren) {
 	const [[isLoadingUser, userData], setUserData] = useStorageState('user');
 	const isLoading = isLoadingSession || isLoadingUser;
 
+	const signOut = useCallback(async (): Promise<void> => {
+		setSession(null);
+		setUserData(null);
+	}, [setSession, setUserData]);
+
+	useEffect(() => onUnauthorized(signOut), [signOut]);
+
 	const signIn = async (credentials: LoginCredentials): Promise<void> => {
 		try {
 			const response = await api.post<{ token: string; user: User }>(
@@ -48,8 +55,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 			setUserData(JSON.stringify(response.user));
 		} catch (error) {
 			// Clear any existing session on error
-			setSession(null);
-			setUserData(null);
+			await signOut();
 			throw error;
 		}
 	};
@@ -69,21 +75,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
 			setUserData(JSON.stringify(response.user));
 		} catch (error) {
 			// Clear any existing session on error
-			setSession(null);
-			setUserData(null);
+			await signOut();
 			throw error;
-		}
-	};
-
-	const signOut = async (): Promise<void> => {
-		try {
-			setSession(null);
-			setUserData(null);
-		} catch (error) {
-			console.error('Sign out error:', error);
-			// Clear local data even if API call fails
-			setSession(null);
-			setUserData(null);
 		}
 	};
 

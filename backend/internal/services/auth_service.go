@@ -94,19 +94,21 @@ func (s *AuthService) Login(ctx context.Context, identifier string, password str
 }
 
 func generateAndSaveNewToken(ctx context.Context, repo *repositories.TokenRepository, user models.User) (string, error) {
-	tokenString, err := utils.GenerateRandomToken(tokenLength)
+	token, tokenHash, err := utils.GenerateRandomToken(tokenLength)
 	if err != nil {
 		return "", err
 	}
 
-	if err := repo.CreateDefault(ctx, tokenString, user.ID, tokenValidityPeriod); err != nil {
+	if err := repo.CreateDefault(ctx, tokenHash, user.ID, tokenValidityPeriod); err != nil {
 		return "", err
 	}
-	return tokenString, nil
+	return token, nil
 }
 
 func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (int64, error) {
-	token, err := s.store.Repos().Tokens.FindByToken(ctx, tokenString)
+	tokenHash := utils.HashToken(tokenString)
+
+	token, err := s.store.Repos().Tokens.FindByToken(ctx, tokenHash)
 	if err != nil {
 		return 0, ErrInvalidToken
 	}
@@ -120,5 +122,5 @@ func (s *AuthService) ValidateToken(ctx context.Context, tokenString string) (in
 
 // RevokeToken explicitly revokes a token
 func (s *AuthService) RevokeToken(ctx context.Context, tokenString string) error {
-	return s.store.Repos().Tokens.Deactivate(ctx, tokenString)
+	return s.store.Repos().Tokens.Deactivate(ctx, utils.HashToken(tokenString))
 }

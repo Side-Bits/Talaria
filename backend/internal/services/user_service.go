@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-
 	"talaria/internal/domain/models"
 	"talaria/internal/pkgs/database"
 )
@@ -15,6 +14,10 @@ func NewUserService(db database.TxBeginner) *UserService {
 	return &UserService{
 		store: NewStore(db),
 	}
+}
+
+func (s *UserService) CloseAllSessions(ctx context.Context, userId int64) error {
+	return s.store.Repos().Tokens.CloseAllSessions(ctx, userId)
 }
 
 func (s *UserService) GetUserByID(ctx context.Context, userID int64) (*models.User, error) {
