@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 export function TravelDetailsScreen() {
   const { state, retry } = useTravels();
   const [activeTab, setActiveTab] = useState('planned');
+  const nextTravel = state.status === 'success' ? state.data.Going[0] : undefined;
 
   function renderTrips() {
     if (state.status === 'loading') {
@@ -55,27 +56,29 @@ export function TravelDetailsScreen() {
 
     if (activeTab === 'undated') {
       return (
-        <View style={styles.feedback}>
-          <ThemedText textMuted={true}>Undated trips aren’t available yet.</ThemedText>
-        </View>
+        <ThemedView type='center' style={styles.feedback}>
+          <ThemedText textMuted={true}>Undated trips aren’t available yet</ThemedText>
+        </ThemedView>
       );
     }
 
-    const trips = activeTab === 'planned' ? state.data.Going : state.data.Done;
+    const trips = activeTab === 'planned' ? state.data.Going.slice(1) : state.data.Done;
 
     if (trips.length === 0) {
       return (
-        <View style={styles.feedback}>
+        <ThemedView type='center' style={styles.feedback}>
           <ThemedText textMuted={true}>
-            {activeTab === 'planned' ? 'No planned trips yet.' : 'No completed trips yet.'}
+            {activeTab === 'planned' ?
+            (state.data.Going[0] ? 'Your next trip is waiting' : 'No planned trips yet') :
+            'No completed trips yet'}
           </ThemedText>
           <ThemedText
-            style={styles.createLink}
+            type='link'
             onPress={() => router.push('/travels/create')}
           >
-            Create one!
+            Create an travel
           </ThemedText>
-        </View>
+        </ThemedView>
       );
     }
 
@@ -89,7 +92,7 @@ export function TravelDetailsScreen() {
         button_menu={true}
         label="My Trips"
       />
-      <HeroTravel />
+      {nextTravel && <HeroTravel travel={nextTravel} />}
       <Tabs
         data={{
           planned: { label: "Planned" },
@@ -112,19 +115,14 @@ const styles = StyleSheet.create({
   trips: {
     width: '100%',
   },
-  createLink: {
-    color: Colors.light.primary,
-    textDecorationLine: 'underline',
-  },
   bottomSpacer: {
     height: 115,
     width: '100%',
   },
   feedback: {
     width: '100%',
-    paddingVertical: 24,
-    alignItems: 'center',
-    gap: 12,
+    paddingVertical: 16,
+    gap: 4,
   },
   errorCard: {
     width: '100%',
@@ -170,4 +168,19 @@ const styles = StyleSheet.create({
   retryText: {
     fontWeight: '600',
   },
+  create: {
+    width: '100%',
+    minHeight: 45,
+    borderRadius: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    backgroundColor: '#fcfcfc',
+    borderStyle: 'dashed',
+  },
+  textCenter: {
+    width: '100%',
+    marginBottom: 16,
+    textAlign: 'center'
+  }
 });

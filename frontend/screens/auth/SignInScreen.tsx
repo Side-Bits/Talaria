@@ -91,7 +91,7 @@ export function SignInScreen() {
                 <ThemedView type="between" style={{ marginBottom: 16 }}>
                     <ThemedCheckbox label="Remember me"></ThemedCheckbox>
                     <ThemedText
-                        type="default"
+                        type="link"
                         onPress={() => console.log("Forgot password")}
                     >
                         Forgot password?

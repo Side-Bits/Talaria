@@ -51,7 +51,7 @@ export function ActivitiesDetailsScreen() {
           data={{}}
         />
       </ThemedView>
-      <ThemedText style={styles.description}>{description}</ThemedText>
+      <ThemedText textMuted={true} style={styles.description}>{description}</ThemedText>
       {activity.length ? (
         <>
           <ThemedText type="underlined">Activities</ThemedText>
@@ -67,14 +67,20 @@ export function ActivitiesDetailsScreen() {
           />
         </>
       ) : (
-        <Pressable
-          style={styles.create}
-          onPress={handlePressCreateActivity}
-        >
-          <ThemedView type='center'>
-            <ThemedText type='default' style={{ color: Colors.light.textMuted }}>Create an activity</ThemedText>
-          </ThemedView>
-        </Pressable>
+        <ThemedView type='center' style={styles.feedback}>
+          <ThemedText type="subtitle">
+            Start your itinerary
+          </ThemedText>
+          <ThemedText textMuted={true}>
+            Add your first activity to start planning your trip
+          </ThemedText>
+          <ThemedText
+            type='link'
+            onPress={handlePressCreateActivity}
+          >
+            Create an activity
+          </ThemedText>
+        </ThemedView>
       )}
       <ThemedView type="left" style={{ width: "100%" }}>
         {activity.map((activity) => (
@@ -88,17 +94,11 @@ export function ActivitiesDetailsScreen() {
 
 const styles = StyleSheet.create({
   description: {
-    color: Colors.light.textMuted,
     marginBottom: 16
   },
-  create: {
+  feedback: {
     width: '100%',
-    minHeight: 45,
-    borderRadius: 8,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    backgroundColor: '#fcfcfc',
-    borderStyle: 'dashed',
-  }
+    paddingVertical: 16,
+    gap: 4,
+  },
 });

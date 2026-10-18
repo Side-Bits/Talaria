@@ -1,11 +1,13 @@
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '../../../components/ThemedView';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
-import { Background } from '@react-navigation/elements';
+import { Travel } from '@/types/travel';
+import { formatTravelDates } from '@/scripts/DataScripts';
+import { useRouter } from 'expo-router';
 
 type Props = {
-  image?: string;
+  travel: Travel;
 };
 
 export const travelImages: Record<string, any> = {
@@ -14,11 +16,27 @@ export const travelImages: Record<string, any> = {
   "pedraforca.jpg": require("../../../assets/images/temporal/pedraforca.jpg"),
 };
 
-export function HeroTravel({ image }: Props) {
-  const imageSource = image ? travelImages[image] : undefined;
+export function HeroTravel({ travel }: Props) {
+  const router = useRouter();
+  const imageSource = travel.image ? travelImages[travel.image] : undefined;
+  const date = formatTravelDates(travel.start_date, travel.end_date);
+
+  const handlePress = (() => router.push({
+    pathname: '/(app)/travels/[travel_id]/activities',
+    params: {
+      travel_id: String(travel.id),
+      name: travel.name,
+      date,
+      description: travel.description ?? '',
+      image: travel.image ?? '',
+    }
+  }));
 
   return (
-    <ThemedView type='left' style={styles.conteiner}>
+    <Pressable
+      style={styles.conteiner}
+      onPress={handlePress}
+    >
       {imageSource ? (
         <ImageBackground
           source={imageSource}
@@ -26,18 +44,20 @@ export function HeroTravel({ image }: Props) {
           resizeMode="cover"
         />
       ) : (
-        <View style={styles.banner}></View>
+        <View style={styles.banner}/>
       )}
       <ThemedView type='list' style={styles.box}>
-        <ThemedText textMuted={true}>[name]</ThemedText>
-        <ThemedText textMuted={true}>[date]</ThemedText>
+        <ThemedText>{travel.name}</ThemedText>
+        <ThemedText textMuted={true}>{date}</ThemedText>
       </ThemedView>
-    </ThemedView>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   conteiner: {
+    width: '100%',
+    alignItems: 'flex-start',
     overflow: 'hidden',
     height: 200,
     borderRadius: 8,

@@ -54,16 +54,18 @@ const styles = StyleSheet.create({
     fontWeight: 500,
   },
   subtitle: {
-    fontSize: 16,
+    color: Colors.light.secondary,
+    fontSize: 18,
   },
   defaultSemiBold: {
     fontSize: 10,
     fontWeight: "600",
   },
   link: {
-    color: Colors.light.tertiary,
+    color: Colors.light.primary,
     fontSize: 14,
     cursor: "pointer",
+    textDecorationLine: 'underline'
   },
   center: {
     fontSize: 12,

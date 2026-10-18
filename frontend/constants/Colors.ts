@@ -20,7 +20,7 @@ export const Colors = {
     navigationBackground: '#F3F3F5',
     navigationActive: '#2F2F2F',
     onNavigationActive: '#FFF',
-    navigationInactive: '#858A85',
+    navigationInactive: '#97969D',
 
     // Icons
     iconBackground: '#F7F7F7',
