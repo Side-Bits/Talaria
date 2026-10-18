@@ -5,6 +5,7 @@ import { Colors } from "@/constants/Colors";
 
 type Tab = {
   label: string;
+  onPress?: () => void;
 };
 
 type Props = {
@@ -26,7 +27,10 @@ export function Tabs({ data, activeTab, onTabChange }: Props) {
                 styles.text,
                 activeTab === key ? styles.active : undefined,
               ]}
-              onPress={() => onTabChange(key)}
+              onPress={() => {
+                onTabChange(key);
+                tab.onPress?.();
+              }}
             >
               {tab.label}
             </ThemedText>

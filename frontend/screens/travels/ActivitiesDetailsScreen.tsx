@@ -10,7 +10,6 @@ import { Tabs } from "@/components/Tabs";
 import { HeroActivity } from "./components/HeroActivity";
 import { ActivityCard } from "./components/ActivityCard";
 import { Participants } from "@/components/Participants";
-import { Colors } from "@/constants/Colors";
 
 export function ActivitiesDetailsScreen() {
   const { travel_id, name, date, description, image } = useLocalSearchParams();
@@ -18,6 +17,7 @@ export function ActivitiesDetailsScreen() {
   const travelImage = Array.isArray(image) ? image[0] : image;
   const [activity, setActivities] = useState<Activity[]>([]);
   const [activeTab, setActiveTab] = useState('all');
+  const [day, setDay] = useState(0);
 
   useEffect(() => {
     if (!travelId) return;
@@ -57,9 +57,9 @@ export function ActivitiesDetailsScreen() {
           <ThemedText type="underlined">Activities</ThemedText>
           <Tabs
             data={{
-              all: { label: "All" },
-              d1: { label: "Day 1" },
-              d2: { label: "Day 2" }
+              all: { label: "All", onPress: () => setDay(0) },
+              d1: { label: "Day 1", onPress: () => setDay(1) },
+              d2: { label: "Day 2", onPress: () => setDay(2) }
             }}
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -82,9 +82,9 @@ export function ActivitiesDetailsScreen() {
           </ThemedText>
         </ThemedView>
       )}
-      <ThemedView type="left" style={{ width: "100%" }}>
-        {activity.map((activity) => (
-          <ActivityCard key={activity.id} activity={activity} />
+      <ThemedView type="left">
+        {activity.filter((item) => day === 0 || item.day === day).map((item) => (
+          <ActivityCard key={item.id} activity={item} />
         ))}
       </ThemedView>
       <View style={{ height: 115, width: "100%" }} />
