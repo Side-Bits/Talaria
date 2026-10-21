@@ -35,6 +35,16 @@ export function ActivitiesDetailsScreen() {
     });
   };
 
+  const uniqueDays = [...new Set(activity.map((item) => item.day))]
+    .filter((day): day is number => Number.isFinite(day))
+    .sort((a, b) => a - b);
+
+  const dayTabs = Object.fromEntries(
+    uniqueDays.map((day) => [
+      `day-${day}`, { label: `Day ${day}`, onPress: () => setDay(day) },
+    ]),
+  );
+
   return (
     <ThemedView type="left" style={{ marginBottom: 64 }}>
       <Header
@@ -58,8 +68,7 @@ export function ActivitiesDetailsScreen() {
           <Tabs
             data={{
               all: { label: "All", onPress: () => setDay(0) },
-              d1: { label: "Day 1", onPress: () => setDay(1) },
-              d2: { label: "Day 2", onPress: () => setDay(2) }
+              ...dayTabs,
             }}
             activeTab={activeTab}
             onTabChange={setActiveTab}

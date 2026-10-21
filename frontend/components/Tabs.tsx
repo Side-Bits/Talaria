@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { Colors } from "@/constants/Colors";
@@ -15,28 +15,53 @@ type Props = {
   scroll: boolean;
 };
 
-export function Tabs({ data, activeTab, onTabChange }: Props) {
+export function Tabs({ data, activeTab, onTabChange, scroll }: Props) {
+  const tabs = Object.entries(data);
+  const hasMoreThanFourTabs = tabs.length > 4;
+  const tabItems = tabs.map(([key, tab]) => (
+    <ThemedView
+      type="center"
+      key={key}
+      style={
+        scroll
+          ? hasMoreThanFourTabs
+            ? styles.scrollTab
+            : styles.flexTab
+          : undefined
+      }
+    >
+      <ThemedText
+        type="center"
+        style={[
+          styles.text,
+          activeTab === key ? styles.active : undefined,
+        ]}
+        onPress={() => {
+          onTabChange(key);
+          tab.onPress?.();
+        }}
+      >
+        {tab.label}
+      </ThemedText>
+    </ThemedView>
+  ));
+
   return (
     <View style={styles.tabs}>
-      <ThemedView type="between" style={styles.container}>
-        {Object.entries(data).map(([key, tab]) => (
-          <ThemedView type="center" key={key}>
-            <ThemedText
-              type="center"
-              style={[
-                styles.text,
-                activeTab === key ? styles.active : undefined,
-              ]}
-              onPress={() => {
-                onTabChange(key);
-                tab.onPress?.();
-              }}
-            >
-              {tab.label}
-            </ThemedText>
-          </ThemedView>
-        ))}
-      </ThemedView>
+      {scroll ? (
+        <ScrollView
+          horizontal
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsHorizontalScrollIndicator={false}
+        >
+          {tabItems}
+        </ScrollView>
+      ) : (
+        <ThemedView type="between" style={styles.container}>
+          {tabItems}
+        </ThemedView>
+      )}
     </View>
   );
 }
@@ -54,6 +79,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 4,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    flexDirection: "row",
+    gap: 4,
+  },
+  flexTab: {
+    flex: 1,
+    minWidth: 80,
+  },
+  scrollTab: {
+    flex: 0,
+    width: "24%",
+    minWidth: 80,
   },
   text: {
     flex: 1,
