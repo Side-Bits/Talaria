@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedButton } from '@/components/ThemedButton';
 import { Colors } from '@/constants/Colors';
 import { useTravels } from '@/hooks/useTravels';
+import { useToast } from '@/hooks/useToast';
 import { Tabs } from '@/components/Tabs';
 import { HeroTravel } from '@/screens/travels/components/HeroTravel';
 import { TravelCard } from './components/TravelCard';
@@ -15,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 export function TravelDetailsScreen() {
   const { state, retry } = useTravels();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState('planned');
   const nextTravel = state.status === 'success' ? state.data.Going[0] : undefined;
 
@@ -91,6 +93,15 @@ export function TravelDetailsScreen() {
         button_back={false}
         button_menu={true}
         label="My Trips"
+      />
+      <ThemedButton
+        title="Test toast"
+        variant="outline"
+        onPress={() => showToast({
+          title: 'Toast test',
+          message: 'Your toast notification is working!',
+          variant: 'success',
+        })}
       />
       {nextTravel && <HeroTravel travel={nextTravel} />}
       <Tabs
