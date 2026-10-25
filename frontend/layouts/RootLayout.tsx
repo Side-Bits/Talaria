@@ -1,13 +1,16 @@
 import { Stack } from 'expo-router';
 import { SessionProvider, useSession } from '@/contexts/authContext';
 import { SplashScreenController } from '@/components/Splash';
+import { ToastProvider } from '@/contexts/toastContext';
 
 export function RootLayout() {
   return (
-    <SessionProvider>
-      <SplashScreenController />
-      <RootNavigator />
-    </SessionProvider>
+    <ToastProvider>
+      <SessionProvider>
+        <SplashScreenController />
+        <RootNavigator />
+      </SessionProvider>
+    </ToastProvider>
   );
 }
 

@@ -7,6 +7,7 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { Colors } from '@/constants/Colors';
 import { ErrorCard } from '@/components/ErrorCard';
 import { useTravels } from '@/hooks/useTravels';
+import { useToast } from '@/hooks/useToast';
 import { Tabs } from '@/components/Tabs';
 import { HeroTravel } from '@/screens/travels/components/HeroTravel';
 import { TravelCard } from './components/TravelCard';
@@ -15,6 +16,7 @@ import { router } from 'expo-router';
 
 export function TravelDetailsScreen() {
   const { state, retry } = useTravels();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState('planned');
   const nextTravel = state.status === 'success' ? state.data.Going[0] : undefined;
 
@@ -59,6 +61,7 @@ export function TravelDetailsScreen() {
         button_notifications={true}
         label="My Trips"
       />
+<<<<<<< HEAD
       {state.status === 'loading' ? (
         <View style={styles.feedback}>
           <ActivityIndicator color={Colors.light.primary} />
@@ -112,6 +115,32 @@ export function TravelDetailsScreen() {
           </ThemedView>
         </>
       )}
+=======
+      <ThemedButton
+        title="Test toast"
+        variant="outline"
+        onPress={() => showToast({
+          title: 'Toast test',
+          message: 'Your toast notification is working!',
+          variant: 'success',
+        })}
+      />
+      {nextTravel && <HeroTravel travel={nextTravel} />}
+      <Tabs
+        data={{
+          planned: { label: "Planned" },
+          undated: { label: "Undated" },
+          completed: { label: "Completed" }
+        }}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        scroll={false}
+      />
+      <ThemedView type='left' style={styles.trips}>
+        {renderTrips()}
+        <View style={styles.bottomSpacer} />
+      </ThemedView>
+>>>>>>> cba5b1f (feat: add toast hooks, context, provider and first style version)
     </ThemedView>
   );
 }
