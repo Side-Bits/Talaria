@@ -112,7 +112,6 @@ export function ActivityEditorScreen() {
                     name="location"
                     type="text"
                     label="Location"
-                    required
                     disabled={isSubmitting}
                 />
                 <FormInput
