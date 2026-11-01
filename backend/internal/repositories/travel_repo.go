@@ -34,6 +34,7 @@ func (r *TravelRepository) GetTravels(ctx context.Context, userID int64) (map[st
 				INNER JOIN clients_travels AS ct ON ct.id_travel = t.id_travel
 				INNER JOIN clients AS c ON c.id_user = ct.id_user
 			WHERE c.id_user = $1
+				AND t.id_status IS DISTINCT FROM -1
 		) t
 		WHERE n <= 5
 		ORDER BY tag, start_date ASC;
@@ -73,7 +74,8 @@ func (r *TravelRepository) GetTravelByID(ctx context.Context, userID int64, trav
 		FROM travels AS t
 			INNER JOIN clients_travels ct ON ct.id_travel = t.id_travel
 		WHERE ct.id_user = $1 AND
-			t.id_travel = $2
+			t.id_travel = $2 AND
+			t.id_status IS DISTINCT FROM -1
 		LIMIT 1
 	`
 
@@ -97,8 +99,8 @@ func (r *TravelRepository) GetTravelByID(ctx context.Context, userID int64, trav
 
 func (r *TravelRepository) CreateTravel(ctx context.Context, name string, start_date string, end_date string, description string, image string) (int64, error) {
 	query := `
-        INSERT INTO travels (name, start_date, end_date, description, image)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO travels (name, start_date, end_date, description, image, id_status)
+        VALUES ($1, $2, $3, $4, $5, 1)
 		RETURNING id_travel
 	`
 
@@ -118,4 +120,19 @@ func (r *TravelRepository) AddClientTravels(ctx context.Context, id_travel int64
 	_, err := r.db.Exec(ctx, query, id_travel, userID)
 
 	return err
+}
+
+func (r *TravelRepository) DeleteTravel(ctx context.Context, travelID int64) error {
+	query := `
+		UPDATE travels t
+		SET id_status = -1
+		WHERE t.id_travel = $1
+	`
+	_, err := r.db.Exec(ctx, query, travelID)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

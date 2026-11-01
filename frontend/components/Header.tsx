@@ -1,51 +1,70 @@
 import { ThemedText } from './ThemedText';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
 import { ThemedView } from './ThemedView';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
+import { Popover, type PopoverItem } from './Popover';
 
-type Props = & {
+type Props = {
   button_back: boolean;
-  button_menu: boolean;
+  popover?: Record<string, PopoverItem>;
   label: string;
 };
 
 export function Header({
   button_back,
-  button_menu,
+  popover,
   label
 }: Props) {
+  const haveOptions = popover && Object.keys(popover).length > 0;
+  const [openMenu, setOpenMenu] = useState(false);
+
   return (
-    <ThemedView type='between' style={styles.header}>
-      <View style={styles.action}>
-        {button_back && (
-          <Pressable onPress={() => router.back()}>
-            <Ionicons
-              name="chevron-back-outline"
-              size={20}
-              style={styles.icon}
-              color={Colors.light.textMuted}
-            />
-          </Pressable>
-        )}
-      </View>
-      <ThemedText type="title" style={styles.title}>{label}</ThemedText>
-      <View style={styles.action}>
-        {button_menu && (
-          <Ionicons
-            name="menu-outline"
-            size={20}
-            style={styles.icon}
-            color={Colors.light.onSurface}
-          />
-        )}
-      </View>
-    </ThemedView>
+    <View style={styles.container}>
+      <ThemedView type='between' style={styles.header}>
+        <View style={styles.action}>
+          {button_back && (
+            <Pressable onPress={() => router.back()}>
+              <Ionicons
+                name="chevron-back-outline"
+                size={20}
+                style={styles.icon}
+                color={Colors.light.textMuted}
+              />
+            </Pressable>
+          )}
+        </View>
+        <ThemedText type="title" style={styles.title}>{label}</ThemedText>
+        <View style={styles.action}>
+          {haveOptions && (
+            <Pressable
+              onPress={() => setOpenMenu(isOpen => !isOpen)}
+              accessibilityRole="button"
+              accessibilityState={{ expanded: openMenu }}
+            >
+              <Ionicons
+                name={openMenu ? 'close-outline' : 'menu-outline'}
+                size={20}
+                style={styles.icon}
+                color={Colors.light.onSurface}
+              />
+            </Pressable>
+          )}
+        </View>
+      </ThemedView>
+      {haveOptions && openMenu && popover && <Popover data={popover} />}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    position: 'relative',
+    width: '100%',
+    zIndex: 1,
+  },
   header: {
     width: '100%',
     paddingVertical: 32,

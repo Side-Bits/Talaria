@@ -15,7 +15,6 @@ export function ProfileEditorScreen() {
     <ThemedView type='left'>
       <Header
         button_back={true}
-        button_menu={false}
         label='Profile'
       />
       <ThemedView type='left' style={{ width: '100%' }}>

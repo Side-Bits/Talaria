@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 
 CREATE TABLE IF NOT EXISTS statuses (
-    id_status   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_status   BIGINT PRIMARY KEY,
     name        VARCHAR(64) NOT NULL UNIQUE
 );
 
@@ -84,14 +84,16 @@ CREATE INDEX IF NOT EXISTS idx_clients_activities_activity   ON clients_activiti
 INSERT INTO roles (name)
 VALUES
     ('Admin'),
+    ('Developer'),
     ('Client');
 
-INSERT INTO statuses (name)
+INSERT INTO statuses (id_status, name)
 VALUES
-    ('Active'),
-    ('Inactive'),
-    ('Cancelled'),
-    ('Finished');
+    (-1, 'Deleted'),
+    (1, 'Active'),
+    (2, 'Inactive'),
+    (3, 'Cancelled'),
+    (4, 'Finished');
 
 /*INSERT INTO users (
     id_role,

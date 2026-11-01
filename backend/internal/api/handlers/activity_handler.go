@@ -1,14 +1,15 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"talaria/internal/api/middleware"
 	"talaria/internal/domain/models"
-	"talaria/internal/pkgs/utils"
 	"talaria/internal/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 )
 
 type ActivityHandler struct {
@@ -34,14 +35,12 @@ func NewActivityHandler(activityService services.ActivityService) *ActivityHandl
 // @Failure 500 {object} ErrorResponse
 // @Router /api/travels/{travel_id}/activities [get]
 func (h *ActivityHandler) GetActivities(c *gin.Context) {
-	id_travel := c.Param("travel_id")
-
-	if id_travel == "" {
-		respondBadRequest(c, "travel id is required", nil)
+	travelID, ok := parseTravelID(c)
+	if !ok {
 		return
 	}
 
-	activities, err := h.activityService.GetActivities(c.Request.Context(), id_travel)
+	activities, err := h.activityService.GetActivities(c.Request.Context(), travelID)
 	if err != nil {
 		respondBadRequest(c, "failed to fetch activities", err)
 		return
@@ -68,15 +67,8 @@ func (h *ActivityHandler) GetActivityById(c *gin.Context) {
 		return
 	}
 
-	travelID, err := utils.ParsePositiveInt64Param(c, "travel_id")
-	if err != nil {
-		respondBadRequest(c, "invalid travel id", err)
-		return
-	}
-
-	activityID, err := utils.ParsePositiveInt64Param(c, "activity_id")
-	if err != nil {
-		respondBadRequest(c, "invalid activity id", err)
+	travelID, activityID, ok := parseActivityIDs(c)
+	if !ok {
 		return
 	}
 
@@ -110,24 +102,46 @@ func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 		return
 	}
 
-	// TODO: Està bé?
-	travelID, err := utils.ParsePositiveInt64Param(c, "travel_id")
-	if err != nil {
-		respondBadRequest(c, "invalid travel id", err)
+	travelID, ok := parseTravelID(c)
+	if !ok {
 		return
 	}
 
 	newActivity.Id_travel = travelID
 
-	userID, ok := middleware.GetUserIDOrAbort(c)
+	userId, ok := middleware.GetUserIDOrAbort(c)
 	if !ok {
 		return
 	}
 
-	err2 := h.activityService.CreateActivity(c.Request.Context(), userID, newActivity)
+	err2 := h.activityService.CreateActivity(c.Request.Context(), userId, newActivity)
 
 	if err2 != nil {
 		respondInternalError(c, "failed to create activity", err2)
 		return
 	}
+}
+
+func (h *ActivityHandler) DeleteActivity(c *gin.Context) {
+	_, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
+		return
+	}
+
+	travelID, activityID, ok := parseActivityIDs(c)
+	if !ok {
+		return
+	}
+
+	if err := h.activityService.DeleteActivity(c.Request.Context(), travelID, activityID); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			respondNotFound(c, "activity not found", err)
+			return
+		}
+
+		respondInternalError(c, "failed to delete activity", err)
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 }

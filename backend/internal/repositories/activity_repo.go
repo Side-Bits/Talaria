@@ -15,7 +15,7 @@ func NewActivityRepository(db database.DBExecutor) *ActivityRepository {
 	return &ActivityRepository{db: db}
 }
 
-func (r *ActivityRepository) GetActivities(ctx context.Context, id_travel string) ([]models.Activity, error) {
+func (r *ActivityRepository) GetActivities(ctx context.Context, travelID int64) ([]models.Activity, error) {
 	var activities []models.Activity
 
 	rows, err := r.db.Query(ctx, `
@@ -30,8 +30,9 @@ func (r *ActivityRepository) GetActivities(ctx context.Context, id_travel string
 			DENSE_RANK() OVER (ORDER BY (a.end_date AT TIME ZONE 'UTC')::date) AS day
 		FROM activities a
 		WHERE id_travel = $1
+			AND a.id_status IS DISTINCT FROM -1
 		ORDER BY end_date ASC
-	`, id_travel)
+	`, travelID)
 	if err != nil {
 		return nil, err
 	}
@@ -107,6 +108,7 @@ func (r *ActivityRepository) GetActivity(ctx context.Context, userID int64, trav
 		FROM activities a
 			INNER JOIN clients_activities ca ON ca.id_activity = a.id_activity
 		WHERE ca.id_user = $1 AND a.id_travel = $2 AND a.id_activity = $3
+			AND a.id_status IS DISTINCT FROM -1
 	`
 
 	var activity models.Activity
@@ -123,4 +125,27 @@ func (r *ActivityRepository) GetActivity(ctx context.Context, userID int64, trav
 	)
 
 	return activity, err
+}
+
+func (r *ActivityRepository) DeleteActivity(ctx context.Context, travelID int64, activityID int64) error {
+	query := `
+		UPDATE activities a
+		SET id_status = -1
+		WHERE a.id_travel = $1 AND
+			a.id_activity = $2
+	`
+	_, err := r.db.Exec(ctx, query, travelID, activityID)
+
+	return err
+}
+
+func (r *ActivityRepository) DeleteActivitiesByTravel(ctx context.Context, travelID int64) error {
+	query := `
+		UPDATE activities
+		SET id_status = -1
+		WHERE id_travel = $1
+	`
+	_, err := r.db.Exec(ctx, query, travelID)
+
+	return err
 }

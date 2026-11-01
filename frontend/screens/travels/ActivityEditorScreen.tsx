@@ -22,7 +22,6 @@ export function ActivityEditorScreen() {
     const activityId = Array.isArray(activity_id)
         ? activity_id[0]
         : activity_id;
-
     const {
         control,
         handleSubmit,
@@ -69,7 +68,6 @@ export function ActivityEditorScreen() {
         <ThemedView type="left">
             <Header
                 button_back={true}
-                button_menu={false}
                 label={!activityId ? 'Create activity' : activityName ?? ""}
             />
             <ThemedView type="left" style={{ width: "100%" }}>

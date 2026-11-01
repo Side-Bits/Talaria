@@ -61,7 +61,6 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
         <ThemedView type='left'>
             <Header
                 button_back={true}
-                button_menu={false}
                 label={!travel_id ? 'Create trip' : travel?.name ?? ""}
             />
             <ThemedView type='left' style={{ width: '100%' }}>
