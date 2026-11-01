@@ -5,10 +5,10 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Header } from '@/components/Header';
 import { Activity, DEFAULT_ACTIVITY } from '@/types/activity';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { IconCategory } from '@/components/IconCategory';
 import { Participants } from '@/components/Participants';
-import { getTravelActivity } from "@/services/api/activity";
+import { deleteActivity, getTravelActivity } from "@/services/api/activity";
 
 export function ActivityDetailsScreen() {
     const { travel_id, activity_id } = useLocalSearchParams();
@@ -28,11 +28,31 @@ export function ActivityDetailsScreen() {
             });
     }, [travelId, activityId]);
 
+    const handleActivity = async (action: String) => {
+        if (action === 'delete') {
+            try {
+                await deleteActivity(travelId, activityId);
+                router.back();
+            } catch {
+                Alert.alert("Error", "Invalid credentials");
+            }
+        }
+    }
+
     return (
         <ThemedView type='left'>
             <Header 
                 button_back={true}
-                button_menu={true}
+                popover={
+                    {
+                        delete: {
+                            icon: 'trash-outline',
+                            option: 'Delete activity',
+                            color: 'red',
+                            onclick: () => handleActivity('delete'),
+                        },
+                    }
+                }
                 label={activity.name}
             />
             <ThemedView type='left' style={{ width: '100%' }}>

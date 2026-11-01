@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { router, useLocalSearchParams } from "expo-router";
@@ -10,6 +10,7 @@ import { Tabs } from "@/components/Tabs";
 import { HeroActivity } from "./components/HeroActivity";
 import { ActivityCard } from "./components/ActivityCard";
 import { Participants } from "@/components/Participants";
+import { deleteTravel } from "@/services/api/travel";
 
 export function ActivitiesDetailsScreen() {
   const { travel_id, name, date, description, image } = useLocalSearchParams();
@@ -45,11 +46,31 @@ export function ActivitiesDetailsScreen() {
     ]),
   );
 
+  const handleTravel = async (action: String) => {
+    if (action === 'delete') {
+      try {
+        await deleteTravel(travelId);
+        router.back();
+      } catch {
+        Alert.alert("Error", "Invalid credentials");
+      }
+    }
+  }
+
   return (
     <ThemedView type="left" style={{ marginBottom: 64 }}>
       <Header
         button_back={true}
-        button_menu={true}
+        popover={
+          {
+            delete: {
+              icon: 'trash-outline',
+              option: 'Delete trip',
+              color: 'red',
+              onclick: () => handleTravel('delete'),
+            },
+          }
+        }
         label={String(name)}
       />
       <HeroActivity image={travelImage} />
@@ -63,18 +84,22 @@ export function ActivitiesDetailsScreen() {
       </ThemedView>
       <ThemedText textMuted={true} style={styles.description}>{description}</ThemedText>
       {activity.length ? (
-        <>
+        uniqueDays.length > 1 ? (
+          <>
+            <ThemedText type="underlined">Activities</ThemedText>
+            <Tabs
+              data={{
+                all: { label: "All", onPress: () => setDay(0) },
+                ...dayTabs,
+              }}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              scroll={true}
+            />
+          </>
+        ) : (
           <ThemedText type="underlined">Activities</ThemedText>
-          <Tabs
-            data={{
-              all: { label: "All", onPress: () => setDay(0) },
-              ...dayTabs,
-            }}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            scroll={true}
-          />
-        </>
+        )
       ) : (
         <ThemedView type='center' style={styles.feedback}>
           <ThemedText type="subtitle">

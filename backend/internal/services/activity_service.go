@@ -17,8 +17,8 @@ func NewActivityService(db database.TxBeginner) *ActivityService {
 	}
 }
 
-func (s *ActivityService) GetActivities(ctx context.Context, userID string) ([]models.Activity, error) {
-	return s.store.Repos().Activities.GetActivities(ctx, userID)
+func (s *ActivityService) GetActivities(ctx context.Context, travelID int64) ([]models.Activity, error) {
+	return s.store.Repos().Activities.GetActivities(ctx, travelID)
 }
 
 func (s *ActivityService) CreateActivity(ctx context.Context, userID int64, activity models.Activity) error {
@@ -34,4 +34,10 @@ func (s *ActivityService) CreateActivity(ctx context.Context, userID int64, acti
 
 func (s *ActivityService) GetActivity(ctx context.Context, userID int64, travelID int64, activityID int64) (models.Activity, error) {
 	return s.store.repos.Activities.GetActivity(ctx, userID, travelID, activityID)
+}
+
+func (s *ActivityService) DeleteActivity(ctx context.Context, travelID int64, activityID int64) error {
+	return s.store.InTx(ctx, func(repos Repos) error {
+		return repos.Activities.DeleteActivity(ctx, travelID, activityID)
+	})
 }

@@ -6,7 +6,6 @@ import (
 
 	"talaria/internal/api/middleware"
 	"talaria/internal/domain/models"
-	"talaria/internal/pkgs/utils"
 	"talaria/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -76,9 +75,8 @@ func (h *TravelHandler) GetTravelByID(c *gin.Context) {
 		return
 	}
 
-	travelID, err := utils.ParsePositiveInt64Param(c, "travel_id")
-	if err != nil {
-		respondBadRequest(c, "Invalid id", err)
+	travelID, ok := parseTravelID(c)
+	if !ok {
 		return
 	}
 
@@ -132,4 +130,28 @@ func (h *TravelHandler) CreateTravel(c *gin.Context) {
 		respondInternalError(c, "failed to create travel", err)
 		return
 	}
+}
+
+func (h *TravelHandler) DeleteTravel(c *gin.Context) {
+	_, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
+		return
+	}
+
+	travelID, ok := parseTravelID(c)
+	if !ok {
+		return
+	}
+
+	if err := h.travelService.DeleteTravel(c.Request.Context(), travelID); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			respondNotFound(c, "travel not found", err)
+			return
+		}
+
+		respondInternalError(c, "failed to delete travel", err)
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 }

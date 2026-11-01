@@ -17,7 +17,16 @@ export function ProfileDetailsScreen() {
     <ThemedView type='left'>
       <Header
         button_back={true}
-        button_menu={true}
+        popover={
+          {
+            delete: {
+              icon: 'log-out-outline',
+              option: 'Log Out',
+              color: 'red',
+              onclick: session.signOut,
+            },
+          }
+        }
         label='Profile'
       />
       <ThemedView type='list' style={{ width: '100%' }}>
@@ -72,7 +81,6 @@ export function ProfileDetailsScreen() {
           </ThemedView>
         </ThemedView>
       </ThemedView>
-      <ThemedButton title='Log Out' buttonStyle={styles.signout_button} onPress={session.signOut} />
     </ThemedView>
   );
 }

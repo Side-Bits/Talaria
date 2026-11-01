@@ -9,10 +9,14 @@ export function getTravels() {
 	return api.get<{ G?: Travel[]; D?: Travel[] }>(ENDPOINTS.getTravels)
 }
 
-export function getTravel(travel_id: string) {
-    return api.get<Travel>(`${ENDPOINTS.getTravels}/${travel_id}`)
+export function getTravel(travelId: string) {
+    return api.get<Travel>(`${ENDPOINTS.getTravels}/${travelId}`)
 }
 
 export function createTravel(travel: Travel) {
 	return api.post('api/travels/create', travel);
+}
+
+export function deleteTravel(travelId: string) {
+	return api.post(`api/travels/delete/${travelId}`);
 }

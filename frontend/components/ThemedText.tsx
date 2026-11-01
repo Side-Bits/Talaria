@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   link: {
-    color: Colors.light.primary,
+    color: Colors.light.tertiary,
     fontSize: 14,
     cursor: "pointer",
     textDecorationLine: 'underline'

@@ -1,7 +1,7 @@
 import { View, StyleSheet, ViewProps } from 'react-native';
 
 type Props = ViewProps & {
-  type: 'center' | 'left' | 'right' | 'align' | 'column' | 'list' | 'container' | 'box' | 'between' | 'middle' | 'row';
+  type: 'center' | 'left' | 'right' | 'align' | 'column' | 'list' | 'container' | 'box' | 'between' | 'middle' | 'row' | 'gap';
   margin?: number;
 };
 
@@ -20,6 +20,7 @@ export function ThemedView({ type, margin, style, ...rest }: Props) {
         type === 'between' ? styles.between : undefined,
         type === 'middle' ? styles.middle : undefined,
         type === 'row' ? styles.row : undefined,
+        type === 'gap' ? styles.gap : undefined,
         margin !== undefined ? { marginBottom: margin } : undefined,
         style
       ]}
@@ -75,6 +76,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  gap: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   }
 });
-

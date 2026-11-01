@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
@@ -20,7 +20,6 @@ export function TravelDetailsScreen() {
 
   function renderTrips() {
     if (state.status === 'loading') {
-      // TODO skeleton
       return (
         <View style={styles.feedback}>
           <ActivityIndicator color={Colors.light.primary} />
@@ -89,29 +88,108 @@ export function TravelDetailsScreen() {
     <ThemedView type='left'>
       <Header
         button_back={false}
-        button_menu={true}
         label="My Trips"
       />
-      {nextTravel && <HeroTravel travel={nextTravel} />}
-      <Tabs
-        data={{
-          planned: { label: "Planned" },
-          undated: { label: "Undated" },
-          completed: { label: "Completed" }
-        }}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        scroll={false}
-      />
-      <ThemedView type='left' style={styles.trips}>
-        {renderTrips()}
-        <View style={styles.bottomSpacer} />
-      </ThemedView>
+      {state.status !== 'success' || state.data.Going.length > 0 || state.data.Done.length > 0 ? (
+        <>
+          {nextTravel && <HeroTravel travel={nextTravel} />}
+          <Tabs
+            data={{
+              planned: { label: "Planned" },
+              undated: { label: "Undated" },
+              completed: { label: "Completed" }
+            }}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            scroll={false}
+          />
+          <ThemedView type='left' style={styles.trips}>
+            {renderTrips()}
+            <View style={styles.bottomSpacer} />
+          </ThemedView>
+        </>
+      ) : (
+        <>
+          <View style={styles.imageGallery}>
+            <ImageBackground
+              source={require('../../assets/images/temporal/tailandia.jpg')}
+              style={styles.image2}
+              resizeMode="cover"
+            />
+            <ImageBackground
+              source={require('../../assets/images/temporal/pedraforca.jpg')}
+              style={styles.image3}
+              resizeMode="cover"
+            />
+            <ImageBackground
+              source={require('../../assets/images/temporal/roma.jpg')}
+              style={styles.image1}
+              resizeMode="cover"
+            />
+          </View>
+          <ThemedView type='center' style={styles.feedback}>
+            <ThemedText type="subtitle">
+              Every journey tells a story
+            </ThemedText>
+            <ThemedText textMuted={true}>
+              Your next adventure starts with a plan
+            </ThemedText>
+            <ThemedText
+              type='link'
+              onPress={() => router.push('/travels/create')}
+            >
+              Create an travel
+            </ThemedText>
+          </ThemedView>
+        </>
+      )}
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  imageGallery: {
+    marginVertical: 32,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center', // centra en vertical
+    alignItems: 'center', 
+    gap: 8,
+  },
+  image1: {
+    backgroundColor: Colors.light.iconBackground,
+    height: 130,
+    width: 130,
+    top: 0,
+    alignSelf: 'center',
+    zIndex: 3,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  image2: {
+    backgroundColor: Colors.light.iconBackground,
+    position: 'absolute',
+    top: 2,
+    left: '20%',
+    width: 130,
+    height: 130,
+    zIndex: 1,
+    elevation: 1,
+    overflow: 'hidden',
+    transform: [{ rotate: '-6deg' }],
+  },
+  image3: {
+    backgroundColor: Colors.light.iconBackground,
+    position: 'absolute',
+    top: 10,
+    right: '20%',
+    height: 130,
+    width: 130,
+    zIndex: 1,
+    elevation: 1,
+    overflow: 'hidden',
+    transform: [{ rotate: '8deg' }],
+  },
   trips: {
     width: '100%',
   },

@@ -52,13 +52,20 @@ func (rt *Router) setupPrivateRoutes(r *gin.Engine) {
 	api := r.Group("/api")
 	api.Use(middleware.AuthMiddleware(rt.tokenService))
 	{
+		// User
 		api.GET("/user", rt.userHandler.GetUserByToken)
 		api.POST("/logoutall", rt.userHandler.LogoutAll)
+		
+		// Travel
 		api.GET("/travels", rt.travelHandler.GetTravels)
 		api.POST("/travels/create", rt.travelHandler.CreateTravel)
 		api.GET("/travels/:travel_id", rt.travelHandler.GetTravelByID)
+		api.POST("/travels/delete/:travel_id", rt.travelHandler.DeleteTravel)
+		
+		// Activities
 		api.GET("/travels/:travel_id/activities", rt.activityHandler.GetActivities)
 		api.POST("/travels/:travel_id/activities/create", rt.activityHandler.CreateActivity)
 		api.GET("/travels/:travel_id/activities/:activity_id", rt.activityHandler.GetActivityById)
+		api.POST("/travels/:travel_id/activities/delete/:activity_id", rt.activityHandler.DeleteActivity)
 	}
 }
