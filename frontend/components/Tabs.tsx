@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { Colors } from "@/constants/Colors";
+import { globalStyles } from "@/constants/Global";
 
 type Tab = {
   label: string;
@@ -47,7 +48,7 @@ export function Tabs({ data, activeTab, onTabChange, scroll }: Props) {
   ));
 
   return (
-    <View style={styles.tabs}>
+    <View style={[styles.tabs, globalStyles.shadow]}>
       {scroll ? (
         <ScrollView
           horizontal

@@ -27,7 +27,7 @@ func (r *ActivityRepository) GetActivities(ctx context.Context, travelID int64) 
 			a.start_date,
 			a.end_date,
 			a.price,
-			DENSE_RANK() OVER (ORDER BY (a.end_date AT TIME ZONE 'UTC')::date) AS day
+			DENSE_RANK() OVER (ORDER BY (a.start_date AT TIME ZONE 'UTC')::date) AS day
 		FROM activities a
 		WHERE id_travel = $1
 			AND a.id_status IS DISTINCT FROM -1

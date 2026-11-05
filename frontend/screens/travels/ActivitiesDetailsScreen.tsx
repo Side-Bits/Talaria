@@ -11,6 +11,7 @@ import { HeroActivity } from "./components/HeroActivity";
 import { ActivityCard } from "./components/ActivityCard";
 import { Participants } from "@/components/Participants";
 import { deleteTravel } from "@/services/api/travel";
+import { formatDate } from "@/scripts/DataScripts";
 
 export function ActivitiesDetailsScreen() {
   const { travel_id, name, date, description, image } = useLocalSearchParams();
@@ -84,9 +85,8 @@ export function ActivitiesDetailsScreen() {
       </ThemedView>
       <ThemedText textMuted={true} style={styles.description}>{description}</ThemedText>
       {activity.length ? (
-        uniqueDays.length > 1 ? (
+        uniqueDays.length > 1 && (
           <>
-            <ThemedText type="underlined">Activities</ThemedText>
             <Tabs
               data={{
                 all: { label: "All", onPress: () => setDay(0) },
@@ -97,8 +97,6 @@ export function ActivitiesDetailsScreen() {
               scroll={true}
             />
           </>
-        ) : (
-          <ThemedText type="underlined">Activities</ThemedText>
         )
       ) : (
         <ThemedView type='center' style={styles.feedback}>
@@ -117,8 +115,13 @@ export function ActivitiesDetailsScreen() {
         </ThemedView>
       )}
       <ThemedView type="left">
-        {activity.filter((item) => day === 0 || item.day === day).map((item) => (
-          <ActivityCard key={item.id} activity={item} />
+        {activity.filter((item) => day === 0 || item.day === day).map((item, i, arr) => (
+          <>
+            {item.start_date.slice(0, 10) !== arr[i - 1]?.start_date.slice(0, 10) && (
+              <ThemedText type="underlined" style={{ marginLeft: 60 }}>{formatDate(item.start_date)}</ThemedText>
+            )}
+            <ActivityCard key={item.id} activity={item} />
+          </>
         ))}
       </ThemedView>
       <View style={{ height: 115, width: "100%" }} />

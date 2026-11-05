@@ -8,7 +8,7 @@ export const activitySchema = z
         id_travel: z.number(),
         name: z.string().trim().min(1, { error: "Activity name is required" }),
         description: z.string(),
-        location: z.string().trim().min(1, { error: "Location is required" }),
+        location: z.string(),
         start_date: datetimeSchema,
         end_date: datetimeSchema,
         price: z.number(),
