@@ -9,6 +9,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { IconCategory } from '@/components/IconCategory';
 import { Participants } from '@/components/Participants';
 import { deleteActivity, getTravelActivity } from "@/services/api/activity";
+import { formatActivityDates } from "@/scripts/DataScripts";
 
 export function ActivityDetailsScreen() {
     const { travel_id, activity_id } = useLocalSearchParams();
@@ -63,6 +64,10 @@ export function ActivityDetailsScreen() {
                 <ThemedText type="underlined">Information</ThemedText>
                 <ThemedView type='list' margin={8} style={styles.container}>
                     <ThemedView type='between' margin={8}>
+                        <ThemedText type='small' textMuted={true}>Date</ThemedText>
+                        <ThemedText type='small'>{formatActivityDates(activity.start_date, activity.end_date)}</ThemedText>
+                    </ThemedView>
+                    <ThemedView type='between' margin={8}>
                         <ThemedText type='small' textMuted={true}>Location</ThemedText>
                         <ThemedText type='small'>{activity.location}</ThemedText>
                     </ThemedView>
@@ -79,12 +84,12 @@ export function ActivityDetailsScreen() {
                         data={{}}
                     />
                 </View>
-                <View style={{ width: '100%', marginBottom: 12, }}>
+                {/*<View style={{ width: '100%', marginBottom: 12, }}>
                     <ThemedText type="underlined">Others</ThemedText>
                 </View>
                 <View style={{ width: '100%', marginBottom: 12, }}>
                     <ThemedText type="underlined">Documents</ThemedText>
-                </View>
+                </View>*/}
             </ThemedView>
             <View style={{ height: 103, width: '100%' }} />
         </ThemedView>
