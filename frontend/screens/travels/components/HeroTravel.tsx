@@ -34,7 +34,7 @@ export function HeroTravel({ travel }: Props) {
 
   return (
     <Pressable
-      style={styles.conteiner}
+      style={styles.container}
       onPress={handlePress}
     >
       {imageSource ? (
@@ -55,7 +55,7 @@ export function HeroTravel({ travel }: Props) {
 }
 
 const styles = StyleSheet.create({
-  conteiner: {
+  container: {
     width: '100%',
     alignItems: 'flex-start',
     overflow: 'hidden',

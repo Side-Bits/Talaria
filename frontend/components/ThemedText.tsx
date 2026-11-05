@@ -84,9 +84,8 @@ const styles = StyleSheet.create({
   },
   underlined: {
     fontSize: 14,
-    marginBottom: 8,
-    borderRadius: 4,
-    color: Colors.light.secondary
+    marginVertical: 8,
+    color: Colors.light.tertiary
   },
   textMuted: {
     color: Colors.light.textMuted,
