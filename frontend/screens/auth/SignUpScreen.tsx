@@ -22,7 +22,7 @@ export function SignUpScreen() {
     formState: { isSubmitting },
   } = useForm<z.input<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
-    mode: "onBlur",
+    mode: "onSubmit",
     reValidateMode: "onChange",
     shouldFocusError: true,
     defaultValues: {
