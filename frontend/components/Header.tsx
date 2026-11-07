@@ -9,17 +9,21 @@ import { Popover, type PopoverItem } from './Popover';
 
 type Props = {
   button_back: boolean;
+  button_notifications?: boolean;
   popover?: Record<string, PopoverItem>;
+
   label: string;
 };
 
 export function Header({
   button_back,
+  button_notifications,
   popover,
   label
 }: Props) {
   const haveOptions = popover && Object.keys(popover).length > 0;
   const [openMenu, setOpenMenu] = useState(false);
+  const [openNotifications, setOpenNotifications] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -38,7 +42,7 @@ export function Header({
         </View>
         <ThemedText type="title" style={styles.title}>{label}</ThemedText>
         <View style={styles.action}>
-          {haveOptions && (
+          {haveOptions ? (
             <Pressable
               onPress={() => setOpenMenu(isOpen => !isOpen)}
               accessibilityRole="button"
@@ -51,7 +55,20 @@ export function Header({
                 color={Colors.light.onSurface}
               />
             </Pressable>
-          )}
+          ) : button_notifications ? (
+            <Pressable
+              onPress={() => setOpenNotifications(isOpen => !isOpen)}
+              accessibilityRole="button"
+              accessibilityState={{ expanded: openNotifications }}
+            >
+              <Ionicons
+                name={openNotifications ? 'close-outline' : 'notifications-outline'}
+                size={20}
+                style={styles.icon}
+                color={Colors.light.onSurface}
+              />
+            </Pressable>
+          ) : null}
         </View>
       </ThemedView>
       {haveOptions && openMenu && popover && <Popover data={popover} />}

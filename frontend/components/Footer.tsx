@@ -10,7 +10,6 @@ import {
     type FooterParams,
     type FooterTab,
 } from "@/navigation/footer";
-import { globalStyles } from '@/constants/Global';
 
 const TAB_ICONS: Record<
     FooterTab,
@@ -32,7 +31,7 @@ export function Footer() {
 
     return (
         <View style={styles.footer}>
-            <ThemedView type="between" style={[styles.container, globalStyles.shadow]}>
+            <ThemedView type="between" style={styles.container}>
                 {destinations.map((destination) => (
                     <FooterButton
                         key={destination.id}

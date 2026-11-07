@@ -12,6 +12,8 @@ import { ActivityCard } from "./components/ActivityCard";
 import { Participants } from "@/components/Participants";
 import { deleteTravel } from "@/services/api/travel";
 import { formatDate } from "@/scripts/DataScripts";
+import { ThemedButton } from "@/components/ThemedButton";
+import { Colors } from "@/constants/Colors";
 
 export function ActivitiesDetailsScreen() {
   const { travel_id, name, date, description, image } = useLocalSearchParams();
@@ -106,12 +108,14 @@ export function ActivitiesDetailsScreen() {
           <ThemedText textMuted={true}>
             Add your first activity to start planning your trip
           </ThemedText>
-          <ThemedText
-            type='link'
+          <ThemedButton
+            title="Create an activity"
+            width="auto"
+            size="sm"
+            buttonStyle={{ backgroundColor: Colors.light.primary }}
+            textStyle={{ color: Colors.light.onPrimary }}
             onPress={handlePressCreateActivity}
-          >
-            Create an activity
-          </ThemedText>
+          />
         </ThemedView>
       )}
       <ThemedView type="left">
@@ -136,6 +140,6 @@ const styles = StyleSheet.create({
   feedback: {
     width: '100%',
     paddingVertical: 16,
-    gap: 4,
+    gap: 8,
   },
 });

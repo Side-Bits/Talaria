@@ -13,7 +13,12 @@ type Props = {
 export const travelImages: Record<string, any> = {
   "roma.jpg": require("../../../assets/images/temporal/roma.jpg"),
   "tailandia.jpg": require("../../../assets/images/temporal/tailandia.jpg"),
-  "pedraforca.jpg": require("../../../assets/images/temporal/pedraforca.jpg"),
+  "paris.jpg": require("../../../assets/images/temporal/paris.jpg"),
+  "novayork.jpg": require("../../../assets/images/temporal/novayork.jpg"),
+  "japan.jpg": require("../../../assets/images/temporal/japan.jpg"),
+  "finlandia.jpg": require("../../../assets/images/temporal/finlandia.jpg"),
+  "barcelona.jpg": require("../../../assets/images/temporal/barcelona.jpg"),
+  "argentina.jpg": require("../../../assets/images/temporal/argentina.jpg"),
 };
 
 export function HeroTravel({ travel }: Props) {
