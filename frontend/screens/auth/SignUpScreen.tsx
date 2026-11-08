@@ -51,10 +51,10 @@ export function SignUpScreen() {
   return (
     <ThemedView type="center" style={styles.screen}>
       <ThemedView type="column" style={styles.form}>
-        <ThemedView type="center" style={{ maxHeight: 140 }}>
+        <ThemedView type="center" style={{ maxHeight: 100 }}>
           <Image
-            source={require("../../assets/images/favicon3.png")}
-            style={{ width: 140, height: 140 }}
+            source={require("../../assets/images/favicon.svg")}
+            style={{ width: 100, height: 100 }}
           />
         </ThemedView>
         <ThemedText type="title" style={styles.title}>
@@ -104,8 +104,21 @@ export function SignUpScreen() {
           disabled={isSubmitting}
         />
 
-        <ThemedView type="left" style={styles.terms}>
-          <ThemedCheckbox label="I agree with privacy and policy"></ThemedCheckbox>
+        <ThemedView type="gap" style={styles.terms}>
+          <ThemedCheckbox label="I agree to the" />
+          <ThemedText
+            type="link"
+            onPress={() => router.push("/(auth)/terms")}
+          >
+            Terms
+          </ThemedText>
+          <ThemedText>and</ThemedText>
+          <ThemedText
+            type="link"
+            onPress={() => router.push("/(auth)/privacy")}
+          >
+            Privacy Policy
+          </ThemedText>
         </ThemedView>
         <ThemedButton
           title="Sign up"
@@ -124,7 +137,7 @@ export function SignUpScreen() {
             type="link"
             onPress={() => router.replace("/(auth)/sign-in")}
           >
-            Sign in{" "}
+            Sign in
           </ThemedText>
         </ThemedText>
       </ThemedView>
@@ -146,6 +159,7 @@ const styles = StyleSheet.create({
   },
   terms: {
     marginBottom: 16,
+    flexWrap: "wrap",
   },
   authPrompt: {
     marginTop: 16,

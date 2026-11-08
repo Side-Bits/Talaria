@@ -4,7 +4,7 @@
     "slug": "Talaria",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/favicon4.png",
+    "icon": "./assets/images/faviconBackground.svg",
     "scheme": "talaria",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -21,15 +21,15 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon3.png"
+      "favicon": "./assets/images/favicon.svg"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/favicon3.png",
-          "imageWidth": 1254,
+          "image": "./assets/images/favicon.svg",
+          "imageWidth": 100,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {

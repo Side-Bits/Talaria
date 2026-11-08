@@ -57,10 +57,10 @@ export function SignInScreen() {
                     paddingHorizontal: 16,
                 }}
             >
-                <ThemedView type="center" style={{ maxHeight: 140 }}>
+                <ThemedView type="center" style={{ maxHeight: 100 }}>
                     <Image
-                        source={require("../../assets/images/favicon3.png")}
-                        style={{ width: 140, height: 140 }}
+                        source={require("../../assets/images/favicon.svg")}
+                        style={{ width: 100, height: 100 }}
                     />
                 </ThemedView>
                 <ThemedText type="title" style={{ marginBottom: 16 }}>
@@ -103,11 +103,11 @@ export function SignInScreen() {
                     loading={isSubmitting}
                 />
                 {/* <ThemedView type='between' style={{ marginTop: 16, marginBottom: 16 }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
-           <ThemedText type="default" style={{ color: Colors.light.textMuted, marginLeft: 16, marginRight: 16 }}>Or</ThemedText>
-          <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
-        </ThemedView>
-        <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.onSurface }} onPress={() => console.log('Continue with Google')} /> */}
+                    <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
+                        <ThemedText type="default" style={{ color: Colors.light.textMuted, marginLeft: 16, marginRight: 16 }}>Or</ThemedText>
+                    <View style={{ flex: 1, height: 1, backgroundColor: Colors.light.border }} />
+                </ThemedView>
+                <ThemedButton title='Continue with Google' buttonStyle={{ backgroundColor: '#FAFAFA' }} textStyle={{ color: Colors.light.onSurface }} onPress={() => console.log('Continue with Google')} /> */}
                 <ThemedText style={styles.authPrompt}>
                     Don&apos;t have an account?{" "}
                     <ThemedText
