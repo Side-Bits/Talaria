@@ -73,7 +73,7 @@ export function ProfileDetailsScreen() {
         <ThemedView type='list' margin={8} style={styles.container}>
           <ThemedView type='between'>
             <ThemedText type='small' textMuted={true}>Language</ThemedText>
-            <ThemedText type='small'>Español (ESP)</ThemedText>
+            <ThemedText type='small'>English (ENG)</ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedView type='list' margin={16} style={styles.container}>
