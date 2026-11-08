@@ -4,7 +4,7 @@
     "slug": "Talaria",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/faviconBackground.svg",
+    "icon": "./assets/images/faviconBackground.png",
     "scheme": "talaria",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -28,7 +28,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/favicon.svg",
+          "image": "./assets/images/favicon.png",
           "imageWidth": 100,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
