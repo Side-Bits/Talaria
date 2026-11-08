@@ -1,12 +1,11 @@
+import { router } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
-import { ThemedButton } from '@/components/ThemedButton';
 import { useSession } from '@/contexts/authContext';
 import { IconProfile } from '@/components/IconProfile';
 import { ThemedText } from '@/components/ThemedText';
-import { Colors } from '@/constants/Colors';
 
 export function ProfileDetailsScreen() {
   const session = useSession();
@@ -23,7 +22,10 @@ export function ProfileDetailsScreen() {
               icon: 'log-out-outline',
               option: 'Log Out',
               color: 'red',
-              onclick: session.signOut,
+              onclick: async () => {
+                await session.signOut();
+                router.replace('/(auth)/sign-in');
+              },
             },
           }
         }
