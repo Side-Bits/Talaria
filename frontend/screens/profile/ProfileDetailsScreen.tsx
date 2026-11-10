@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
@@ -83,6 +83,7 @@ export function ProfileDetailsScreen() {
           </ThemedView>
         </ThemedView>
       </ThemedView>
+      <View style={{ height: 80, width: "100%" }} />
     </ThemedView>
   );
 }

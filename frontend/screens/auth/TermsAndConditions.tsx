@@ -39,7 +39,7 @@ export function TermsAndConditions() {
       <ThemedText type="default" style={styles.defaultText}>Side Bits reserves the right to modify, update, or discontinue any part of the application at any time.</ThemedText>
       <ThemedText type="subtitle" style={styles.subtitle}>Contact</ThemedText>
       <ThemedText type="default" style={styles.defaultText}>For any questions, contact us at: sidebits.contact@gmail.com</ThemedText>
-      <View style={{ height: 115, width: "100%" }} />
+      <View style={{ height: 50, width: "100%" }} />
     </AppScreen>
   );
 }

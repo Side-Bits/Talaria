@@ -139,7 +139,7 @@ export function ActivitiesDetailsScreen() {
               </React.Fragment>
             ))}
           </ThemedView>
-          <View style={{ height: 115, width: "100%" }} />
+          <View style={{ height: 30, width: "100%" }} />
         </>
       )}
     </ThemedView>

@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   bottomSpacer: {
-    height: 115,
+    height: 90,
     width: '100%',
   },
   feedback: {
