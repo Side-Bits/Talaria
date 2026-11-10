@@ -79,7 +79,7 @@ export function ActivityDetailsScreen() {
                 <View style={{ width: '100%', marginBottom: 12, }}>
                     <ThemedText type="underlined">People</ThemedText>
                     <Participants
-                        editable={true}
+                        editable={false}
                         size={40}
                         data={{}}
                     />
