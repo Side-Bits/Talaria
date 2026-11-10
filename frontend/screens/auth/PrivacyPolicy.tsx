@@ -41,7 +41,7 @@ export function PrivacyPolicy() {
       <ThemedText type="default" style={styles.defaultText}>You may request access, correction, or deletion of your personal information by contacting us.</ThemedText>
       <ThemedText type="subtitle" style={styles.subtitle}>Contact</ThemedText>
       <ThemedText type="default" style={styles.defaultText}>For any questions regarding this Privacy Policy, contact us at: sidebits.contact@gmail.com</ThemedText>
-      <View style={{ height: 115, width: "100%" }} />
+      <View style={{ height: 50, width: "100%" }} />
     </AppScreen>
   );
 }
