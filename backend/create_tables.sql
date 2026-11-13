@@ -33,7 +33,10 @@ CREATE TABLE IF NOT EXISTS clients (
     name        VARCHAR(64) NOT NULL,
     surname1    VARCHAR(64) NOT NULL,
     surname2    VARCHAR(64),
-    photo       TEXT
+    photo       TEXT,
+    birthdate   DATE,
+    currency    VARCHAR(3) NOT NULL DEFAULT 'EUR',
+    language    VARCHAR(8) NOT NULL DEFAULT 'ENG'
 );
 
 CREATE TABLE IF NOT EXISTS travels (

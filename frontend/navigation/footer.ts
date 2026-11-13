@@ -37,7 +37,7 @@ export function resolveFooterNavigation(
 
     const isInsideTrip = Boolean(travelId);
     const isHome = route === "travels";
-    const isProfile = route === "id-profile";
+    const isProfile = route === "profile";
     const isCreateTrip = route === "travels/create";
     const isCreateActivity = isInsideTrip && route === "travels/[travel_id]/activities/create";
 
@@ -78,7 +78,7 @@ export function resolveFooterNavigation(
         {
             id: "profile",
             label: "Profile",
-            href: { pathname: "/(app)/id-profile" },
+            href: { pathname: "/(app)/profile" },
             method: "replace",
             isCurrentScreen: isProfile,
         },

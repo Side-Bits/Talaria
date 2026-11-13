@@ -24,7 +24,7 @@ export function SignInScreen() {
     } = useForm<z.input<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         mode: "onSubmit",
-        reValidateMode: "onChange",
+        reValidateMode: "onSubmit",
         shouldFocusError: true,
         defaultValues: {
             identifier: "",
