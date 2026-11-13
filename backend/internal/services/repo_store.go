@@ -9,6 +9,7 @@ import (
 
 type Repos struct {
 	Users      *repositories.UserRepository
+	Profiles   *repositories.ProfileRepository
 	Tokens     *repositories.TokenRepository
 	Clients    *repositories.ClientRepository
 	Travels    *repositories.TravelRepository
@@ -23,6 +24,7 @@ type RepositoryStore struct {
 func NewRepos(exec database.DBExecutor) Repos {
 	return Repos{
 		Users:      repositories.NewUserRepository(exec),
+		Profiles:   repositories.NewProfileRepository(exec),
 		Tokens:     repositories.NewTokenRepository(exec),
 		Clients:    repositories.NewClientRepository(exec),
 		Travels:    repositories.NewTravelRepository(exec),

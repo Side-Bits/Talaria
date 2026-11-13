@@ -23,7 +23,7 @@ export function SignUpScreen() {
   } = useForm<z.input<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     mode: "onSubmit",
-    reValidateMode: "onChange",
+    reValidateMode: "onSubmit",
     shouldFocusError: true,
     defaultValues: {
       username: "",

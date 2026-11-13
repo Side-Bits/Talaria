@@ -22,6 +22,7 @@ export function ActivityEditorScreen() {
     const activityId = Array.isArray(activity_id)
         ? activity_id[0]
         : activity_id;
+    
     const {
         control,
         handleSubmit,
@@ -32,7 +33,7 @@ export function ActivityEditorScreen() {
     } = useForm<z.input<typeof activitySchema>>({
         resolver: zodResolver(activitySchema),
         mode: "onSubmit",
-        reValidateMode: "onChange",
+        reValidateMode: "onSubmit",
         shouldFocusError: true,
         defaultValues: DEFAULT_ACTIVITY,
     });

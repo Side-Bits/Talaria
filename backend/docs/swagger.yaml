@@ -13,6 +13,7 @@ definitions:
         type: string
     required:
     - end_date
+    - birthdate
     - name
     - start_date
     type: object
@@ -61,6 +62,50 @@ definitions:
       items:
         $ref: '#/definitions/models.Travel'
       type: array
+    type: object
+  handlers.ProfileResponse:
+    properties:
+      birthdate:
+        format: date-time
+        type: string
+      currency:
+        type: string
+      email:
+        type: string
+      id_user:
+        type: integer
+      language:
+        type: string
+      name:
+        type: string
+      photo:
+        type: string
+      surname1:
+        type: string
+      surname2:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.UpdateProfileRequest:
+    properties:
+      birthdate:
+        description: Date in YYYY-MM-DD format.
+        example: "1990-01-31"
+        type: string
+      name:
+        maxLength: 64
+        type: string
+      surname1:
+        maxLength: 64
+        type: string
+      surname2:
+        maxLength: 64
+        type: string
+    required:
+    - birthdate
+    - name
+    - surname1
     type: object
   handlers.UserResponse:
     properties:
@@ -125,6 +170,73 @@ info:
   title: Talaria API
   version: "1.0"
 paths:
+  /api/profile:
+    get:
+      description: Returns the authenticated user's profile and account details.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get current profile
+      tags:
+      - users
+  /api/profile/edit:
+    post:
+      consumes:
+      - application/json
+      description: Updates the authenticated user's name and surnames.
+      parameters:
+      - description: Profile fields
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Edit current profile
+      tags:
+      - users
   /api/travels:
     get:
       description: Returns travels for the authenticated user.

@@ -65,12 +65,14 @@ func main() {
 
 	userService := services.NewUserService(dbpool)
 	userHandler := handlers.NewUserHandler(*userService)
+	profileService := services.NewProfileService(dbpool)
+	profileHandler := handlers.NewProfileHandler(*profileService)
 	travelService := services.NewTravelService(dbpool)
 	travelHandler := handlers.NewTravelHandler(*travelService)
 	activityService := services.NewActivityService(dbpool)
 	activityHandler := handlers.NewActivityHandler(*activityService)
 
-	router := routes.NewRouter(authHandler, userHandler, travelHandler, activityHandler, authService)
+	router := routes.NewRouter(authHandler, userHandler, profileHandler, travelHandler, activityHandler, authService)
 	router.SetupRoutes(r)
 
 	log.Printf("listening on 0.0.0.0:%s", port)

@@ -26,7 +26,7 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
     } = useForm<z.input<typeof travelSchema>>({
         resolver: zodResolver(travelSchema),
         mode: 'onSubmit',
-        reValidateMode: 'onChange',
+        reValidateMode: 'onSubmit',
         shouldFocusError: true,
         defaultValues: DEFAULT_TRAVEL,
     });

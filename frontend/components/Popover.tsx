@@ -27,7 +27,7 @@ export function Popover({ data }: Props) {
                 onPress={element.onclick}
             >
                 <Ionicons name={element.icon} size={20} color={element.color ?? Colors.light.onSurface} />
-                <ThemedText>{element.option}</ThemedText>
+                <ThemedText style={{ color: element.color ?? Colors.light.onSurface }}>{element.option}</ThemedText>
             </Pressable>
         ))}
       </ThemedView>  

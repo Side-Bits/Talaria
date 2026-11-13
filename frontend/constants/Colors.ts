@@ -15,6 +15,7 @@ export const Colors = {
     surface: '#FFF',
     onSurface: '#2F2F2F',
     border: '#F5F5F7',
+    onInput: '#FFF',
 
     // Navigation
     navigationBackground: '#F3F3F5',
@@ -52,6 +53,7 @@ export const Colors = {
     surface: '#1B1E1B',
     onSurface: '#EDEDED',
     border: '#2A2D2A',
+    onInput: '#3b3b3b',
 
     // Navigation
     navigationBackground: '#1B1E1B',

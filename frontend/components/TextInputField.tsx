@@ -102,6 +102,7 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
       leadingIcon,
       placeholder,
       placeholderTextColor,
+      readOnly = false,
       required,
       trailingAction,
       trailingIcon,
@@ -148,7 +149,7 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
       ]}
     >
       {label}
-      {required ? " *" : ""}
+      {required && !readOnly ? " *" : ""}
     </Text>
     );
 
@@ -171,6 +172,8 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
 
         <TextInput
           {...inputProps}
+          readOnly={readOnly}
+          pointerEvents={readOnly ? "none" : "auto"}
           placeholder={placeholder}
           placeholderTextColor={placeholderTextColor ?? colors.textMuted}
           secureTextEntry={isPassword && !passwordVisible}
@@ -187,7 +190,7 @@ export const TextInputField = forwardRef<TextInput, TextInputFieldProps>(
           onChangeText={onChangeText}
           style={[
             styles.input,
-            { color: Colors.light.onSurface },
+            { color: readOnly ? colors.textMuted : Colors.light.onSurface },
             inputStyle,
           ]}
         />

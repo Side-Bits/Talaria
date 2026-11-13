@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     textinput: {
         borderWidth: 1,
         borderColor: Colors.light.border,
-        backgroundColor: Colors.light.onPrimary,
+        backgroundColor: Colors.light.onInput,
         borderRadius: 8,
         padding: 8,
         fontSize: 12,

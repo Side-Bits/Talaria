@@ -14,15 +14,17 @@ import (
 type Router struct {
 	authHandler     *handlers.AuthHandler
 	userHandler     *handlers.UserHandler
+	profileHandler  *handlers.ProfileHandler
 	travelHandler   *handlers.TravelHandler
 	activityHandler *handlers.ActivityHandler
 	tokenService    middleware.TokenValidator
 }
 
-func NewRouter(authHandler *handlers.AuthHandler, userHandler *handlers.UserHandler, travelHandler *handlers.TravelHandler, activityHandler *handlers.ActivityHandler, tokenService middleware.TokenValidator) *Router {
+func NewRouter(authHandler *handlers.AuthHandler, userHandler *handlers.UserHandler, profileHandler *handlers.ProfileHandler, travelHandler *handlers.TravelHandler, activityHandler *handlers.ActivityHandler, tokenService middleware.TokenValidator) *Router {
 	return &Router{
 		authHandler:     authHandler,
 		userHandler:     userHandler,
+		profileHandler:  profileHandler,
 		travelHandler:   travelHandler,
 		activityHandler: activityHandler,
 		tokenService:    tokenService,
@@ -55,7 +57,9 @@ func (rt *Router) setupPrivateRoutes(r *gin.Engine) {
 		// User
 		api.GET("/user", rt.userHandler.GetUserByToken)
 		api.POST("/logoutall", rt.userHandler.LogoutAll)
-		
+		api.GET("/profile", rt.profileHandler.GetProfile)
+		api.POST("/profile/edit", rt.profileHandler.UpdateProfile)
+
 		// Travel
 		api.GET("/travels", rt.travelHandler.GetTravels)
 		api.POST("/travels/create", rt.travelHandler.CreateTravel)
