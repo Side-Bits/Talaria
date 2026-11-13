@@ -21,7 +21,7 @@ export function SplashScreenController() {
   return (
     <View style={styles.container}>
       <Image
-        source={require('@/assets/images/favicon.svg')}
+        source={require('@/assets/images/favicon.png')}
         style={styles.image}
         resizeMode="contain"
         accessibilityLabel="Talaria"

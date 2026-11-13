@@ -53,11 +53,7 @@ export function SignUpScreen() {
       <ThemedView type="column" style={styles.form}>
         <ThemedView type="center" style={{ maxHeight: 100 }}>
           <Image
-            source={
-              Platform.OS === "android"
-                ? require("../../assets/images/favicon.png")
-                : require("../../assets/images/favicon.svg")
-            }
+            source={require("../../assets/images/favicon.png")}
             style={{ width: 100, height: 100 }}
           />
         </ThemedView>
