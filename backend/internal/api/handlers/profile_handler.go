@@ -48,6 +48,25 @@ func (h *ProfileHandler) GetProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, profile)
 }
 
+func (h *ProfileHandler) GetProfileData(c *gin.Context) {
+	userID, ok := middleware.GetUserIDOrAbort(c)
+	if !ok {
+		return
+	}
+
+	profileData, err := h.profileService.GetProfileData(c.Request.Context(), userID)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			respondNotFound(c, "profile not found", err)
+			return
+		}
+		respondInternalError(c, "failed to fetch profileData", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, profileData)
+}
+
 func (h *ProfileHandler) UpdateProfile(c *gin.Context) {
 	var req UpdateProfileRequest
 	

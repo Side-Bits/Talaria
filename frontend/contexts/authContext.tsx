@@ -48,7 +48,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 				{ identifier: credentials.identifier, password: credentials.password },
 				{ requiresAuth: false }  // No auth header added
 			);
-			console.log(response);
+			// console.log(response);
 
 			// Store session token and user data
 			setSession(response.token);
@@ -68,7 +68,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 				{ username: credentials.username, identifier: credentials.identifier, password: credentials.password },
 				{ requiresAuth: false }  // No auth header added
 			);
-			console.log(response);
+			// console.log(response);
 
 			// Store session token and user data
 			setSession(response.token);

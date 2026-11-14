@@ -57,7 +57,7 @@ func (rt *Router) setupPrivateRoutes(r *gin.Engine) {
 		// User
 		api.GET("/user", rt.userHandler.GetUserByToken)
 		api.POST("/logoutall", rt.userHandler.LogoutAll)
-		api.GET("/profile", rt.profileHandler.GetProfile)
+		api.GET("/profile", rt.profileHandler.GetProfileData)
 		api.POST("/profile/edit", rt.profileHandler.UpdateProfile)
 
 		// Travel

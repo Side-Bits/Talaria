@@ -9,13 +9,12 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedLine } from '@/components/ThemedLine';
 import { useEffect, useState } from 'react';
 import { getProfile } from '@/services/api/profile';
-import { Profile } from '@/types/profile';
-import { formatDate } from '@/scripts/DataScripts';
+import { ProfileData } from '@/types/profile';
 
 export function ProfileDetailsScreen() {
   const session = useSession();
   const user = session.user;
-  const [profile, setProfile] = useState<Profile | undefined>();
+  const [profileData, setProfileData] = useState<ProfileData | undefined>();
   const letter = user?.username ? user.username.charAt(0).toUpperCase() : ' ';
 
   const handlePressEditProfile = () => {
@@ -28,7 +27,7 @@ export function ProfileDetailsScreen() {
     if (user) {
       getProfile()
         .then(data => {
-          setProfile(data);
+          setProfileData(data);
         })
         .catch(e => {
           console.error(e);
@@ -44,7 +43,7 @@ export function ProfileDetailsScreen() {
         popover={
           {
             edit: {
-              icon: 'chevron-forward',
+              icon: 'pencil',
               option: 'Edit profile',
               color: '#000',
               onclick: handlePressEditProfile,
@@ -69,15 +68,15 @@ export function ProfileDetailsScreen() {
         </ThemedView>
         <ThemedView type='between' style={{ gap: 8, borderRadius: 8 }}>
           <ThemedView type='column'>
-            <ThemedText type='title'>0</ThemedText>
+            <ThemedText type='title'>{profileData?.numTrips ?? "-"}</ThemedText>
             <ThemedText type='small' textMuted={true}>Trips</ThemedText>
           </ThemedView>
           <ThemedView type='column'>
-            <ThemedText type='title'>0</ThemedText>
+            <ThemedText type='title'>{profileData?.numCountries ?? '-'}</ThemedText>
             <ThemedText type='small' textMuted={true}>Countries</ThemedText>
           </ThemedView>
           <ThemedView type='column'>
-            <ThemedText type='title'>0</ThemedText>
+            <ThemedText type='title'>{profileData?.since ? profileData.since.slice(0, 10) : "-"}</ThemedText>
             <ThemedText type='small' textMuted={true}>Since</ThemedText>
           </ThemedView>
         </ThemedView>
@@ -85,32 +84,32 @@ export function ProfileDetailsScreen() {
         <ThemedView type='list' margin={8} style={styles.container}>
           <ThemedView type='between' margin={8}>
             <ThemedText type='small' textMuted={true}>Name</ThemedText>
-            <ThemedText type='small'>{profile?.name}</ThemedText>
+            <ThemedText type='small'>{profileData?.name}</ThemedText>
           </ThemedView>
           <ThemedView type='between' margin={8}>
             <ThemedText type='small' textMuted={true}>Last names</ThemedText>
-            <ThemedText type='small'>{[profile?.surname1, profile?.surname2].filter(Boolean).join(' ')}</ThemedText>
+            <ThemedText type='small'>{[profileData?.surname1, profileData?.surname2].filter(Boolean).join(' ')}</ThemedText>
           </ThemedView>
           <ThemedView type='between' margin={8}>
             <ThemedText type='small' textMuted={true}>Email</ThemedText>
-            <ThemedText type='small'>{profile?.email}</ThemedText>
+            <ThemedText type='small'>{profileData?.email}</ThemedText>
           </ThemedView>
           <ThemedView type='between'>
             <ThemedText type='small' textMuted={true}>Birthdate</ThemedText>
-            <ThemedText type='small'>{profile?.birthdate ? profile.birthdate.slice(0, 10) : ''}</ThemedText>
+            <ThemedText type='small'>{profileData?.birthdate ? profileData.birthdate.slice(0, 10) : ''}</ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedLine type='all' />
         <ThemedView type='list' margin={8} style={styles.container}>
           <ThemedView type='between'>
             <ThemedText type='small' textMuted={true}>Language</ThemedText>
-            <ThemedText type='small'>{profile?.language}</ThemedText>
+            <ThemedText type='small'>{profileData?.language}</ThemedText>
           </ThemedView>
         </ThemedView>
         <ThemedView type='list' margin={16} style={styles.container}>
           <ThemedView type='between'>
             <ThemedText type='small' textMuted={true}>Currency</ThemedText>
-            <ThemedText type='small'>{profile?.currency}</ThemedText>
+            <ThemedText type='small'>{profileData?.currency}</ThemedText>
           </ThemedView>
         </ThemedView>
       </ThemedView>
@@ -120,10 +119,6 @@ export function ProfileDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  signout_button: {
-    backgroundColor: '#FF8F8F',
-    alignItems: 'center',
-  },
   container: {
     width: '100%',
     padding: 8,

@@ -16,7 +16,6 @@ import { FormDate } from '@/components/FormDate';
 import { useEffect } from 'react';
 import { DEFAULT_PROFILE } from '@/types/profile';
 import { getProfile, updateProfile } from '@/services/api/profile';
-import { getDefaultDate } from '@/scripts/DataScripts';
 
 export function ProfileEditorScreen() {
   const session = useSession();
@@ -62,7 +61,7 @@ export function ProfileEditorScreen() {
           reset({
             ...DEFAULT_PROFILE,
             ...data,
-            birthdate: data.birthdate.slice(0, 10),
+            birthdate: data.birthdate ? data.birthdate.slice(0, 10) : '',
             username: user.username,
             email: user.email,
           });
