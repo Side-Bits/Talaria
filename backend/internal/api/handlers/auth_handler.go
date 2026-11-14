@@ -55,7 +55,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	user := models.User{
 		Email:    req.Identifier,
 		Password: req.Password,
-		Name:     req.Username,
+		Username: req.Username,
 	}
 
 	token, err := h.authService.Register(c, &user)

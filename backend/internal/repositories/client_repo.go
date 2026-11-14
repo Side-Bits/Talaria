@@ -14,7 +14,7 @@ func NewClientRepository(db database.DBExecutor) *ClientRepository {
 	return &ClientRepository{db: db}
 }
 
-func (r *ClientRepository) Create(ctx context.Context, client *models.Client) error {
+func (r *ClientRepository) CreateClient(ctx context.Context, client *models.Client) error {
 	query := `
         INSERT INTO clients (id_user, name, surname1, surname2, photo)
         VALUES ($1, $2, $3, $4, $5)

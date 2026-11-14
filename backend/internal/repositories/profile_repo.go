@@ -53,6 +53,56 @@ func (r *ProfileRepository) GetProfile(ctx context.Context, userID int64) (*mode
 	return &profile, nil
 }
 
+func (r *ProfileRepository) GetProfileData(ctx context.Context, userID int64) (*models.ProfileData, error) {
+	query := `
+		SELECT c.id_user,
+			u.username,
+			u.email,
+			c.name,
+			c.surname1,
+			COALESCE(c.surname2, ''),
+			c.birthdate,
+			COALESCE(c.photo, ''),
+			c.currency,
+			c.language,
+			(
+				SELECT COUNT(*)
+				FROM clients_travels ct
+				JOIN travels t ON t.id_travel = ct.id_travel
+				WHERE ct.id_user = c.id_user
+					AND t.id_status IN (1, 2, 4)
+			),
+			0::bigint,
+			u.created_at
+		FROM clients c
+		JOIN users u ON u.id_user = c.id_user
+		WHERE c.id_user = $1
+	`
+
+	var profile models.ProfileData
+	err := r.db.QueryRow(ctx, query, userID).Scan(
+		&profile.ID,
+		&profile.Username,
+		&profile.Email,
+		&profile.Name,
+		&profile.Surname1,
+		&profile.Surname2,
+		&profile.Birthdate,
+		&profile.Photo,
+		&profile.Currency,
+		&profile.Language,
+		&profile.NumTrips,
+		&profile.NumCountries,
+		&profile.Since,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &profile, nil
+}
+
 func (r *ProfileRepository) UpdateProfile(ctx context.Context, userID int64, name string, surname1 string, surname2 string, birthdate string) error {
 	query := `
 		UPDATE clients

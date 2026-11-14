@@ -10,6 +10,12 @@ export interface Profile {
   currency: string
 }
 
+export interface ProfileData extends Profile {
+  numTrips: number;
+  numCountries: number;
+  since: string;
+}
+
 export const DEFAULT_PROFILE = {
   id: 0,
   username: "",

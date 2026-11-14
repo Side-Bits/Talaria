@@ -1,8 +1,8 @@
-import { Profile } from "@/types/profile";
+import { Profile, ProfileData } from "@/types/profile";
 import { api } from "../api";
 
 export function getProfile() {
-    return api.get<Profile>(`api/profile`);
+    return api.get<ProfileData>(`api/profile`);
 }
 
 export function updateProfile(profile: Profile) {

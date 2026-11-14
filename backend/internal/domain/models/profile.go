@@ -14,3 +14,10 @@ type Profile struct {
 	Username  string     `json:"username"`
 	Email     string     `json:"email"`
 }
+
+type ProfileData struct {
+	Profile
+	NumTrips     int64     `json:"numTrips"`
+	NumCountries int64     `json:"numCountries"`
+	Since        time.Time `json:"since"`
+}
