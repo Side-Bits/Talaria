@@ -36,7 +36,7 @@ func (r *TravelRepository) GetTravels(ctx context.Context, userID int64) (map[st
 			WHERE c.id_user = $1
 				AND t.id_status IS DISTINCT FROM -1
 		) t
-		WHERE n <= 5
+		-- WHERE n <= 5
 		ORDER BY tag, start_date ASC;
 	`, userID)
 	

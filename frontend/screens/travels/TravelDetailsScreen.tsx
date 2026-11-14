@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Image } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
@@ -65,27 +65,27 @@ export function TravelDetailsScreen() {
           <ActivityIndicator color={Colors.light.primary} />
         </View>
       ) : state.status === 'error' ? (
-        <View style={styles.errorCard}>
-          <View style={styles.errorIcon} accessible={false}>
-            <Ionicons name="alert-circle-outline" size={32} color={Colors.light.error} />
-          </View>
-          <ThemedText style={styles.errorTitle} accessibilityRole="alert">
-            We couldn&apos;t load your trips
-          </ThemedText>
-          <View style={styles.errorDetails}>
-            <ThemedText style={styles.errorMessage} selectable>
-              {state.error.message}
-            </ThemedText>
-          </View>
-          <ThemedButton
-            title="Try again"
-            onPress={retry}
-            variant='outline'
-            leadingIcon={props => <Ionicons name="refresh-outline" {...props} />}
-            buttonStyle={styles.retryButton}
-            textStyle={styles.retryText}
-          />
-        </View>
+        <ThemedView type='center' style={{ width: '100%' }}>
+          <ThemedView type='center' style={{ gap: 4 }}>
+            <ThemedView type="center" style={{ maxHeight: 190 }}>
+              <Image
+                source={require("../../assets/images/failed.png")}
+                style={{ width: 170, height: 190 }}
+              />
+            </ThemedView>
+            <ThemedText type='title'>We couldn&apos;t load your trips</ThemedText>
+            <ThemedText type='subtitle'>{state.error.message}</ThemedText>
+            <ThemedButton
+              title="Try again"
+              onPress={retry}
+              variant='primary'
+              width='auto'
+              size='sm'
+              buttonStyle={{ backgroundColor: Colors.light.primary, marginTop: 8 }}
+              textStyle={{ color: Colors.light.onPrimary }}
+            />
+          </ThemedView>
+        </ThemedView>
       ) : state.data.Going.length === 0 && state.data.Done.length === 0 ? (
         <>
           <ImageGallery />
@@ -162,9 +162,6 @@ const styles = StyleSheet.create({
     paddingVertical: 28,
     paddingHorizontal: 20,
     alignItems: 'center',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
     backgroundColor: Colors.light.surface,
     gap: 12,
   },
@@ -192,13 +189,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: Colors.light.onSurface,
     textAlign: 'center',
-  },
-  retryButton: {
-    width: 'auto',
-    minWidth: 144,
-    marginTop: 4,
-  },
-  retryText: {
-    fontWeight: '600',
-  },
+  }
 });
