@@ -244,7 +244,7 @@ export const ThemedDate = forwardRef<TextInput, ThemedDateProps>(
                 autoComplete="off"
                 clearable={false}
                 controlStyle={[styles.control, controlStyle]}
-                helperText={helperText ?? (mode === "datetime" ? DATETIME_PLACEHOLDER : DATE_PLACEHOLDER)}
+                // helperText={helperText ?? (mode === "datetime" ? DATETIME_PLACEHOLDER : DATE_PLACEHOLDER)}
                 inputMode="numeric"
                 inputStyle={[styles.input, inputStyle]}
                 keyboardType="number-pad"

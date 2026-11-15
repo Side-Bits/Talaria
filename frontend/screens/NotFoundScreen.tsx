@@ -24,8 +24,7 @@ export function NotFoundScreen() {
         title="Back to Home"
         width="auto"
         size="sm"
-        buttonStyle={{ backgroundColor: Colors.light.primary, marginTop: 16 }}
-        textStyle={{ color: Colors.light.onPrimary }}
+        buttonStyle={{ marginTop: 16 }}
         onPress={() => router.replace(session ? "/(app)/travels" : "/(auth)/sign-in")}
       />
     </ThemedView>

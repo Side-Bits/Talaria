@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: 600,
   },
   title: {
     fontSize: 24,
@@ -56,10 +56,11 @@ const styles = StyleSheet.create({
   subtitle: {
     color: Colors.light.secondary,
     fontSize: 18,
+    fontWeight: 400,
   },
   defaultSemiBold: {
     fontSize: 10,
-    fontWeight: "600",
+    fontWeight: 400,
   },
   link: {
     color: Colors.light.tertiary,
