@@ -9,24 +9,43 @@ import { HeroActivity } from "./components/HeroActivity";
 import { ActivityCard } from "./components/ActivityCard";
 import { Participants } from "@/components/Participants";
 import { deleteTravel } from "@/services/api/travel";
-import { formatDate } from "@/scripts/DataScripts";
+import { formatDate, formatTravelDates } from "@/scripts/DataScripts";
+import { ErrorCard } from "@/components/ErrorCard";
 import { ThemedButton } from "@/components/ThemedButton";
 import { Colors } from "@/constants/Colors";
 import { useActivities } from "@/hooks/useActivities";
+import { useTravel } from "@/hooks/useTravel";
 
 export function ActivitiesDetailsScreen() {
-  const { travel_id, name, date, description, image } = useLocalSearchParams();
+  const { travel_id } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
-  const travelImage = Array.isArray(image) ? image[0] : image;
   const [activeTab, setActiveTab] = useState('all');
   const [day, setDay] = useState(0);
-  const { state, retry } = useActivities(travelId);
-  const activity = state.status === 'success' ? state.data : [];
+  const { state: activitiesState, retry: retryActivities } = useActivities(travelId);
+  const { state: travelState, retry: retryTravel } = useTravel(travelId);
+  const travel = travelState.status === 'success' ? travelState.data : undefined;
+  const travelDate = travel ? formatTravelDates(travel.start_date, travel.end_date) : '';
+  const activity = activitiesState.status === 'success' ? activitiesState.data : [];
+  const isLoading = activitiesState.status === 'loading' || travelState.status === 'loading';
+  const loadError = activitiesState.status === 'error'
+    ? activitiesState.error
+    : travelState.status === 'error'
+      ? travelState.error
+      : undefined;
 
-  const handlePressCreateActivity = () => {
+  const retry = () => {
+    if (activitiesState.status === 'error') retryActivities();
+    if (travelState.status === 'error') retryTravel();
+  };
+
+  const handleCreateActivity = () => {
+    if (!travelId) return;
+
     router.push({
       pathname: "/(app)/travels/[travel_id]/activities/create",
-      params: { travel_id: travelId },
+      params: {
+        travel_id: travelId
+      },
     });
   };
 
@@ -40,14 +59,12 @@ export function ActivitiesDetailsScreen() {
     ]),
   );
 
-  const handleTravel = async (action: String) => {
-    if (action === 'delete') {
-      try {
-        await deleteTravel(travelId);
-        router.back();
-      } catch {
-        Alert.alert("Error", "Invalid credentials");
-      }
+  const handleTravel = async () => {
+    try {
+      await deleteTravel(travelId);
+      router.back();
+    } catch {
+      Alert.alert("Error", "Invalid credentials");
     }
   }
 
@@ -55,50 +72,43 @@ export function ActivitiesDetailsScreen() {
     <ThemedView type="left" style={{ marginBottom: 64 }}>
       <Header
         button_back={true}
-        popover={
+        popover={travel ? (
           {
             delete: {
               icon: 'trash-outline',
               option: 'Delete trip',
               color: 'red',
-              onclick: () => handleTravel('delete'),
+              onclick: () => handleTravel(),
             },
           }
-        }
-        label={String(name)}
+        ) : undefined}
+        label={travel?.name ?? ' '}
       />
-      {state.status === 'loading' ? (
+      {isLoading ? (
         <View style={styles.feedback}>
           <ActivityIndicator color={Colors.light.primary} />
         </View>
-      ) : state.status === 'error' ? (
-        <View style={styles.errorCard}>
-          <ThemedText style={styles.errorTitle} accessibilityRole="alert">
-            We couldn&apos;t load the activities
-          </ThemedText>
-          <ThemedText style={styles.errorMessage} selectable>
-            {state.error.message}
-          </ThemedText>
-          <ThemedButton
-            title="Try again"
-            onPress={retry}
-            variant="outline"
-            buttonStyle={styles.retryButton}
-            textStyle={styles.retryText}
-          />
-        </View>
+      ) : loadError ? (
+        <ErrorCard
+          title="We couldn't load the trip details"
+          description={loadError.message}
+          image={require('../../assets/images/failed.png')}
+          onPress={retry}
+        />
       ) : (
         <>
-          <HeroActivity image={travelImage} />
+          <HeroActivity image={travel?.image} />
           <ThemedView type='between' style={{ marginBottom: 8 }}>
-            <ThemedText>{date}</ThemedText>
+            <ThemedText>{travelDate}</ThemedText>
             <Participants
               editable={false}
               size={25}
               data={{}}
             />
           </ThemedView>
-          <ThemedText textMuted={true} style={styles.description}>{description}</ThemedText>
+          <ThemedText textMuted={true} style={styles.description}>
+            {travel?.description}
+          </ThemedText>
           {activity.length ? (
             uniqueDays.length > 1 && (
               <Tabs
@@ -123,18 +133,18 @@ export function ActivitiesDetailsScreen() {
                 title="Create an activity"
                 width="auto"
                 size="sm"
-                buttonStyle={{ backgroundColor: Colors.light.primary }}
-                textStyle={{ color: Colors.light.onPrimary }}
-                onPress={handlePressCreateActivity}
+                onPress={handleCreateActivity}
               />
             </ThemedView>
           )}
           <ThemedView type="left">
             {activity.filter((item) => day === 0 || item.day === day).map((item, i, arr) => (
               <React.Fragment key={item.id}>
-                {item.start_date.slice(0, 10) !== arr[i - 1]?.start_date.slice(0, 10) && (
-                  <ThemedText type="underlined" style={{ marginLeft: 60 }}>{formatDate(item.start_date)}</ThemedText>
-                )}
+                {uniqueDays.length > 1 &&
+                  item.start_date.slice(0, 10) !== arr[i - 1]?.start_date.slice(0, 10) && (
+                    <ThemedText type="underlined" style={{ marginLeft: 60 }}>{formatDate(item.start_date)}</ThemedText>
+                  )
+                }
                 <ActivityCard activity={item} />
               </React.Fragment>
             ))}
@@ -154,36 +164,5 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 16,
     gap: 8,
-  },
-  errorCard: {
-    width: '100%',
-    paddingVertical: 28,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    backgroundColor: Colors.light.surface,
-    gap: 12,
-  },
-  errorTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: Colors.light.onSurface,
-    textAlign: 'center',
-  },
-  errorMessage: {
-    fontSize: 12,
-    lineHeight: 18,
-    color: Colors.light.onSurface,
-    textAlign: 'center',
-  },
-  retryButton: {
-    width: 'auto',
-    minWidth: 144,
-    marginTop: 4,
-  },
-  retryText: {
-    fontWeight: '600',
   },
 });

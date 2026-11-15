@@ -89,7 +89,7 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
                             disabled={isSubmitting}
                         />
                     </View>
-                    <ThemedText type="center" style={{ marginHorizontal: 12, marginBottom: 8 }}>a</ThemedText>
+                    <ThemedText type="center" style={{ marginHorizontal: 12, marginTop: 8 }}>to</ThemedText>
                     <View style={{ flex: 1 }}>
                         <FormDate
                             control={control}
@@ -128,6 +128,7 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
                 </View>
                 <ThemedButton
                     title='Add'
+                    id='buttonAdd'
                     buttonStyle={{ marginTop: 12 }}
                     onPress={handleSubmit(handleTravel)}
                     disabled={isSubmitting}

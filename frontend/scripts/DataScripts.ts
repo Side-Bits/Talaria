@@ -2,6 +2,7 @@ const locale = 'en-US'
 
 const date_option_short: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', timeZone: 'UTC', }
 const date_option_long: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', timeZone: 'UTC', }
+const date_option_numeric: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC', }
 const time_option: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC', }
 
 export function getDefaultDate () {
@@ -14,6 +15,10 @@ export function getDefaultTime () {
 
 export function formatDate(date: string) {
   return formatDateString(date, date_option_long)
+}
+
+export function formatDateDDMMYYYY(date: string) {
+  return new Date(date).toLocaleDateString(locale, date_option_numeric)
 }
 
 export function formatTravelDates (start: string, end: string) {

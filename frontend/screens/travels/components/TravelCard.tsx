@@ -33,10 +33,6 @@ export function TravelCard({ travel, onPress }: TravelCardProps) {
                 pathname: "/(app)/travels/[travel_id]/activities",
                 params: {
                     travel_id: String(travel.id),
-                    name: String(travel.name),
-                    date: String(date),
-                    description: String(travel.description),
-                    image: String(travel.image ?? ""),
                 },
             }));
 

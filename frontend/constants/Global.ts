@@ -11,4 +11,10 @@ export const globalStyles = StyleSheet.create({
         shadowRadius: 8,
         elevation: 2,
     },
+    simpleContainer: {
+        width: '100%',
+        padding: 8,
+        backgroundColor: '#FCFCFC',
+        borderRadius: 4
+    }
 });

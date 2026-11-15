@@ -30,10 +30,6 @@ export function HeroTravel({ travel }: Props) {
     pathname: '/(app)/travels/[travel_id]/activities',
     params: {
       travel_id: String(travel.id),
-      name: travel.name,
-      date,
-      description: travel.description ?? '',
-      image: travel.image ?? '',
     }
   }));
 
@@ -69,6 +65,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderColor: Colors.light.border,
+    backgroundColor: Colors.light.background
   },
   banner: {
     width: '100%',

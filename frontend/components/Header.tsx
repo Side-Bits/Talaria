@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
   icon: {
     paddingVertical: 4,
     paddingHorizontal: 5,
-    backgroundColor: 'transparent',
     borderRadius: 8,
     borderWidth: 1,
-    color: Colors.light.onBackground,
+    color: 'Colors.light.onBackground',
+    backgroundColor: Colors.light.background,
     borderColor: Colors.light.border,
   }
 });

@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View, Image } from 'react-native';
-
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedButton } from '@/components/ThemedButton';
 import { Colors } from '@/constants/Colors';
+import { ErrorCard } from '@/components/ErrorCard';
 import { useTravels } from '@/hooks/useTravels';
 import { Tabs } from '@/components/Tabs';
 import { HeroTravel } from '@/screens/travels/components/HeroTravel';
 import { TravelCard } from './components/TravelCard';
 import { ImageGallery } from './components/ImageGallery';
 import { router } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 
 export function TravelDetailsScreen() {
   const { state, retry } = useTravels();
@@ -65,27 +64,12 @@ export function TravelDetailsScreen() {
           <ActivityIndicator color={Colors.light.primary} />
         </View>
       ) : state.status === 'error' ? (
-        <ThemedView type='center' style={{ width: '100%' }}>
-          <ThemedView type='center' style={{ gap: 4 }}>
-            <ThemedView type="center" style={{ maxHeight: 190 }}>
-              <Image
-                source={require("../../assets/images/failed.png")}
-                style={{ width: 170, height: 190 }}
-              />
-            </ThemedView>
-            <ThemedText type='title'>We couldn&apos;t load your trips</ThemedText>
-            <ThemedText type='subtitle'>{state.error.message}</ThemedText>
-            <ThemedButton
-              title="Try again"
-              onPress={retry}
-              variant='primary'
-              width='auto'
-              size='sm'
-              buttonStyle={{ backgroundColor: Colors.light.primary, marginTop: 8 }}
-              textStyle={{ color: Colors.light.onPrimary }}
-            />
-          </ThemedView>
-        </ThemedView>
+        <ErrorCard
+          title="We couldn't load your trips"
+          description={state.error.message}
+          image={require('../../assets/images/failed.png')}
+          onPress={retry}
+        />
       ) : state.data.Going.length === 0 && state.data.Done.length === 0 ? (
         <>
           <ImageGallery />
@@ -100,8 +84,6 @@ export function TravelDetailsScreen() {
               title="Create an travel"
               width="auto"
               size='sm'
-              buttonStyle={{ backgroundColor: Colors.light.primary }}
-              textStyle={{ color: Colors.light.onPrimary }}
               onPress={() => router.push('/travels/create')}
             />
           </ThemedView>
@@ -143,7 +125,7 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: 16,
     borderRadius: 8,
-    backgroundColor: Colors.light.onBackground,
+    backgroundColor: "#fcfcfc",
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -157,37 +139,4 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     gap: 8,
   },
-  errorCard: {
-    width: '100%',
-    paddingVertical: 28,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    backgroundColor: Colors.light.surface,
-    gap: 12,
-  },
-  errorIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: Colors.light.onSurface,
-    textAlign: 'center',
-  },
-  errorDetails: {
-    width: '100%',
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: Colors.light.border,
-  },
-  errorMessage: {
-    fontSize: 12,
-    lineHeight: 18,
-    color: Colors.light.onSurface,
-    textAlign: 'center',
-  }
 });

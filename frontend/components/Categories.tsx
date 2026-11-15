@@ -11,7 +11,7 @@ export function Categories() {
     <ThemedView type='left' style={styles.container}>
         <ThemedText type="small" textMuted={true} style={{ marginBottom: 6, width: '100%' }}>Categories</ThemedText>
         <ThemedView type='row' style={styles.icons}>
-          {Array.from({ length: 3 }, (_, index) => (
+          {Array.from({ length: 1 }, (_, index) => (
             <IconCategory size={40} />
           ))}
         </ThemedView>

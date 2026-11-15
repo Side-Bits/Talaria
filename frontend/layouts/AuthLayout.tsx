@@ -1,5 +1,8 @@
+import { ThemedView } from "@/components/ThemedView";
+import { Colors } from "@/constants/Colors";
+import { BlurView } from "expo-blur";
 import { Slot } from "expo-router";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function AuthLayout() {
@@ -8,8 +11,46 @@ export function AuthLayout() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
-      <Slot />
-    </View>
+    <ThemedView
+      type="middle"
+      style={{
+        flex: 1,
+        paddingTop: insets.top,
+        backgroundColor: Colors.light.background,
+      }}
+    >
+      <View
+        style={{
+          flex: 1,
+          width: "100%",
+          maxWidth: 500,
+          backgroundColor: "#FFF",
+        }}
+      >
+        <View
+          style={{
+            position: "absolute",
+            left: "10%",
+            width: "80%",
+            height: 8,
+            backgroundColor: "#f2ffeb92",
+          }}
+        />
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            backgroundColor: "#ffffff00",
+          }}
+        >
+          <BlurView
+            intensity={999}
+            pointerEvents="none"
+            style={StyleSheet.absoluteFill}
+          />
+          <Slot />
+        </View>
+      </View>
+    </ThemedView>
   );
 }

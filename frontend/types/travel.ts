@@ -12,8 +12,10 @@ export interface Travel {
 export const DEFAULT_TRAVEL = {
 	id: 0,
 	name: '',
-	start_date: today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') + "-" + String(today.getDate()).padStart(2, '0') + '',
-	end_date: today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') + "-" + String(today.getDate()).padStart(2, '0') + '',
+	// start_date: today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') + "-" + String(today.getDate()).padStart(2, '0') + '',
+	// end_date: today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, '0') + "-" + String(today.getDate()).padStart(2, '0') + '',
+	start_date: '',
+	end_date: '',
 	description: '',
 	image: '',
 }

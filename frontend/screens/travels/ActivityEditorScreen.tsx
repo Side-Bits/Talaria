@@ -41,10 +41,7 @@ export function ActivityEditorScreen() {
     const activityName = watch("name");
 
     const handleActivity = async (activity: Activity) => {
-        if (!travelId) {
-            Alert.alert("Error", "Missing travel ID");
-            return;
-        }
+        if (!travelId) return;
 
         try {
             await createActivity(travelId, activity);
@@ -94,7 +91,7 @@ export function ActivityEditorScreen() {
                             disabled={isSubmitting}
                         />
                     </View>
-                    <ThemedText type="center" style={{ marginHorizontal: 12, marginBottom: 8 }}>a</ThemedText>
+                    <ThemedText type="center" style={{ marginHorizontal: 12, marginTop: 8 }}>to</ThemedText>
                     <View style={{ flex: 1 }}>
                         <FormDate
                             control={control}
