@@ -30,25 +30,23 @@ export function ProfileDetailsScreen() {
     <ThemedView type='left'>
       <Header
         button_back={true}
-        popover={
-          {
-            edit: {
-              icon: 'pencil',
-              option: 'Edit profile',
-              color: '#000',
-              onclick: handlePressEditProfile,
+        popover={{
+          edit: {
+            icon: 'pencil',
+            option: 'Edit profile',
+            color: '#000',
+            onclick: handlePressEditProfile,
+          },
+          delete: {
+            icon: 'log-out-outline',
+            option: 'Log Out',
+            color: 'red',
+            onclick: async () => {
+              await session.signOut();
+              router.replace('/(auth)/sign-in');
             },
-            delete: {
-              icon: 'log-out-outline',
-              option: 'Log Out',
-              color: 'red',
-              onclick: async () => {
-                await session.signOut();
-                router.replace('/(auth)/sign-in');
-              },
-            }
           }
-        }
+        }}
         label='Profile'
       />
       {state.status === 'loading' ? (

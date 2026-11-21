@@ -11,7 +11,7 @@ type Props = {
 
 export function IconProfile({ size = 25, letter, photo }: Props) {
   return (
-    <View style={[styles.container, { width: size, height: size, backgroundColor: Colors.light.iconBackground, overflow: 'hidden' }]}>
+    <View style={[styles.container, { width: size, height: size }]}>
       {photo ? (
         <ImageBackground
           source={{ uri: getImageBase64(photo) }}
@@ -33,8 +33,12 @@ export function IconProfile({ size = 25, letter, photo }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
+    backgroundColor: Colors.light.iconBackground,
+    borderWidth: 2,
+    borderColor: Colors.light.background
   },
 });

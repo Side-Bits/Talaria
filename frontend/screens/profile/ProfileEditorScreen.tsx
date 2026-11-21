@@ -13,7 +13,7 @@ import { ApiError } from '@/services/api';
 import { z } from "zod";
 import { FormInput } from '@/components/FormInput';
 import { FormDate } from '@/components/FormDate';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DEFAULT_PROFILE } from '@/types/profile';
 import { getProfile, updateProfile } from '@/services/api/profile';
 
@@ -21,6 +21,7 @@ export function ProfileEditorScreen() {
   const session = useSession();
   const user = session.user;
   const letter = user?.username ? user.username.charAt(0).toUpperCase() : ' ';
+  const [photo, setPhoto] = useState<string | undefined>();
 
   const {
     control,
@@ -58,6 +59,7 @@ export function ProfileEditorScreen() {
     if (user) {
       getProfile()
         .then(data => {
+          setPhoto(data.photo ?? undefined);
           reset({
             ...DEFAULT_PROFILE,
             ...data,
@@ -84,6 +86,7 @@ export function ProfileEditorScreen() {
           <IconProfile
             size={80}
             letter={letter}
+            photo={photo}
           />
         </ThemedView>
         <FormInput
