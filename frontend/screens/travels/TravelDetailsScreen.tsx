@@ -7,7 +7,6 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { Colors } from '@/constants/Colors';
 import { ErrorCard } from '@/components/ErrorCard';
 import { useTravels } from '@/hooks/useTravels';
-import { useToast } from '@/hooks/useToast';
 import { Tabs } from '@/components/Tabs';
 import { HeroTravel } from '@/screens/travels/components/HeroTravel';
 import { TravelCard } from './components/TravelCard';
@@ -16,7 +15,6 @@ import { router } from 'expo-router';
 
 export function TravelDetailsScreen() {
   const { state, retry } = useTravels();
-  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState('planned');
   const nextTravel = state.status === 'success' ? state.data.Going[0] : undefined;
 
@@ -38,8 +36,8 @@ export function TravelDetailsScreen() {
         <ThemedView type='center' style={styles.feedback}>
           <ThemedText textMuted={true}>
             {activeTab === 'planned' ?
-            (state.data.Going[0] ? 'Your next trip is waiting' : 'No planned trips yet') :
-            'No completed trips yet'}
+              (state.data.Going[0] ? 'Your next trip is waiting' : 'No planned trips yet') :
+              'No completed trips yet'}
           </ThemedText>
           <ThemedText
             type='link'
