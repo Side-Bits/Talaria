@@ -20,7 +20,8 @@ export function ActivityCard({ activity }: ActivityCardProps) {
             pathname: "/(app)/travels/[travel_id]/activities/[activity_id]",
             params: {
                 travel_id: activity.id_travel,
-                activity_id: String(activity.id),
+                activity_id: activity.id,
+                name: activity.name,
             },
         })
     );

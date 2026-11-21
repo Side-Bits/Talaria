@@ -66,7 +66,7 @@ export function ActivityEditorScreen() {
         <ThemedView type="left">
             <Header
                 button_back={true}
-                label={!activityId ? 'Create activity' : activityName ?? ""}
+                label={!activityId ? 'Create activity' : activityName ?? " "}
             />
             <ThemedView type="left" style={{ width: "100%" }}>
                 <Categories />

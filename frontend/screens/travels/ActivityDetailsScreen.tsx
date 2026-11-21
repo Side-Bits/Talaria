@@ -15,9 +15,10 @@ import { useActivity } from "@/hooks/useActivity";
 import { globalStyles } from "@/constants/Global";
 
 export function ActivityDetailsScreen() {
-    const { travel_id, activity_id } = useLocalSearchParams();
+    const { travel_id, activity_id, name } = useLocalSearchParams();
     const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
     const activityId = Array.isArray(activity_id) ? activity_id[0] : activity_id;
+    const activityName = Array.isArray(name) ? name[0] : name;
 
     const { state, retry } = useActivity(travelId, activityId);
 
@@ -36,17 +37,15 @@ export function ActivityDetailsScreen() {
         <ThemedView type='left'>
             <Header 
                 button_back={true}
-                popover={state.status === 'success' ? (
-                    {
-                        delete: {
-                            icon: 'trash-outline',
-                            option: 'Delete activity',
-                            color: 'red',
-                            onclick: () => handleActivity(),
-                        },
-                    }
-                ) : undefined}
-                label={state.status === 'success' ? state.data.name : ' '}
+                popover={{
+                    delete: {
+                        icon: 'trash-outline',
+                        option: 'Delete activity',
+                        color: 'red',
+                        onclick: () => handleActivity(),
+                    },
+                }}
+                label={activityName}
             />
             {state.status === 'loading' ? (
                 <View style={styles.feedback}>

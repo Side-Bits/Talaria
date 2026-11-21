@@ -18,7 +18,8 @@ export function HeroTravel({ travel }: Props) {
   const handlePress = (() => router.push({
     pathname: '/(app)/travels/[travel_id]/activities',
     params: {
-      travel_id: String(travel.id),
+      travel_id: travel.id,
+      name: travel.name,
     }
   }));
 

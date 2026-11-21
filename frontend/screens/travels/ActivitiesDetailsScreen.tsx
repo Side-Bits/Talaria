@@ -17,8 +17,9 @@ import { useActivities } from "@/hooks/useActivities";
 import { useTravel } from "@/hooks/useTravel";
 
 export function ActivitiesDetailsScreen() {
-  const { travel_id } = useLocalSearchParams();
+  const { travel_id, name } = useLocalSearchParams();
   const travelId = Array.isArray(travel_id) ? travel_id[0] : travel_id;
+  const travelName = Array.isArray(name) ? name[0] : name;
   const [activeTab, setActiveTab] = useState('all');
   const [day, setDay] = useState(0);
   const { state: activitiesState, retry: retryActivities } = useActivities(travelId);
@@ -72,17 +73,15 @@ export function ActivitiesDetailsScreen() {
     <ThemedView type="left" style={{ marginBottom: 64 }}>
       <Header
         button_back={true}
-        popover={travel ? (
-          {
-            delete: {
-              icon: 'trash-outline',
-              option: 'Delete trip',
-              color: 'red',
-              onclick: () => handleTravel(),
-            },
+        popover={{
+          delete: {
+            icon: 'trash-outline',
+            option: 'Delete trip',
+            color: 'red',
+            onclick: () => handleTravel(),
           }
-        ) : undefined}
-        label={travel?.name ?? ' '}
+        }}
+        label={travelName ?? ' '}
       />
       {isLoading ? (
         <View style={styles.feedback}>
