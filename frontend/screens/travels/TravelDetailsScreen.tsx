@@ -36,8 +36,8 @@ export function TravelDetailsScreen() {
         <ThemedView type='center' style={styles.feedback}>
           <ThemedText textMuted={true}>
             {activeTab === 'planned' ?
-            (state.data.Going[0] ? 'Your next trip is waiting' : 'No planned trips yet') :
-            'No completed trips yet'}
+              (state.data.Going[0] ? 'Your next trip is waiting' : 'No planned trips yet') :
+              'No completed trips yet'}
           </ThemedText>
           <ThemedText
             type='link'
