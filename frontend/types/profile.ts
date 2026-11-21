@@ -6,6 +6,7 @@ export interface Profile {
   surname1: string,
   surname2: string,
   birthdate: string,
+  photo: string,
   language: string,
   currency: string
 }
@@ -24,6 +25,7 @@ export const DEFAULT_PROFILE = {
   surname1: "",
   surname2: "",
   birthdate: "",
+  photo: "",
   language: "ENG",
-  currency: "EUR",
+  currency: "EUR"
 };

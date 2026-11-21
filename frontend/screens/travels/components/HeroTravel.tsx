@@ -5,25 +5,14 @@ import { ThemedText } from '@/components/ThemedText';
 import { Travel } from '@/types/travel';
 import { formatTravelDates } from '@/scripts/DataScripts';
 import { useRouter } from 'expo-router';
+import { getImageBase64 } from '@/scripts/ImageScripts';
 
 type Props = {
   travel: Travel;
 };
 
-export const travelImages: Record<string, any> = {
-  "roma.jpg": require("../../../assets/images/temporal/roma.jpg"),
-  "tailandia.jpg": require("../../../assets/images/temporal/tailandia.jpg"),
-  "paris.jpg": require("../../../assets/images/temporal/paris.jpg"),
-  "novayork.jpg": require("../../../assets/images/temporal/novayork.jpg"),
-  "japan.jpg": require("../../../assets/images/temporal/japan.jpg"),
-  "finlandia.jpg": require("../../../assets/images/temporal/finlandia.jpg"),
-  "barcelona.jpg": require("../../../assets/images/temporal/barcelona.jpg"),
-  "argentina.jpg": require("../../../assets/images/temporal/argentina.jpg"),
-};
-
 export function HeroTravel({ travel }: Props) {
   const router = useRouter();
-  const imageSource = travel.image ? travelImages[travel.image] : undefined;
   const date = formatTravelDates(travel.start_date, travel.end_date);
 
   const handlePress = (() => router.push({
@@ -38,9 +27,9 @@ export function HeroTravel({ travel }: Props) {
       style={styles.container}
       onPress={handlePress}
     >
-      {imageSource ? (
+      {travel.image ? (
         <ImageBackground
-          source={imageSource}
+          source={{ uri: getImageBase64(travel.image) }}
           style={styles.banner}
           resizeMode="cover"
         />

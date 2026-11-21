@@ -1,30 +1,18 @@
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '../../../components/ThemedView';
 import { ImageBackground, StyleSheet, View } from 'react-native';
+import { getImageBase64 } from '@/scripts/ImageScripts';
 
 type Props = {
   image?: string;
 };
 
-export const activityImages: Record<string, any> = {
-  "roma.jpg": require("../../../assets/images/temporal/roma.jpg"),
-  "tailandia.jpg": require("../../../assets/images/temporal/tailandia.jpg"),
-  "paris.jpg": require("../../../assets/images/temporal/paris.jpg"),
-  "novayork.jpg": require("../../../assets/images/temporal/novayork.jpg"),
-  "japan.jpg": require("../../../assets/images/temporal/japan.jpg"),
-  "finlandia.jpg": require("../../../assets/images/temporal/finlandia.jpg"),
-  "barcelona.jpg": require("../../../assets/images/temporal/barcelona.jpg"),
-  "argentina.jpg": require("../../../assets/images/temporal/argentina.jpg"),
-};
-
 export function HeroActivity({ image }: Props) {
-  const imageSource = image ? activityImages[image] : undefined;
-
   return (
     <ThemedView type='left' style={styles.conteiner}>
-      {imageSource ? (
+      {image ? (
         <ImageBackground
-          source={imageSource}
+          source={{ uri: getImageBase64(image) }}
           style={styles.banner}
           resizeMode="cover"
         />
