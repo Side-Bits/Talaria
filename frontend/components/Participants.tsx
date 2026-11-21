@@ -2,7 +2,6 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { IconProfile } from './IconProfile';
 import { useSession } from '@/contexts/authContext';
-import { Colors } from '@/constants/Colors';
 
 type Participant = {
   id_client: number;
@@ -23,6 +22,7 @@ export function Participants({ editable, size, data = {} }: Props) {
     ...(user ? [{ id_client: user.id, username: user.username }] : []),
     ...Object.values(data).filter((participant) => participant.id_client !== user?.id),
   ];
+  const letter = user?.username ? user.username.charAt(0).toUpperCase() : ' ';
 
   return (
     <ThemedView type='row'>
@@ -33,8 +33,7 @@ export function Participants({ editable, size, data = {} }: Props) {
         >
           <IconProfile
             size={size}
-            letter={participant.username.charAt(0).toUpperCase()}
-            background={participant.background}
+            letter={letter}
           />
         </View>
       ))}
@@ -45,7 +44,6 @@ export function Participants({ editable, size, data = {} }: Props) {
           <IconProfile
             size={size}
             letter={'+'}
-            background={Colors.light.background}
           />
         </Pressable>
       )}

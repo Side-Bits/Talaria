@@ -66,7 +66,11 @@ export function ProfileDetailsScreen() {
         <>
           <ThemedView type='list' style={{ width: '100%' }}>
             <ThemedView type='left' margin={32} style={{ alignItems: 'center' }}>
-              <IconProfile size={80} letter={letter} />
+              <IconProfile
+                size={80}
+                letter={letter}
+                photo={profileData?.photo}
+              />
               <ThemedText type='center' style={{ marginTop: 8 }}>@{user?.username}</ThemedText>
             </ThemedView>
             <ThemedView type='between' style={{ gap: 8, width: 'auto', borderRadius: 8, marginHorizontal: 16 }}>

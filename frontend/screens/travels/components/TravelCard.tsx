@@ -5,21 +5,11 @@ import { ThemedText } from "@/components/ThemedText";
 import { Travel } from "@/types/travel";
 import { useRouter } from "expo-router";
 import { formatTravelDates } from "@/scripts/DataScripts";
+import { getImageBase64 } from "@/scripts/ImageScripts";
 
 type TravelCardProps = {
     travel: Travel;
     onPress?: () => void;
-};
-
-export const travelImages: Record<string, any> = {
-    "roma.jpg": require("../../../assets/images/temporal/roma.jpg"),
-    "tailandia.jpg": require("../../../assets/images/temporal/tailandia.jpg"),
-    "paris.jpg": require("../../../assets/images/temporal/paris.jpg"),
-    "novayork.jpg": require("../../../assets/images/temporal/novayork.jpg"),
-    "japan.jpg": require("../../../assets/images/temporal/japan.jpg"),
-    "finlandia.jpg": require("../../../assets/images/temporal/finlandia.jpg"),
-    "barcelona.jpg": require("../../../assets/images/temporal/barcelona.jpg"),
-    "argentina.jpg": require("../../../assets/images/temporal/argentina.jpg"),
 };
 
 export function TravelCard({ travel, onPress }: TravelCardProps) {
@@ -36,17 +26,15 @@ export function TravelCard({ travel, onPress }: TravelCardProps) {
                 },
             }));
 
-    const imageSource = travel.image ? travelImages[travel.image] : undefined;
-
     const content = (
         <ThemedView type="list" style={styles.content}>
             <ThemedText
                 type="default"
-                style={[styles.name, imageSource && styles.textOnImage]}
+                style={[styles.name, travel.image && styles.textOnImage]}
             >
                 {travel.name}
             </ThemedText>
-            <ThemedText type="default" style={imageSource && styles.textOnImage}>
+            <ThemedText type="default" style={travel.image && styles.textOnImage}>
                 {date}
             </ThemedText>
         </ThemedView>
@@ -54,12 +42,12 @@ export function TravelCard({ travel, onPress }: TravelCardProps) {
 
     return (
         <Pressable
-            style={[styles.container, !imageSource && styles.noImage]}
+            style={[styles.container, !travel.image && styles.noImage]}
             onPress={handlePress}
         >
-            {imageSource ? (
+            {travel.image ? (
                 <ImageBackground
-                    source={imageSource}
+                    source={{ uri: getImageBase64(travel.image) }}
                     style={styles.image}
                     resizeMode="cover"
                 >

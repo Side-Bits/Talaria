@@ -42,7 +42,7 @@ export function ProfileEditorScreen() {
         throw new Error("User information is unavailable");
       }
 
-      await updateProfile({ ...credentials, id: user.id });
+      await updateProfile({ ...DEFAULT_PROFILE, ...credentials, id: user.id });
       router.back();
     } catch (error) {
       Alert.alert(
@@ -81,7 +81,10 @@ export function ProfileEditorScreen() {
       />
       <ThemedView type='left' style={{ width: '100%' }}>
         <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
-          <IconProfile size={80} letter={letter} />
+          <IconProfile
+            size={80}
+            letter={letter}
+          />
         </ThemedView>
         <FormInput
           control={control}
