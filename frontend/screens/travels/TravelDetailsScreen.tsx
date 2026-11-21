@@ -61,7 +61,6 @@ export function TravelDetailsScreen() {
         button_notifications={true}
         label="My Trips"
       />
-<<<<<<< HEAD
       {state.status === 'loading' ? (
         <View style={styles.feedback}>
           <ActivityIndicator color={Colors.light.primary} />
@@ -115,32 +114,6 @@ export function TravelDetailsScreen() {
           </ThemedView>
         </>
       )}
-=======
-      <ThemedButton
-        title="Test toast"
-        variant="outline"
-        onPress={() => showToast({
-          title: 'Toast test',
-          message: 'Your toast notification is working!',
-          variant: 'success',
-        })}
-      />
-      {nextTravel && <HeroTravel travel={nextTravel} />}
-      <Tabs
-        data={{
-          planned: { label: "Planned" },
-          undated: { label: "Undated" },
-          completed: { label: "Completed" }
-        }}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        scroll={false}
-      />
-      <ThemedView type='left' style={styles.trips}>
-        {renderTrips()}
-        <View style={styles.bottomSpacer} />
-      </ThemedView>
->>>>>>> cba5b1f (feat: add toast hooks, context, provider and first style version)
     </ThemedView>
   );
 }
