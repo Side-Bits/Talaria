@@ -3,7 +3,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { BlurView } from "expo-blur";
 import { Slot } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function AppLayout({ footer }: { footer: ReactNode }) {
@@ -26,15 +26,17 @@ export function AppLayout({ footer }: { footer: ReactNode }) {
           backgroundColor: "#FFF",
         }}
       >
-        <View
-          style={{
-            position: "absolute",
-            left: "10%",
-            width: "80%",
-            height: 10,
-            backgroundColor: "#f2ffeb92",
-          }}
-        />
+        {Platform.OS === "web" && (
+          <View
+            style={{
+              position: "absolute",
+              left: "10%",
+              width: "80%",
+              height: 10,
+              backgroundColor: "#f2ffeb92",
+            }}
+          />
+        )}
         {/*<View style={{ position: 'absolute', left: 0, bottom: 50, width: 50, height: 200, backgroundColor: "#e6e6e692" }} />*/}
         <View
           style={{
