@@ -4,7 +4,6 @@ import { Alert, Dimensions, Pressable, View } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
 import { useSession } from '@/contexts/authContext';
-import { ThemedButton } from '@/components/ThemedButton';
 import { IconProfile } from '@/components/IconProfile';
 import { profileSchema } from "@/schemas/profile.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +17,8 @@ import { DEFAULT_PROFILE } from '@/types/profile';
 import { getProfile, updateProfile } from '@/services/api/profile';
 import { isImageAsset, setImageBase64, useImagePicker } from '@/scripts/ImageScripts';
 import { useToast } from '@/hooks/useToast';
+import { useFooterAction } from '@/contexts/footerActionsContext';
+import { useCallback, useMemo } from 'react';
 
 
 export function ProfileEditorScreen() {
@@ -76,7 +77,7 @@ export function ProfileEditorScreen() {
     }
   };
 
-  const handleProfile = async (credentials: z.output<typeof profileSchema>) => {
+  const handleProfile = useCallback(async (credentials: z.output<typeof profileSchema>) => {
     try {
       if (!user) {
         throw new Error("User information is unavailable");
@@ -92,7 +93,20 @@ export function ProfileEditorScreen() {
           : "Something went wrong",
       );
     }
-  };
+  }, [user]);
+
+  const submitProfile = useMemo(
+    () => handleSubmit(handleProfile),
+    [handleSubmit, handleProfile],
+  );
+
+  useFooterAction({
+    title: "Edit",
+    id: "buttonEdit",
+    onPress: submitProfile,
+    disabled: isSubmitting,
+    loading: isSubmitting,
+  });
 
   useEffect(() => {
     if (user) {
@@ -205,13 +219,6 @@ export function ProfileEditorScreen() {
           disabled={isSubmitting}
         />
       </ThemedView>
-      <ThemedButton
-        title="Edit"
-        id="buttonEdit"
-        style={{ marginTop: 8 }}
-        onPress={handleSubmit(handleProfile)}
-        loading={isSubmitting}
-      />
       <View style={{ height: 100, width: "100%" }} />
     </ThemedView>
   );

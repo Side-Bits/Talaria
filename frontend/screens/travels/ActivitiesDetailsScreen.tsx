@@ -43,7 +43,7 @@ export function ActivitiesDetailsScreen() {
     if (!travelId) return;
 
     router.push({
-      pathname: "/(app)/travels/[travel_id]/activities/create",
+      pathname: "/(app)/(editor)/travels/[travel_id]/activities/create",
       params: {
         travel_id: travelId
       },

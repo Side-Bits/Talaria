@@ -17,7 +17,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
 
     const handlePress = (() =>
         router.push({
-            pathname: "/(app)/travels/[travel_id]/activities/[activity_id]",
+            pathname: "/(app)/(main)/travels/[travel_id]/activities/[activity_id]",
             params: {
                 travel_id: activity.id_travel,
                 activity_id: activity.id,

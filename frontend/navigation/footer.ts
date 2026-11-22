@@ -56,7 +56,7 @@ export function resolveFooterNavigation(
         {
             id: "home",
             label: "Home",
-            href: { pathname: "/(app)/travels" },
+            href: { pathname: "/(app)/(main)/travels" },
             method: "replace",
             isCurrentScreen: isHome,
         },
@@ -66,11 +66,11 @@ export function resolveFooterNavigation(
             href:
                 isInsideTrip && travelId
                     ? {
-                        pathname: "/(app)/travels/[travel_id]/activities/create",
+                        pathname: "/(app)/(editor)/travels/[travel_id]/activities/create",
                         params: { travel_id: travelId },
                     }
                     : {
-                        pathname: "/(app)/travels/create"
+                        pathname: "/(app)/(editor)/travels/create"
                     },
             method: "push",
             isCurrentScreen: isInsideTrip && travelId ? isCreateTrip : isCreateActivity,
@@ -78,7 +78,7 @@ export function resolveFooterNavigation(
         {
             id: "profile",
             label: "Profile",
-            href: { pathname: "/(app)/profile" },
+            href: { pathname: "/(app)/(main)/profile" },
             method: "replace",
             isCurrentScreen: isProfile,
         },

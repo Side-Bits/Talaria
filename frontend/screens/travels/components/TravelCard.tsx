@@ -20,7 +20,7 @@ export function TravelCard({ travel, onPress }: TravelCardProps) {
         onPress ??
         (() =>
             router.push({
-                pathname: "/(app)/travels/[travel_id]/activities",
+                pathname: "/(app)/(main)/travels/[travel_id]/activities",
                 params: {
                     travel_id: travel.id,
                     name: travel.name

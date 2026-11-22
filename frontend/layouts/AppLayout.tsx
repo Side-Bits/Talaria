@@ -1,4 +1,4 @@
-import { Footer } from "@/components/Footer";
+import type { ReactNode } from "react";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { BlurView } from "expo-blur";
@@ -6,7 +6,7 @@ import { Slot } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export function AppLayout() {
+export function AppLayout({ footer }: { footer: ReactNode }) {
   const insets = useSafeAreaInsets();
 
   return (
@@ -51,7 +51,7 @@ export function AppLayout() {
           <AppNavigator />
         </View>
       </View>
-      <Footer />
+      {footer}
     </ThemedView>
   );
 }

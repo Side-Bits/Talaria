@@ -5,7 +5,6 @@ import { ThemedText } from '@/components/ThemedText';
 import { FormDate } from '@/components/FormDate';
 import { FormInput } from '@/components/FormInput';
 import { Header } from '@/components/Header';
-import { ThemedButton } from '@/components/ThemedButton';
 import { DEFAULT_TRAVEL, Travel } from '@/types/travel';
 import { createTravel, getTravel } from '@/services/api/travel';
 import { travelSchema } from '@/schemas/travel.schema';
@@ -14,10 +13,11 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Participants } from '@/components/Participants';
 import { Colors } from '@/constants/Colors';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isImageAsset, setImageBase64, useImagePicker } from '@/scripts/ImageScripts';
 import type { DocumentPickerAsset } from 'expo-document-picker';
 import { useToast } from '@/hooks/useToast';
+import { useFooterAction } from '@/contexts/footerActionsContext';
 
 export function setImage(asset: DocumentPickerAsset | null) {
     if (!asset) {
@@ -104,19 +104,32 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
             .catch((error) => console.error(error));
     }, [travel_id, reset]);
 
-    const handleTravel = async (travel: Travel) => {
+    const handleTravel = useCallback(async (travel: Travel) => {
         try {
             await createTravel(travel)
             router.back();
         } catch (error) {
-            console.error('Failed to create the travel:', error);
+            // console.error('Failed to create the travel:', error);
             showToast({
                 title: 'Error',
                 message: 'Could not create the travel',
                 variant: 'error',
             });
         }
-    };
+    }, [showToast]);
+
+    const submitTravel = useMemo(
+        () => handleSubmit(handleTravel),
+        [handleSubmit, handleTravel],
+    );
+
+    useFooterAction({
+        title: "Add",
+        id: "buttonAdd",
+        onPress: submitTravel,
+        disabled: isSubmitting,
+        loading: isSubmitting,
+    });
 
     return (
         <ThemedView type='left'>
@@ -185,14 +198,6 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
                         data={{}}
                     />
                 </View>
-                <ThemedButton
-                    title='Add'
-                    id='buttonAdd'
-                    buttonStyle={{ marginTop: 12 }}
-                    onPress={handleSubmit(handleTravel)}
-                    disabled={isSubmitting}
-                    loading={isSubmitting}
-                />
             </ThemedView>
             <View style={{ height: 103, width: '100%' }} />
         </ThemedView>

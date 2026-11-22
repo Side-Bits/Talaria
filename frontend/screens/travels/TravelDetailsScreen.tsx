@@ -41,7 +41,7 @@ export function TravelDetailsScreen() {
           </ThemedText>
           <ThemedText
             type='link'
-            onPress={() => router.push('/travels/create')}
+            onPress={() => router.push('/(app)/(editor)/travels/create')}
           >
             Create an travel
           </ThemedText>
@@ -84,7 +84,7 @@ export function TravelDetailsScreen() {
               title="Create an travel"
               width="auto"
               size='sm'
-              onPress={() => router.push('/travels/create')}
+              onPress={() => router.push('/(app)/(editor)/travels/create')}
             />
           </ThemedView>
           <View style={styles.bottomSpacer} />

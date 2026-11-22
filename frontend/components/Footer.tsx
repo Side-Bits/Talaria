@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     container: {
         width: "100%",
         maxWidth: 450,
+        height: 55,
         padding: 6,
         gap: 6,
         borderRadius: 24,

@@ -16,7 +16,7 @@ export function HeroTravel({ travel }: Props) {
   const date = formatTravelDates(travel.start_date, travel.end_date);
 
   const handlePress = (() => router.push({
-    pathname: '/(app)/travels/[travel_id]/activities',
+    pathname: '/(app)/(main)/travels/[travel_id]/activities',
     params: {
       travel_id: travel.id,
       name: travel.name,

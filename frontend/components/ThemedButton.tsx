@@ -25,12 +25,13 @@ export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonIconProps = { size: number; color: ColorValue };
 
 type ThemedButtonProps = PressableProps & {
-  title: string;
+  title?: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
   radius?: number;
   width?: ViewStyle["width"];
+  iconOnly?: boolean;
   leadingIcon?: (props: ButtonIconProps) => ReactNode;
   trailingIcon?: (props: ButtonIconProps) => ReactNode;
   buttonStyle?: StyleProp<ViewStyle>;
@@ -44,6 +45,7 @@ export function ThemedButton({
   loading = false,
   radius = 8,
   width = "100%",
+  iconOnly = false,
   leadingIcon,
   trailingIcon,
   buttonStyle,
@@ -87,7 +89,10 @@ export function ThemedButton({
       {loading ? (
         <ActivityIndicator size="small" color={labelColor} />
       ) : (
-        <View style={styles.content} pointerEvents="none">
+        <View
+          style={[styles.content, iconOnly && styles.iconOnly]}
+          pointerEvents="none"
+        >
           {leadingIcon && (
             <View>
               {leadingIcon(iconProps)}
@@ -127,6 +132,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     maxWidth: "100%",
+  },
+  iconOnly: {
+    gap: 0,
   },
   text: {
     fontSize: 14,

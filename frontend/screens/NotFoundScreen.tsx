@@ -25,7 +25,7 @@ export function NotFoundScreen() {
         width="auto"
         size="sm"
         buttonStyle={{ marginTop: 16 }}
-        onPress={() => router.replace(session ? "/(app)/travels" : "/(auth)/sign-in")}
+        onPress={() => router.replace(session ? "/(app)/(main)/travels" : "/(auth)/sign-in")}
       />
     </ThemedView>
   );

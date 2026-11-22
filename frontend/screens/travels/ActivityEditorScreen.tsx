@@ -2,7 +2,7 @@ import { View, Alert } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { Header } from "@/components/Header";
-import { ThemedButton } from "@/components/ThemedButton";
+import { useFooterAction } from "@/contexts/footerActionsContext";
 import { Categories } from "@/components/Categories";
 import { FormDate } from "@/components/FormDate";
 import { FormInput } from "@/components/FormInput";
@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { activitySchema } from "@/schemas/activity.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Participants } from "@/components/Participants";
 
 export function ActivityEditorScreen() {
@@ -40,7 +40,7 @@ export function ActivityEditorScreen() {
 
     const activityName = watch("name");
 
-    const handleActivity = async (activity: Activity) => {
+    const handleActivity = useCallback(async (activity: Activity) => {
         if (!travelId) return;
 
         try {
@@ -49,7 +49,20 @@ export function ActivityEditorScreen() {
         } catch {
             Alert.alert("Error", "Invalid credentials");
         }
-    };
+    }, [travelId]);
+
+    const submitActivity = useMemo(
+        () => handleSubmit(handleActivity),
+        [handleSubmit, handleActivity],
+    );
+
+    useFooterAction({
+        title: "Add",
+        id: "buttonAdd",
+        onPress: submitActivity,
+        disabled: isSubmitting,
+        loading: isSubmitting,
+    });
 
     useEffect(() => {
         if (!travelId || !activityId) return;
@@ -137,14 +150,6 @@ export function ActivityEditorScreen() {
                         data={{}}
                     />
                 </View>
-                <ThemedButton
-                    title="Add"
-                    id="buttonAdd"
-                    style={{ marginTop: 8 }}
-                    onPress={handleSubmit(handleActivity)}
-                    disabled={isSubmitting}
-                    loading={isSubmitting}
-                />
             </ThemedView>
             <View style={{ height: 103, width: "100%" }} />
         </ThemedView>

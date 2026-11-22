@@ -5,6 +5,6 @@ export default function CreateActivity() {
     return (
         <AppScreen>
             <ActivityEditorScreen />
-        </AppScreen> 
+        </AppScreen>
     );
 }

@@ -22,7 +22,7 @@ export function ProfileDetailsScreen() {
 
   const handlePressEditProfile = () => {
     router.push({
-      pathname: "/(app)/profile/edit"
+      pathname: "/(app)/(editor)/profile/edit"
     });
   };
 
