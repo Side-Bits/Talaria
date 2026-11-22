@@ -52,7 +52,6 @@ export function ThemedButton({
   textStyle,
   disabled,
   style,
-  onFocus,
   onBlur,
   ...others
 }: ThemedButtonProps) {
@@ -66,10 +65,6 @@ export function ThemedButton({
     <Pressable
       {...others}
       disabled={isDisabled}
-      onFocus={event => {
-        setFocused(true);
-        onFocus?.(event);
-      }}
       onBlur={event => {
         setFocused(false);
         onBlur?.(event);
@@ -81,7 +76,6 @@ export function ThemedButton({
         { borderRadius: radius, width },
         buttonStyle,
         typeof style === "function" ? style(pressState) : style,
-        focused && !isDisabled && styles.focused,
         pressState.pressed && !isDisabled && styles.pressed,
         isDisabled && styles.disabled,
       ]}
@@ -122,9 +116,6 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.8,
-  },
-  focused: {
-    borderColor: Colors.light.onSurface,
   },
   content: {
     flexDirection: "row",
