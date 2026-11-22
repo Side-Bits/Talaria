@@ -2,7 +2,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { BlurView } from "expo-blur";
 import { Slot } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function AuthLayout() {
@@ -27,15 +27,17 @@ export function AuthLayout() {
           backgroundColor: "#FFF",
         }}
       >
-        <View
-          style={{
-            position: "absolute",
-            left: "10%",
-            width: "80%",
-            height: 8,
-            backgroundColor: "#f2ffeb92",
-          }}
-        />
+        {Platform.OS === "web" && (
+          <View
+            style={{
+              position: "absolute",
+              left: "10%",
+              width: "80%",
+              height: 8,
+              backgroundColor: "#f2ffeb92",
+            }}
+          />
+        )}
         <View
           style={{
             flex: 1,
