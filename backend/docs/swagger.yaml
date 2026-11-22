@@ -78,7 +78,7 @@ definitions:
         type: string
       name:
         type: string
-      photo:
+      image:
         type: string
       surname1:
         type: string
@@ -92,6 +92,8 @@ definitions:
       birthdate:
         description: Date in YYYY-MM-DD format.
         example: "1990-01-31"
+        type: string
+      image:
         type: string
       name:
         maxLength: 64

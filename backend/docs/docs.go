@@ -657,7 +657,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "photo": {
+                "image": {
                     "type": "string"
                 },
                 "surname1": {
@@ -683,6 +683,9 @@ const docTemplate = `{
                     "type": "string",
                     "description": "Date in YYYY-MM-DD format.",
                     "example": "1990-01-31"
+                },
+                "image": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string",

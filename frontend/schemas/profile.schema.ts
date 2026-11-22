@@ -13,4 +13,5 @@ export const profileSchema = z
         surname2: z.string(),
         language: z.string(),
         currency: z.string(),
+        image: z.string(),
     })

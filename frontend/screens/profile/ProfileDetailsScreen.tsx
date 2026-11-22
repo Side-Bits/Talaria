@@ -67,7 +67,7 @@ export function ProfileDetailsScreen() {
               <IconProfile
                 size={80}
                 letter={letter}
-                photo={profileData?.photo}
+                image={profileData?.image}
               />
               <ThemedText type='center' style={{ marginTop: 8 }}>@{user?.username}</ThemedText>
             </ThemedView>

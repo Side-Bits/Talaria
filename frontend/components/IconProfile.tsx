@@ -6,15 +6,15 @@ import { getImageBase64 } from '@/scripts/ImageScripts';
 type Props = {
   letter: string;
   size: number;
-  photo?: string;
+  image?: string;
 };
 
-export function IconProfile({ size = 25, letter, photo }: Props) {
+export function IconProfile({ size = 25, letter, image }: Props) {
   return (
     <View style={[styles.container, { width: size, height: size }]}>
-      {photo ? (
+      {image ? (
         <ImageBackground
-          source={{ uri: getImageBase64(photo) }}
+          source={{ uri: getImageBase64(image) }}
           style={{ width: size, height: size }}
           resizeMode="cover"
         />

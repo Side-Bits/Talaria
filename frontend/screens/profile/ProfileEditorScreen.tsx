@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Alert, View } from 'react-native';
+import { Alert, Dimensions, Pressable, View } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Header } from '@/components/Header';
@@ -16,18 +16,24 @@ import { FormDate } from '@/components/FormDate';
 import { useEffect, useState } from 'react';
 import { DEFAULT_PROFILE } from '@/types/profile';
 import { getProfile, updateProfile } from '@/services/api/profile';
+import { isImageAsset, setImageBase64, useImagePicker } from '@/scripts/ImageScripts';
+import { useToast } from '@/hooks/useToast';
+
 
 export function ProfileEditorScreen() {
   const session = useSession();
   const user = session.user;
   const letter = user?.username ? user.username.charAt(0).toUpperCase() : ' ';
-  const [photo, setPhoto] = useState<string | undefined>();
+  const [image, setImage] = useState<string | undefined>();
+  const { selectImage: pickImage } = useImagePicker();
+  const { showToast } = useToast();
 
   const {
     control,
     handleSubmit,
     trigger,
     reset,
+    setValue,
     formState: { isSubmitting },
   } = useForm<z.input<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -36,6 +42,39 @@ export function ProfileEditorScreen() {
     shouldFocusError: true,
     defaultValues: DEFAULT_PROFILE,
   });
+
+  const selectImage = async () => {
+    try {
+      const asset = await pickImage();
+
+      if (!asset) {
+        return;
+      }
+
+      if (!isImageAsset(asset)) {
+        showToast({
+          title: 'Invalid file',
+          message: 'Please select an image file',
+          variant: 'error',
+        });
+        return;
+      }
+
+      const base64 = await setImageBase64(
+        asset.uri,
+        Dimensions.get('window').width
+      );
+
+      setImage(base64);
+      setValue('image', base64);
+    } catch {
+      showToast({
+        title: 'Error',
+        message: 'Could not process the selected image',
+        variant: 'error',
+      });
+    }
+  };
 
   const handleProfile = async (credentials: z.output<typeof profileSchema>) => {
     try {
@@ -59,7 +98,7 @@ export function ProfileEditorScreen() {
     if (user) {
       getProfile()
         .then(data => {
-          setPhoto(data.photo ?? undefined);
+          setImage(data.image ?? undefined);
           reset({
             ...DEFAULT_PROFILE,
             ...data,
@@ -83,11 +122,13 @@ export function ProfileEditorScreen() {
       />
       <ThemedView type='left' style={{ width: '100%' }}>
         <ThemedView type='left' margin={16} style={{ alignItems: 'center' }}>
-          <IconProfile
-            size={80}
-            letter={letter}
-            photo={photo}
-          />
+          <Pressable onPress={selectImage}>
+            <IconProfile
+              size={80}
+              letter={letter}
+              image={image}
+            />
+          </Pressable>
         </ThemedView>
         <FormInput
           control={control}

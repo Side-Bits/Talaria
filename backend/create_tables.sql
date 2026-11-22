@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS clients (
     name        VARCHAR(64) NOT NULL,
     surname1    VARCHAR(64) NOT NULL,
     surname2    VARCHAR(64),
-    photo       TEXT,
+    image       TEXT,
     birthdate   DATE,
     currency    VARCHAR(3) NOT NULL DEFAULT 'EUR',
     language    VARCHAR(8) NOT NULL DEFAULT 'ENG'
@@ -118,7 +118,7 @@ INSERT INTO clients (
     name,
     surname1,
     surname2,
-    photo
+    image
 )
 VALUES (
     2,

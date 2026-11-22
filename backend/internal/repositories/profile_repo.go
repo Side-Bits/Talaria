@@ -24,7 +24,7 @@ func (r *ProfileRepository) GetProfile(ctx context.Context, userID int64) (*mode
 			c.surname1,
 			COALESCE(c.surname2, ''),
 			c.birthdate,
-			COALESCE(c.photo, ''),
+			COALESCE(c.image, ''),
 			c.currency,
 			c.language
 		FROM clients c
@@ -41,7 +41,7 @@ func (r *ProfileRepository) GetProfile(ctx context.Context, userID int64) (*mode
 		&profile.Surname1,
 		&profile.Surname2,
 		&profile.Birthdate,
-		&profile.Photo,
+		&profile.Image,
 		&profile.Currency,
 		&profile.Language,
 	)
@@ -62,7 +62,7 @@ func (r *ProfileRepository) GetProfileData(ctx context.Context, userID int64) (*
 			c.surname1,
 			COALESCE(c.surname2, ''),
 			c.birthdate,
-			COALESCE(c.photo, ''),
+			COALESCE(c.image, ''),
 			c.currency,
 			c.language,
 			(
@@ -88,7 +88,7 @@ func (r *ProfileRepository) GetProfileData(ctx context.Context, userID int64) (*
 		&profile.Surname1,
 		&profile.Surname2,
 		&profile.Birthdate,
-		&profile.Photo,
+		&profile.Image,
 		&profile.Currency,
 		&profile.Language,
 		&profile.NumTrips,
@@ -103,15 +103,13 @@ func (r *ProfileRepository) GetProfileData(ctx context.Context, userID int64) (*
 	return &profile, nil
 }
 
-func (r *ProfileRepository) UpdateProfile(ctx context.Context, userID int64, name string, surname1 string, surname2 string, birthdate string) error {
+func (r *ProfileRepository) UpdateProfile(ctx context.Context, userID int64, name string, surname1 string, surname2 string, birthdate string, image string) error {
 	query := `
 		UPDATE clients
-		SET name = $2, surname1 = $3, surname2 = $4, birthdate = $5
+		SET name = $2, surname1 = $3, surname2 = $4, birthdate = $5, image = $6
 		WHERE id_user = $1
 	`
 
-	// TODO: update other parameters
-
-	_, err := r.db.Exec(ctx, query, userID, name, surname1, surname2, birthdate)
+	_, err := r.db.Exec(ctx, query, userID, name, surname1, surname2, birthdate, image)
 	return err
 }

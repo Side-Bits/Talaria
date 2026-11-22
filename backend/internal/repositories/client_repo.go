@@ -16,10 +16,10 @@ func NewClientRepository(db database.DBExecutor) *ClientRepository {
 
 func (r *ClientRepository) CreateClient(ctx context.Context, client *models.Client) error {
 	query := `
-        INSERT INTO clients (id_user, name, surname1, surname2, photo)
+        INSERT INTO clients (id_user, name, surname1, surname2, image)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id_user;
     `
 
-	return r.db.QueryRow(ctx, query, client.ID, client.Name, client.Surname1, client.Surname2, client.Photo).Scan(&client.ID)
+	return r.db.QueryRow(ctx, query, client.ID, client.Name, client.Surname1, client.Surname2, client.Image).Scan(&client.ID)
 }

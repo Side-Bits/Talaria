@@ -8,7 +8,7 @@ type Profile struct {
 	Surname1  string     `json:"surname1"`
 	Surname2  string     `json:"surname2,omitempty"`
 	Birthdate *time.Time `json:"birthdate"`
-	Photo     string     `json:"photo,omitempty"`
+	Image     string     `json:"image,omitempty"`
 	Currency  string     `json:"currency"`
 	Language  string     `json:"language"`
 	Username  string     `json:"username"`

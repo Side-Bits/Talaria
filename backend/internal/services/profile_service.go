@@ -25,10 +25,10 @@ func (s *ProfileService) GetProfileData(ctx context.Context, userID int64) (*mod
 	return s.store.Repos().Profiles.GetProfileData(ctx, userID)
 }
 
-func (s *ProfileService) UpdateProfile(ctx context.Context, userID int64, name string, surname1 string, surname2 string, birthdate string) (*models.Profile, error) {
+func (s *ProfileService) UpdateProfile(ctx context.Context, userID int64, name string, surname1 string, surname2 string, birthdate string, image string) (*models.Profile, error) {
 	var profile *models.Profile
 	err := s.store.InTx(ctx, func(repos Repos) error {
-		if err := repos.Profiles.UpdateProfile(ctx, userID, name, surname1, surname2, birthdate); err != nil {
+		if err := repos.Profiles.UpdateProfile(ctx, userID, name, surname1, surname2, birthdate, image); err != nil {
 			return err
 		}
 

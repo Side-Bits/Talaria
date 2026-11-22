@@ -49,9 +49,9 @@ func (s *AuthService) Register(ctx context.Context, user *models.User) (string, 
 			return errors.New("Failed to generate auth token: " + err.Error())
 		}
 
-		// TODO create client with more info (surname, photo, etc) and update user with client id.
+		// TODO create client with more info (surname, image, etc) and update user with client id.
 		// For now, we just create a client with the same id as the user and empty info
-		if err := repos.Clients.CreateClient(ctx, &models.Client{ID: user.ID, Name: "", Surname1: "", Surname2: "", Photo: ""}); err != nil {
+		if err := repos.Clients.CreateClient(ctx, &models.Client{ID: user.ID, Name: "", Surname1: "", Surname2: "", Image: ""}); err != nil {
 			return errors.New("Failed to create client: " + err.Error())
 		}
 

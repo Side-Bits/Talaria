@@ -17,6 +17,7 @@ type UpdateProfileRequest struct {
 	Surname1 	string `json:"surname1" binding:"max=64"`
 	Surname2 	string `json:"surname2" binding:"max=64"`
 	Birthdate 	string `json:"birthdate" binding:"required"`
+	Image    	string `json:"image"`
 }
 
 type ProfileResponse = models.Profile
@@ -80,7 +81,7 @@ func (h *ProfileHandler) UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	profile, err := h.profileService.UpdateProfile(c.Request.Context(), userID, req.Name, req.Surname1, req.Surname2, req.Birthdate)
+	profile, err := h.profileService.UpdateProfile(c.Request.Context(), userID, req.Name, req.Surname1, req.Surname2, req.Birthdate, req.Image)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			respondNotFound(c, "profile not found", err)
