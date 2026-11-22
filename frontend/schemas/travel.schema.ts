@@ -8,6 +8,7 @@ export const travelSchema = z
         start_date: dateSchema,
         end_date: dateSchema,
         description: z.string().trim().optional(),
+        image: z.string().optional(),
     })
     .refine((travel) => travel.end_date >= travel.start_date, {
         error: "End date cannot be before start date",

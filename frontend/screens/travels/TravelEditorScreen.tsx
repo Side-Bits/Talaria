@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { View, Alert, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet, Image, Dimensions } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { FormDate } from '@/components/FormDate';
@@ -15,6 +15,27 @@ import { z } from 'zod';
 import { Participants } from '@/components/Participants';
 import { Colors } from '@/constants/Colors';
 import { useEffect, useState } from 'react';
+import { isImageAsset, setImageBase64, useImagePicker } from '@/scripts/ImageScripts';
+import type { DocumentPickerAsset } from 'expo-document-picker';
+import { useToast } from '@/hooks/useToast';
+
+export function setImage(asset: DocumentPickerAsset | null) {
+    if (!asset) {
+        return (
+            <ThemedView type='center' style={{ flex: 1 }}>
+                <ThemedText type='default' textMuted={true}>Add front page</ThemedText>
+            </ThemedView>
+        );
+    }
+
+    return (
+        <Image
+            source={{ uri: asset.uri }}
+            style={styles.preview}
+            resizeMode='cover'
+        />
+    );
+}
 
 export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
     const {
@@ -22,6 +43,7 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
         handleSubmit,
         trigger,
         reset,
+        setValue,
         formState: { isSubmitting },
     } = useForm<z.input<typeof travelSchema>>({
         resolver: zodResolver(travelSchema),
@@ -32,6 +54,40 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
     });
 
     const [travel, setTravel] = useState<Travel>();
+    const { image, selectImage: pickImage } = useImagePicker();
+    const { showToast } = useToast();
+
+    const selectImage = async () => {
+        try {
+            const asset = await pickImage();
+
+            if (!asset) {
+                return;
+            }
+
+            if (!isImageAsset(asset)) {
+                showToast({
+                    title: 'Invalid file',
+                    message: 'Please select an image file',
+                    variant: 'error',
+                });
+                return;
+            }
+
+            const base64 = await setImageBase64(
+                asset.uri,
+                Dimensions.get('window').width
+            );
+
+            setValue('image', base64);
+        } catch (error) {
+            showToast({
+                title: 'Error',
+                message: 'Could not process the selected image',
+                variant: 'error',
+            });
+        }
+    };
 
     useEffect(() => {
         if (!travel_id) {
@@ -52,8 +108,13 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
         try {
             await createTravel(travel)
             router.back();
-        } catch {
-            Alert.alert('Error', 'Invalid credentials');
+        } catch (error) {
+            console.error('Failed to create the travel:', error);
+            showToast({
+                title: 'Error',
+                message: 'Could not create the travel',
+                variant: 'error',
+            });
         }
     };
 
@@ -64,10 +125,8 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
                 label={!travel_id ? 'Create trip' : travel?.name ?? " "}
             />
             <ThemedView type='left' style={{ width: '100%' }}>
-                <Pressable style={styles.hero}>
-                    <ThemedView type='center'>
-                        <ThemedText type='default' textMuted={true}>Add front page</ThemedText>
-                    </ThemedView>
+                <Pressable style={styles.hero} onPress={ selectImage }>
+                    {setImage(image)}
                 </Pressable>
                 <FormInput
                     control={control}
@@ -143,11 +202,17 @@ export function TravelEditorScreen({ travel_id }: { travel_id?: string }) {
 const styles = StyleSheet.create({
     hero: {
         width: '100%',
-        minHeight: 100,
+        height: 100,
         borderRadius: 8,
         marginBottom: 16,
         borderWidth: 1,
         borderColor: Colors.light.border,
-        backgroundColor: '#FCFCFC'
+        backgroundColor: '#FCFCFC',
+        overflow: 'hidden',
+    },
+    preview: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 8,
     }
 });
